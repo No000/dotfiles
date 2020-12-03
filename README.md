@@ -1,5 +1,5 @@
 # dotfiles
-ドットファイル管理
+ドットファイル管理  
 OS：ManjaroLinux-KDE
 
 ## ディレクトリ構成
