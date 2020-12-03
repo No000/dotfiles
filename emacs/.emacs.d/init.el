@@ -232,7 +232,7 @@
 ;; backup の保存先
 ;;
 (setq backup-directory-alist
-	  (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
+	  (cons (cons ".*" (expand-file-name "~/.emacs.d/backup/"))
 			backup-directory-alist))
 
 
