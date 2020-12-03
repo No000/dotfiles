@@ -10,7 +10,7 @@ exa -Tで生成
 GNU Stowを利用する
 > https://www.gnu.org/software/stow/
 
-manula
+GNU Stowマニュアル
 > https://www.gnu.org/software/stow/manual/stow.html
 
 dotfilesを管理する方法に関して
