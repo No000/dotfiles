@@ -24,4 +24,37 @@ cd ~/dotfiles
 stow -v <対象のドットファイルやドットディレクトリー（複数選択可）>
 ```
 
+### 必要なパッケージ
+フォント関連  
+・ttf-cascadia-code  
+・ttf-ricty-diminished  
+
+emacs-application-framework関連  
+・emacs-eaf(AUR)  
+・python-pyqt5  
+・python-pyqt5-sip  
+・python-pyqtwebengine  
+・python-qrcode  
+・python-feedparser  
+・python-dbus  
+・python-pyinotify  
+・python-markdown  
+・nodejs  
+・aria2  
+・libreoffice  
+・python-grip  
+・python-qtconsole  
+・filebrowser-bin  
+・wmctrl  
+
+lsp関連  
+・clnagd  
+・rust-analyzer  
+
+Magit  
+・git  
+
+Docker  
+・docker  
+・docker-compose  
 
