@@ -24,6 +24,9 @@ cd ~/dotfiles
 stow -v <対象のドットファイルやドットディレクトリー（複数選択可）>
 ```
 
+### Emacs  
+初回のインストールときのみ、267行目の(all-the-icons-install-fonts)のコメントアウトを外しておく
+
 ### 必要なパッケージ
 フォント関連  
 ・ttf-cascadia-code  

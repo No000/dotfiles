@@ -1,8 +1,14 @@
 emacs/.emacs.d/*
+!emacs/.emacs.d/auto-save-list
 !emacs/.emacs.d/backup/
 !emacs/.emacs.d/conf/
+!emacs/.emacs.d/eaf/
 !emacs/.emacs.d/elisp/
 !emacs/.emacs.d/elpa/
-!emacs/.emacs.d/mysnippets
-!emacs/.emacs.d/public_repos
+!emacs/.emacs.d/games/
+!emacs/.emacs.d/mysnippets/
+!emacs/.emacs.d/public_repos/
+!emacs/.emacs.d/snippets/
+!emacs/.emacs.d/transient/
+!emacs/.emacs.d/url/
 !emacs/.emacs.d/init.el
