@@ -601,13 +601,14 @@ properly disable mozc-mode."
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-;;(add-to-list 'company-backends 'company-yasnippet) ; 何故か指定しなくても動作をするので入れていない
+
 
 (define-key company-active-map (kbd "M-n") nil)
 (define-key company-active-map (kbd "M-p") nil)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-h") nil)
+
 
 
 ;; -----------------------------------------------------------------------
@@ -648,6 +649,12 @@ properly disable mozc-mode."
 
 (add-hook 'nim-mode-hook 'my--init-nim-mode)
 
+
+;; ;; python
+;; (use-package python-mode
+;;   :ensure t
+;;   )
+
 ;;------------------------------------------------------------------------eglot
 
 ;; https://granddaifuku.hatenablog.com/entry/emacs-eglot
@@ -656,12 +663,13 @@ properly disable mozc-mode."
 (use-package rustic)
 (setq rustic-lsp-client 'eglot)
 
+(add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
 (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"))) ;clangdというlspの設定
 (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never"))) ;clangdというlspの設定
 ;; -header-insertion=neverで勝手にヘッダーincludeをコードに追記するのを中止している
 (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
 
-
+(add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'rust-mode-hook 'eglot-ensure)
@@ -677,6 +685,8 @@ properly disable mozc-mode."
 ;; http://ayageman.blogspot.com/2019/02/emacsyasnippet.html
 ;; 一応、なぜかcompanyと馴染んでいる。（理由はわからない）
 ;; Rustは対応していないので調整をする必要がある
+
+;; yasnippetはtabで出てきます。
 
 (use-package yasnippet :ensure t
   :diminish
@@ -719,6 +729,7 @@ properly disable mozc-mode."
   ;; こいつをdataに入れれば、indentが反映される。
   ;; # expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
   )
+
 
 ;; -------------------------------------------------------------------------------------------------
 ;; sublimity
