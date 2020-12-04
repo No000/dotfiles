@@ -608,16 +608,60 @@ properly disable mozc-mode."
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "C-h") nil)
+
+
+;; -----------------------------------------------------------------------
+;; nim-mode
+;; -----------------------------------------------------------------------
+
+(use-package nim-mode
+  :ensure t)
+;; The `nimsuggest-path' will be set to the value of
+;; (executable-find "nimsuggest"), automatically.
+;; (setq nimsuggest-path "/home/toto/.choosenim/toolchains/nim-1.4.0/nimsuggest")
+
+(defun my--init-nim-mode ()
+  "Local init function for `nim-mode'."
+
+  ;; Just an example, by default these functions are
+  ;; already mapped to "C-c <" and "C-c >".
+  (local-set-key (kbd "M->") 'nim-indent-shift-right)
+  (local-set-key (kbd "M-<") 'nim-indent-shift-left)
+
+  ;; Make files in the nimble folder read only by default.
+  ;; This can prevent to edit them by accident.
+  (when (string-match "/\.nimble/" (or (buffer-file-name) "")) (read-only-mode 1))
+
+  ;; If you want to experiment, you can enable the following modes by
+  ;; uncommenting their line.
+  ;; (nimsuggest-mode 1)
+  ;; Remember: Only enable either `flycheck-mode' or `flymake-mode' at the same time.
+  ;; (flycheck-mode 1)
+  ;; (flymake-mode 1)
+
+  ;; The following modes are disabled for Nim files just for the case
+  ;; that they are enabled globally.
+  ;; Anything that is based on smie can cause problems.
+  (auto-fill-mode 0)
+  (electric-indent-local-mode 0)
+)
+
+(add-hook 'nim-mode-hook 'my--init-nim-mode)
+
 ;;------------------------------------------------------------------------eglot
+
 ;; https://granddaifuku.hatenablog.com/entry/emacs-eglot
 ;; https://mopemope.com/emacs-config/
 (use-package eglot)
 (use-package rustic)
 (setq rustic-lsp-client 'eglot)
+
 (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"))) ;clangdというlspの設定
 (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never"))) ;clangdというlspの設定
 ;; -header-insertion=neverで勝手にヘッダーincludeをコードに追記するのを中止している
 (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
+
+
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'rust-mode-hook 'eglot-ensure)
@@ -799,8 +843,9 @@ properly disable mozc-mode."
 ;; ブラウザ検索のショートカット
 (global-set-key (kbd "C-c w")  'eaf-search-it)
 ;; ブラウザ履歴の閲覧
-(global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
-
+ (global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
+;; ブラウザのURLを叩いて飛ぶ用
+ (global-set-key (kbd "C-c u")  'eaf-open-browser)
 
 ;; -------------------------------------------------------------------------------------------------
 ;; ace-window
