@@ -575,7 +575,7 @@ properly disable mozc-mode."
          (lambda (str)
            (concat (all-the-icons-faicon
                     "hand-o-right"
-                    :v-adjust -0.2 :face 'my-ivy-arrow-visible :height 0.6 ) ;0.7がよしかも
+                    :v-adjust -0.2 :face 'my-ivy-arrow-visible :height 0.6 ) ;文が切れるので調整を行った。
                    " " (ivy--add-face str 'ivy-current-match)))
          (lambda (str)
            (concat (all-the-icons-faicon
