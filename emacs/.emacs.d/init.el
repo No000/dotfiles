@@ -525,13 +525,21 @@ properly disable mozc-mode."
 
 ;;----------------------------------------------------------------------------------
 
+;; ivy-postframeの大きさの設定
+;; (setq   ivy-posframe-height-alist '((t . 20))
+;;         ivy-posframe-parameters '((internal-border-width . 2))
+;;         ;;ivy-posframe '((t (:background "#333244")))
+;;         ;;ivy-posframe-border '((t (:background "#abff00")))
+;;         ;;ivy-posframe-cursor '((t (:background "#00ff00")))
+;;         )
+
 ;; display at `ivy-posframe-style'
 ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
 ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
-;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))) 
 (ivy-posframe-mode 1)
 
 
@@ -567,11 +575,11 @@ properly disable mozc-mode."
          (lambda (str)
            (concat (all-the-icons-faicon
                     "hand-o-right"
-                    :v-adjust -0.2 :face 'my-ivy-arrow-visible)
+                    :v-adjust -0.2 :face 'my-ivy-arrow-visible :height 0.6 ) ;0.7がよしかも
                    " " (ivy--add-face str 'ivy-current-match)))
          (lambda (str)
            (concat (all-the-icons-faicon
-                    "hand-o-right" :face 'my-ivy-arrow-invisible) " " str))
+                    "hand-o-right" :face 'my-ivy-arrow-invisible :height 0.6) " " str))
          cands
          "\n"))
       (setq ivy-format-functions-alist
@@ -787,6 +795,11 @@ properly disable mozc-mode."
   (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
   (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
   (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+
+;; ブラウザ検索のショートカット
+(global-set-key (kbd "C-c w")  'eaf-search-it)
+;; ブラウザ履歴の閲覧
+(global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
 
 
 ;; -------------------------------------------------------------------------------------------------
