@@ -1134,18 +1134,23 @@ properly disable mozc-mode."
 (setq eshell-history-size 100000)
 (setq eshell-hist-ignoredups t)
 
+(use-package eshell-toggle
+  :ensure t
+  :bind
+  ("<f7>" . eshell-toggle))
 
 ;; alias
 (defvar *shell-alias* '(("ll" "ls -la")
                         ("cdd" "cd ~/Desktop")))
 (defvar eshell-command-aliases-list (append *shell-alias*))
 
-(when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
-  (use-package aweshell
-	:ensure nil
-	:bind
-	("<f7>" . aweshell-dedicated-toggle)
-	))
+;; aweshellは消したが戻すとき用に設定だけ残す（戻すときはelispディレクトリに突っ込む）
+;; (when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
+;;   (use-package aweshell
+;; 	:ensure nil
+;; 	:bind
+;; 	("<f7>" . aweshell-dedicated-toggle)
+;; 	))
 
 
 
