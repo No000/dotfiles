@@ -1140,11 +1140,9 @@ properly disable mozc-mode."
                         ("cdd" "cd ~/Desktop")))
 (defvar eshell-command-aliases-list (append *shell-alias*))
 
-(when (file-directory-p "~/ghq/github.com/manateelazycat/aweshell")
+(when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
   (use-package aweshell
 	:ensure nil
-	:load-path
-    (lambda () (expand-file-name "~/ghq/github.com/manateelazycat/aweshell" user-emacs-directory))
 	:bind
 	("<f7>" . aweshell-dedicated-toggle)
 	))
