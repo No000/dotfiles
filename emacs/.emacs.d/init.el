@@ -1122,3 +1122,33 @@ properly disable mozc-mode."
   ;; type over a region
   (pending-delete-mode t))
 
+;; ================================================================================
+;; eshell
+;; ================================================================================
+
+(setq comint-prompt-read-only t)		;これでshellとtermのプロンプトが消されることはなくなる
+
+(setq eshell-cmpl-ignore-case t)
+(setq eshell-glob-include-dot-dot nil)
+(setq eshell-ask-to-save-history (quote always))
+(setq eshell-history-size 100000)
+(setq eshell-hist-ignoredups t)
+
+
+;; alias
+(defvar *shell-alias* '(("ll" "ls -la")
+                        ("cdd" "cd ~/Desktop")))
+(defvar eshell-command-aliases-list (append *shell-alias*))
+
+(when (file-directory-p "~/ghq/github.com/manateelazycat/aweshell")
+  (use-package aweshell
+	:ensure nil
+	:load-path
+    (lambda () (expand-file-name "~/ghq/github.com/manateelazycat/aweshell" user-emacs-directory))
+	:bind
+	("<f7>" . aweshell-dedicated-toggle)
+	))
+
+
+
+
