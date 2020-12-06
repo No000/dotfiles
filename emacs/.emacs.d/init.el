@@ -1134,16 +1134,16 @@ properly disable mozc-mode."
 (setq eshell-history-size 100000)
 (setq eshell-hist-ignoredups t)
 
-;; https://github.com/4DA/eshell-toggle
-(use-package eshell-toggle
-  :ensure t
-  :custom
-  (eshell-toggle-run-command nil)
-  ;; (eshell-toggle-window-side 'above) ; ウィンドウ開く方向を調整できる
-  ;; (eshell-toggle-default-directory "~/Desktop") ;関連ファイルがない場合にどこで開くかを指定することができる
-  ;; (eshell-toggle-init-function #'eshell-toggle-init-tmux) ; 美しくないのでやめたほうがいい
-  :bind
-  ("<f7>" . eshell-toggle))
+;; ;; https://github.com/4DA/eshell-toggle
+;; (use-package eshell-toggle
+;;   :ensure t
+;;   :custom
+;;   (eshell-toggle-run-command nil)
+;;   ;; (eshell-toggle-window-side 'above) ; ウィンドウ開く方向を調整できる
+;;   ;; (eshell-toggle-default-directory "~/Desktop") ;関連ファイルがない場合にどこで開くかを指定することができる
+;;   ;; (eshell-toggle-init-function #'eshell-toggle-init-tmux) ; 美しくないのでやめたほうがいい
+;;   :bind
+;;   ("<f7>" . eshell-toggle))
 
 ;; alias
 (defvar *shell-alias* '(("ll" "ls -la")
@@ -1151,13 +1151,11 @@ properly disable mozc-mode."
 (defvar eshell-command-aliases-list (append *shell-alias*))
 
 ;; aweshellは消したが戻すとき用に設定だけ残す（戻すときはelispディレクトリに突っ込む）
-;; (when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
-;;   (use-package aweshell
-;; 	:ensure nil
-;; 	:bind
-;; 	("<f7>" . aweshell-dedicated-toggle)
-;; 	))
-
-
-
+(when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
+  (use-package aweshell
+	:ensure nil
+	:bind
+	("<f7>" . aweshell-dedicated-toggle)
+	)
+  )
 
