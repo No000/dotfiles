@@ -33,7 +33,7 @@ stow -v <対象のドットファイルやドットディレクトリー（複�
 ・ttf-ricty-diminished  
 
 emacs-application-framework関連  
-・emacs-eaf(AUR)  
+・emacs-eaf(AUR) <-今は使っていない   
 ・python-pyqt5  
 ・python-pyqt5-sip  
 ・python-pyqtwebengine  
@@ -61,3 +61,11 @@ Docker
 ・docker  
 ・docker-compose  
 
+### git clone
+
+elispディレクトリにパッケージを入れる  
+eaf  
+> https://github.com/manateelazycat/emacs-application-framework.git
+
+aweshell  
+> https://github.com/manateelazycat/aweshell.git  

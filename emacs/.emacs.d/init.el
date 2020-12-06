@@ -840,8 +840,8 @@ properly disable mozc-mode."
 ;; Emacsの２窓をするとかなり不安定になるためおすすめしない。そもそもしないと思うけどデバッグの際に注意が必要
 ;; ea-open-gitはまだ使い方がいまいちわからないので入れていない(必要なパッケージは、PyGit2)
 (use-package eaf
-  :load-path "/usr/share/emacs/site-lisp/eaf" ; Set to "~/.emacs.d/site-lisp/emacs-application-framework" if installed from AUR
-  ;; :load-path "/home/toto/Git/emacs-application-framework"
+  ;;:load-path "/usr/share/emacs/site-lisp/eaf" ; Set to "~/.emacs.d/site-lisp/emacs-application-framework" if installed from AUR
+  :load-path "~/dotfiles/emacs/.emacs.d/emacs-application-framework"
   :custom
   (eaf-find-alternate-file-in-dired t)
   (eaf-browser-continue-where-left-off t)
