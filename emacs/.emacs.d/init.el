@@ -712,16 +712,29 @@ properly disable mozc-mode."
 ;; optionally
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode)
+  :custom
+  ;; lsp-ui-peek
+  (lsp-ui-peek-enable t)
+  (lsp-ui-peek-peek-height 20)
+  (lsp-ui-peek-list-width 50)
+  (lsp-ui-peek-fontify 'always) ;; never, on-demand, or always
+  (lsp-ui-sideline-enable t)
+  :commands lsp-ui-mode
+  :bind
+  ("C-c r" . lsp-ui-peek-find-references)
+  ;; ("C-c j" . lsp-ui-peek-find-definitions)
+  ;; ("C-c i"   . lsp-ui-peek-find-implementation) ; clangdがサポートしていない
+  )
 ;; if you are helm user
 
 ;; if you are ivy user
 (use-package lsp-ivy
   :ensure t
   :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs
-  :ensure t
-  :commands lsp-treemacs-errors-list)
+
+;; (use-package lsp-treemacs
+;;   :ensure t
+;;   :commands lsp-treemacs-errors-list)
 
 ;; optionally if you want to use debugger
 (use-package dap-mode
@@ -730,7 +743,7 @@ properly disable mozc-mode."
 
 (defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
 
-(define-key lsp-mode-map (kbd "<f6>") 'xref-find-definitions)
+(define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
 ;; ===========================================================================================
 ;; yasnippet
 ;; ===========================================================================================
