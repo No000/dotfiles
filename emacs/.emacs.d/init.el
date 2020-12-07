@@ -688,8 +688,10 @@ properly disable mozc-mode."
 ;;set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 
 ;;(add-to-list 'exec-path(expand-file-name "~/.nimble/bin/"))
-(use-package rustic)
+(use-package rustic
+  :ensure t)
 (use-package lsp-mode
+  :ensure t
   :custom
   (lsp-headerline-breadcrumb-mode t)
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
@@ -708,15 +710,22 @@ properly disable mozc-mode."
 (setq-default rustic-format-trigger 'on-save)
 (setq rustic-lsp-server 'rust-analyzer)
 ;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
 ;; if you are helm user
 
 ;; if you are ivy user
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+(use-package lsp-ivy
+  :ensure t
+  :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs
+  :ensure t
+  :commands lsp-treemacs-errors-list)
 
 ;; optionally if you want to use debugger
-(use-package dap-mode)
+(use-package dap-mode
+  :ensure t)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 (defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
