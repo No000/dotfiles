@@ -847,7 +847,7 @@ properly disable mozc-mode."
   (imenu-list-entry-face-1 ((t (:foreground "white"))))
   :custom
   (imenu-list-focus-after-activation t)
-  (imenu-list-auto-resize t))
+  (imenu-list-auto-resize nil))
 ;; -------------------------------------------------------------------------------------------------
 ;; openwith
 ;; -------------------------------------------------------------------------------------------------
