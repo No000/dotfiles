@@ -659,28 +659,72 @@ properly disable mozc-mode."
 
 ;; https://granddaifuku.hatenablog.com/entry/emacs-eglot
 ;; https://mopemope.com/emacs-config/
-(use-package eglot)
+;; (use-package eglot)
+;; (use-package rustic)
+;; (setq rustic-lsp-client 'eglot)
+
+;; (add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
+;; (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"))) ;clangdというlspの設定
+;; (add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never"))) ;clangdというlspの設定
+;; ;; -header-insertion=neverで勝手にヘッダーincludeをコードに追記するのを中止している
+;; (add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
+
+;; (add-hook 'python-mode-hook 'eglot-ensure)
+;; (add-hook 'c++-mode-hook 'eglot-ensure)
+;; (add-hook 'c-mode-hook 'eglot-ensure)
+;; (add-hook 'rust-mode-hook 'eglot-ensure)
+;; (remove-hook 'rustic-mode-hook 'flycheck-mode);flycheckを無効化
+;; ;;(add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1))); flycheckを利用する場合
+;; (define-key eglot-mode-map (kbd "C-c e f") 'eglot-format)
+;; (define-key eglot-mode-map (kbd "C-c e n") 'eglot-rename)
+
+;; (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+
+;; ===========================================================================================
+;; lsp-mode
+;; ===========================================================================================
+
+;; eglotの対応が少ないのが辛いのでlsp-modeに移行する
+;;set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+
+;;(add-to-list 'exec-path(expand-file-name "~/.nimble/bin/"))
 (use-package rustic)
-(setq rustic-lsp-client 'eglot)
+(use-package lsp-mode
+  :custom
+  (lsp-headerline-breadcrumb-mode t)
+    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+           (c-mode . lsp)
+		   (c++-mode . lsp)
+;;		   (nim-mode . lsp)
+		   (rustic-mode . lsp)
+		   (python-mode . lsp)
+            ;; if you want which-key integration
+           (lsp-mode . lsp-enable-which-key-integration)
+         (lsp-managed-mode . lsp-modeline-diagnostics-mode)
+         (lsp-mode . lsp-headerline-breadcrumb-mode)
+         (lsp-mode . lsp-modeline-code-actions-mode))
+    :commands lsp)
 
-(add-to-list 'eglot-server-programs '(python-mode . ("pyls")))
-(add-to-list 'eglot-server-programs '(c++-mode . ("clangd"))) ;clangdというlspの設定
-(add-to-list 'eglot-server-programs '(c-mode . ("clangd" "-header-insertion=never"))) ;clangdというlspの設定
-;; -header-insertion=neverで勝手にヘッダーincludeをコードに追記するのを中止している
-(add-to-list 'eglot-server-programs '(rust-mode . ("rust-analyzer")))
+(setq-default rustic-format-trigger 'on-save)
+(setq rustic-lsp-server 'rust-analyzer)
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+;; if you are helm user
 
-(add-hook 'python-mode-hook 'eglot-ensure)
-(add-hook 'c++-mode-hook 'eglot-ensure)
-(add-hook 'c-mode-hook 'eglot-ensure)
-(add-hook 'rust-mode-hook 'eglot-ensure)
-(remove-hook 'rustic-mode-hook 'flycheck-mode);flycheckを無効化
-;;(add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1))); flycheckを利用する場合
-(define-key eglot-mode-map (kbd "C-c e f") 'eglot-format)
-(define-key eglot-mode-map (kbd "C-c e n") 'eglot-rename)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
-(define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
+;; optionally if you want to use debugger
+(use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
+(defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
 
+(define-key lsp-mode-map (kbd "<f6>") 'xref-find-definitions)
+;; ===========================================================================================
+;; yasnippet
+;; ===========================================================================================
 ;; yasnippetは他の方からもらってきた
 ;; http://ayageman.blogspot.com/2019/02/emacsyasnippet.html
 ;; 一応、なぜかcompanyと馴染んでいる。（理由はわからない）
