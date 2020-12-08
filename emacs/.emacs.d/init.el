@@ -1247,6 +1247,7 @@ properly disable mozc-mode."
   '("vim"                                ; what is going on??
     "htop"                      ; ok, a valid program...
     "less" "more"                       ; M-x view-file)
+	"qemu-system-x86_64"				; qemuのCLI起動時に対応するため
 	))
 
 
