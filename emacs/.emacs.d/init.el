@@ -756,6 +756,11 @@ properly disable mozc-mode."
 
 (defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
 
+;; lsp-modeのパフォーマンスを上げるための調整
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq lsp-completion-provider :capf)
+
 ;; (define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
 ;; ===========================================================================================
 ;; yasnippet
