@@ -384,7 +384,7 @@ properly disable mozc-mode."
   (column-number-mode 0)
   (doom-modeline-def-modeline 'main
     '(bar  matches buffer-info remote-host buffer-position parrot selection-info)
-    '(misc-info persp-name lsp github debug minor-modes input-method major-mode process vcs checker)))
+    '(misc-info battery persp-name lsp github debug minor-modes input-method major-mode process vcs checker))) ; batteryを追加した
 
 ;; これは黄色にポォンと出るやつ
 (use-package beacon
@@ -719,9 +719,20 @@ properly disable mozc-mode."
   (lsp-ui-peek-list-width 50)
   (lsp-ui-peek-fontify 'always) ;; never, on-demand, or always
   (lsp-ui-sideline-enable t)
+      (lsp-ui-doc-use-childframe t)
+    (lsp-ui-doc-use-webkit t)
   :commands lsp-ui-mode
+      :preface
+    (defun ladicle/toggle-lsp-ui-doc ()
+      (interactive)
+      (if lsp-ui-doc-mode
+        (progn
+          (lsp-ui-doc-mode -1)
+          (lsp-ui-doc--hide-frame))
+         (lsp-ui-doc-mode 1)))
   :bind
   ("C-c r" . lsp-ui-peek-find-references)
+  ("<f6>"   . ladicle/toggle-lsp-ui-doc)
   ;; ("C-c j" . lsp-ui-peek-find-definitions)
   ;; ("C-c i"   . lsp-ui-peek-find-implementation) ; clangdがサポートしていない
   )
@@ -743,7 +754,7 @@ properly disable mozc-mode."
 
 (defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
 
-(define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
+;; (define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
 ;; ===========================================================================================
 ;; yasnippet
 ;; ===========================================================================================
@@ -1033,6 +1044,21 @@ properly disable mozc-mode."
   ("C-c t p" . centaur-tabs-group-by-projectile-project)
   ("C-c t g" . centaur-tabs-group-buffer-groups))
 
+
+
+;; ================================================================================
+;; highlight-indent-guides
+;; ================================================================================
+;; https://github.com/DarthFennec/highlight-indent-guides
+  (use-package highlight-indent-guides
+    :diminish
+    :hook
+    ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+    :custom
+    (highlight-indent-guides-auto-enabled t)
+    (highlight-indent-guides-responsive t)
+    (highlight-indent-guides-method 'bitmap)) ; column
+
 ;; -----------------------------------------------------------------------------------------------
 ;; whitespacの設定
 ;; -----------------------------------------------------------------------------------------------
@@ -1215,6 +1241,21 @@ properly disable mozc-mode."
 (defvar *shell-alias* '(("ll" "ls -la")
                         ("cdd" "cd ~/Desktop")))
 (defvar eshell-command-aliases-list (append *shell-alias*))
+
+;; ここにeshellだと表示やキーバインドが奪われるコマンドを追記する
+(setq eshell-visual-commands
+  '("vim"                                ; what is going on??
+    "htop"                      ; ok, a valid program...
+    "less" "more"                       ; M-x view-file)
+	))
+
+
+(require 'em-term)
+(defun eshell-exec-visual (&rest args)
+  (apply 'start-process
+         "eshell-exec-visual" " eshell-exec-visual"
+         "konsole" "-title" "eshell-exec-visual" "-e" args)
+  nil)
 
 ;; aweshellは消したが戻すとき用に設定だけ残す（戻すときはelispディレクトリに突っ込む）
 (when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
