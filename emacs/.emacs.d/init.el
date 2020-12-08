@@ -382,9 +382,11 @@ properly disable mozc-mode."
   :config
   (line-number-mode 0)
   (column-number-mode 0)
-  (doom-modeline-def-modeline 'main
-    '(bar  matches buffer-info remote-host buffer-position parrot selection-info)
-    '(misc-info battery persp-name lsp github debug minor-modes input-method major-mode process vcs checker))) ; batteryを追加した
+  ;; ace-windowやwinum-modeで使いやすいように
+  ;; (doom-modeline-def-modeline 'main
+  ;;   '(bar  matches buffer-info remote-host buffer-position parrot selection-info)
+  ;;   '(winum misc-info battery persp-name lsp github debug minor-modes input-method major-mode process vcs checker))) ; batteryを追加した
+  )
 
 ;; これは黄色にポォンと出るやつ
 (use-package beacon
@@ -938,16 +940,33 @@ properly disable mozc-mode."
 ;; ace-window
 ;; -------------------------------------------------------------------------------------------------
 ;; tmux風のWindow間を移動する手段
-(use-package ace-window
-  ;; :functions hydra-frame-window/body
-  :config
-  (global-set-key (kbd "C-x o") 'ace-window)
+;; (use-package ace-window
+;;   ;; :functions hydra-frame-window/body
+;;   :config
+;;   (global-set-key (kbd "C-x o") 'ace-window)
 
-  ;; ("C-M-o" . hydra-frame-window/body)
-  :custom
-  (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
-  :custom-face
-  (aw-leading-char-face ((t (:height 4.0 :foreground "#f1fa8c")))))
+
+
+;;   ;; ("C-M-o" . hydra-frame-window/body)
+;;   ;; :custom
+;;   ;; (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
+
+;;   ;; :custom-face
+;;   ;; (aw-leading-char-face ((t (:height 4.0 :foreground "#f1fa8c"))))
+;;   )
+;; (setq aw-dispatch-always t)
+;; (ace-window-display-mode 1)
+;; (setq aw-minibuffer-flag t)
+
+;; -------------------------------------------------------------------------------------------------
+;; winum-mode
+;; -------------------------------------------------------------------------------------------------
+;; ace-windowは多機能すぎたので移行
+(use-package winum
+  :ensure t)
+
+(winum-mode)
+(winum-set-keymap-prefix (kbd "C-c"))
 ;; -------------------------------------------------------------------------------------------------
 ;; <方向キー>でウィンドウ間移動を可能にする
 ;; -------------------------------------------------------------------------------------------------
