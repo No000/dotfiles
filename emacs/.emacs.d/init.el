@@ -1292,3 +1292,22 @@ properly disable mozc-mode."
 	)
   )
 
+
+;; ================================================================================
+;; git-gutter
+;; ================================================================================
+;; https://github.com/emacsorphanage/git-gutter
+;; https://qiita.com/Ladicle/items/feb5f9dce9adf89652cf#%E5%A4%89%E6%9B%B4%E7%AF%84%E5%9B%B2%E3%81%A8%E6%93%8D%E4%BD%9C%E3%82%92%E5%8F%AF%E8%A6%96%E5%8C%96----git-gutter
+;; git diffコマンドを活用した変更箇所の可視化
+
+(use-package git-gutter
+    :custom
+    (git-gutter:modified-sign "~")
+    (git-gutter:added-sign    "+")
+    (git-gutter:deleted-sign  "-")
+    :custom-face
+    (git-gutter:modified ((t (:background "#f1fa8c"))))
+    (git-gutter:added    ((t (:background "#50fa7b"))))
+    (git-gutter:deleted  ((t (:background "#ff79c6"))))
+    :config
+    (global-git-gutter-mode +1))
