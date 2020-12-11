@@ -69,6 +69,8 @@
 ;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
 ;; (setq ring-bell-function 'ignore)
 
+;; barを出るようにする
+(global-hl-line-mode t) 
 
 ;; 現状スクロールバーとメニューバーを使っていないため削除する。
 ;; 可能であればyaskrollのようなものに変更を行いたい。
@@ -388,12 +390,13 @@ properly disable mozc-mode."
   ;;   '(winum misc-info battery persp-name lsp github debug minor-modes input-method major-mode process vcs checker))) ; batteryを追加した
   )
 
-;; これは黄色にポォンと出るやつ
-(use-package beacon
-  :custom
-  (beacon-color "yellow")
-  :config
-  (beacon-mode 1))
+;; 時々バグるので消す
+;; ;; これは黄色にポォンと出るやつ
+;; (use-package beacon
+;;   :custom
+;;   (beacon-color "yellow")
+;;   :config
+;;   (beacon-mode 1))
 
 (use-package page-break-lines)
 
@@ -1324,54 +1327,77 @@ properly disable mozc-mode."
 ;; (require 'company-english-helper)
 
 ;; ================================================================================
-;;  company-tabnine 
+;;  company-tabnine
 ;; ================================================================================
 ;; 機械学習で支援してくれるツール
 ;; 少し重いのと、lsp-modeとの動機が面倒そう
 ;; (use-package company-tabnine :ensure t)
 
-
-;; (use-package popwin
-;;   :ensure t)
-
-;; (use-package google-translate
-;;   :ensure t)
-;; (setq google-translate-backend-method 'wget)
-
-;; (require 'google-translate-default-ui)
-
-;; (defvar google-translate-english-chars "[:ascii:]"
-;;   "これらの文字が含まれているときは英語とみなす")
-;; (defun google-translate-enja-or-jaen (&optional string)
-;;   "regionか現在位置の単語を翻訳する。C-u付きでquery指定も可能"
-;;   (interactive)
-;;   (setq string
-;;         (cond ((stringp string) string)
-;;               (current-prefix-arg
-;;                (read-string "Google Translate: "))
-;;               ((use-region-p)
-;;                (buffer-substring (region-beginning) (region-end)))
-;;               (t
-;;                (thing-at-point 'word))))
-;;   (let* ((asciip (string-match
-;;                   (format "\\`[%s]+\\'" google-translate-english-chars)
-;;                   string)))
-;;     (run-at-time 0.1 nil 'deactivate-mark)
-;;     (google-translate-translate
-;;      (if asciip "en" "ja")
-;;      (if asciip "ja" "en")
-;;      string)))
-
-;; (push '("\*Google Translate\*" :height 0.5 :stick t) popwin:special-display-config)
-
-;; (global-set-key (kbd "C-c e") 'google-translate-enja-or-jaen)
+;; ================================================================================
+;; google-translate
+;; ================================================================================
 
 
+;; popwin
+;; https://github.com/emacsorphanage/popwin
+(use-package popwin
+  :ensure t)
+(popwin-mode 1)
+
+;; google翻訳
+;; https://github.com/atykhonov/google-translate
 (use-package google-translate
   :ensure t)
 (require 'google-translate-smooth-ui)
-(global-set-key (kbd "C-c e") 'google-translate-smooth-translate)
 
-(setq google-translate-translation-directions-alist
-      '(("en" . "ja")))
+;; 以下コードは以下のサイトより引用
+;; https://blog.shibayu36.org/entry/2016/05/29/123342
+
+(defvar google-translate-english-chars "[:ascii:]"
+  "これらの文字が含まれているときは英語とみなす")
+(defun google-translate-enja-or-jaen (&optional string)
+  "regionか現在位置の単語を翻訳する。C-u付きでquery指定も可能"
+  (interactive)
+  (setq string
+        (cond ((stringp string) string)
+              (current-prefix-arg
+               (read-string "Google Translate: "))
+              ((use-region-p)
+               (buffer-substring (region-beginning) (region-end)))
+              (t
+               (thing-at-point 'word))))
+  (let* ((asciip (string-match
+                  (format "\\`[%s]+\\'" google-translate-english-chars)
+                  string)))
+    (run-at-time 0.1 nil 'deactivate-mark)
+    (google-translate-translate
+     (if asciip "en" "ja")
+     (if asciip "ja" "en")
+     string)))
+
+
+(setq popwin:popup-window-position 'bottom)
+(push '("\*Google Translate\*") popwin:special-display-config)
+
+(global-set-key (kbd "C-c e") 'google-translate-enja-or-jaen)
+
+
+
+;; 現状におけるバグなのか以下の記載がないと動かない
+;; https://github.com/atykhonov/google-translate/issues/137#issuecomment-723938431
+(defun google-translate--search-tkk ()
+  "Search TKK."
+  (list 430675 2721866130))
+
+;; ================================================================================
+;; real-auto-save
+;; ================================================================================
+;; 自動で保存をしてくれる
+
+(use-package real-auto-save
+  :ensure t)
+(add-hook 'prog-mode-hook 'real-auto-save-mode)
+ (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
+
+
 
