@@ -853,7 +853,7 @@ properly disable mozc-mode."
 
 ;; With use-package:
 ;; -------------------------------------------------------------------------------------------------
-;; company-box
+
 ;; -------------------------------------------------------------------------------------------------
 ;; モダンな補完機能
 (use-package company-box
@@ -1311,3 +1311,67 @@ properly disable mozc-mode."
     (git-gutter:deleted  ((t (:background "#ff79c6"))))
     :config
     (global-git-gutter-mode +1))
+
+
+;; ================================================================================
+;; company-english-helper
+;; ================================================================================
+;; 英語辞書
+;; elisp内に以下のelispをgit clone
+;; stardict形式の辞書ファイルを入手し変更をする
+;; https://github.com/manateelazycat/company-english-helper
+
+;; (require 'company-english-helper)
+
+;; ================================================================================
+;;  company-tabnine 
+;; ================================================================================
+;; 機械学習で支援してくれるツール
+;; 少し重いのと、lsp-modeとの動機が面倒そう
+;; (use-package company-tabnine :ensure t)
+
+
+;; (use-package popwin
+;;   :ensure t)
+
+;; (use-package google-translate
+;;   :ensure t)
+;; (setq google-translate-backend-method 'wget)
+
+;; (require 'google-translate-default-ui)
+
+;; (defvar google-translate-english-chars "[:ascii:]"
+;;   "これらの文字が含まれているときは英語とみなす")
+;; (defun google-translate-enja-or-jaen (&optional string)
+;;   "regionか現在位置の単語を翻訳する。C-u付きでquery指定も可能"
+;;   (interactive)
+;;   (setq string
+;;         (cond ((stringp string) string)
+;;               (current-prefix-arg
+;;                (read-string "Google Translate: "))
+;;               ((use-region-p)
+;;                (buffer-substring (region-beginning) (region-end)))
+;;               (t
+;;                (thing-at-point 'word))))
+;;   (let* ((asciip (string-match
+;;                   (format "\\`[%s]+\\'" google-translate-english-chars)
+;;                   string)))
+;;     (run-at-time 0.1 nil 'deactivate-mark)
+;;     (google-translate-translate
+;;      (if asciip "en" "ja")
+;;      (if asciip "ja" "en")
+;;      string)))
+
+;; (push '("\*Google Translate\*" :height 0.5 :stick t) popwin:special-display-config)
+
+;; (global-set-key (kbd "C-c e") 'google-translate-enja-or-jaen)
+
+
+(use-package google-translate
+  :ensure t)
+(require 'google-translate-smooth-ui)
+(global-set-key (kbd "C-c e") 'google-translate-smooth-translate)
+
+(setq google-translate-translation-directions-alist
+      '(("en" . "ja")))
+
