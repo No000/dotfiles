@@ -650,7 +650,7 @@ properly disable mozc-mode."
   ;; Anything that is based on smie can cause problems.
   (auto-fill-mode 0)
   (electric-indent-local-mode 0)
-)
+  )
 
 (add-hook 'nim-mode-hook 'my--init-nim-mode)
 
@@ -699,18 +699,18 @@ properly disable mozc-mode."
   :ensure t
   :custom
   (lsp-headerline-breadcrumb-mode t)
-    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (c-mode . lsp)
-		   (c++-mode . lsp)
-;;		   (nim-mode . lsp)
-		   (rustic-mode . lsp)
-		   (python-mode . lsp)
-            ;; if you want which-key integration
-           (lsp-mode . lsp-enable-which-key-integration)
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (c-mode . lsp)
+		 (c++-mode . lsp)
+		 ;;		   (nim-mode . lsp)
+		 (rustic-mode . lsp)
+		 (python-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration)
          (lsp-managed-mode . lsp-modeline-diagnostics-mode)
          (lsp-mode . lsp-headerline-breadcrumb-mode)
          (lsp-mode . lsp-modeline-code-actions-mode))
-    :commands lsp)
+  :commands lsp)
 
 (setq-default rustic-format-trigger 'on-save)
 (setq rustic-lsp-server 'rust-analyzer)
@@ -724,17 +724,17 @@ properly disable mozc-mode."
   (lsp-ui-peek-list-width 50)
   (lsp-ui-peek-fontify 'always) ;; never, on-demand, or always
   (lsp-ui-sideline-enable t)
-      (lsp-ui-doc-use-childframe t)
-    (lsp-ui-doc-use-webkit t)
+  (lsp-ui-doc-use-childframe t)
+  (lsp-ui-doc-use-webkit t)
   :commands lsp-ui-mode
-      :preface
-    (defun ladicle/toggle-lsp-ui-doc ()
-      (interactive)
-      (if lsp-ui-doc-mode
+  :preface
+  (defun ladicle/toggle-lsp-ui-doc ()
+    (interactive)
+    (if lsp-ui-doc-mode
         (progn
           (lsp-ui-doc-mode -1)
           (lsp-ui-doc--hide-frame))
-         (lsp-ui-doc-mode 1)))
+      (lsp-ui-doc-mode 1)))
   :bind
   ("C-c r" . lsp-ui-peek-find-references)
   ("<f6>"   . ladicle/toggle-lsp-ui-doc)
@@ -940,9 +940,9 @@ properly disable mozc-mode."
 ;; ブラウザ検索のショートカット
 (global-set-key (kbd "C-c w")  'eaf-search-it)
 ;; ブラウザ履歴の閲覧
- (global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
+(global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
 ;; ブラウザのURLを叩いて飛ぶ用
- (global-set-key (kbd "C-c u")  'eaf-open-browser)
+(global-set-key (kbd "C-c u")  'eaf-open-browser)
 
 ;; -------------------------------------------------------------------------------------------------
 ;; ace-window
@@ -1078,14 +1078,14 @@ properly disable mozc-mode."
 ;; highlight-indent-guides
 ;; ================================================================================
 ;; https://github.com/DarthFennec/highlight-indent-guides
-  (use-package highlight-indent-guides
-    :diminish
-    :hook
-    ((prog-mode yaml-mode) . highlight-indent-guides-mode)
-    :custom
-    (highlight-indent-guides-auto-enabled t)
-    (highlight-indent-guides-responsive t)
-    (highlight-indent-guides-method 'bitmap)) ; column
+(use-package highlight-indent-guides
+  :diminish
+  :hook
+  ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-auto-enabled t)
+  (highlight-indent-guides-responsive t)
+  (highlight-indent-guides-method 'bitmap)) ; column
 
 ;; -----------------------------------------------------------------------------------------------
 ;; whitespacの設定
@@ -1172,8 +1172,8 @@ properly disable mozc-mode."
 		)
 	  )
 
-; メモをC-M-^一発で見るための設定
-; https://qiita.com/takaxp/items/0b717ad1d0488b74429d から拝借
+										; メモをC-M-^一発で見るための設定
+										; https://qiita.com/takaxp/items/0b717ad1d0488b74429d から拝借
 (defun show-org-buffer (file)
   "Show an org-file FILE on the current buffer."
   (interactive)
@@ -1272,11 +1272,11 @@ properly disable mozc-mode."
 
 ;; ここにeshellだと表示やキーバインドが奪われるコマンドを追記する
 (setq eshell-visual-commands
-  '("vim"                                ; what is going on??
-    "htop"                      ; ok, a valid program...
-    "less" "more"                       ; M-x view-file)
-	"qemu-system-x86_64"				; qemuのCLI起動時に対応するため
-	))
+	  '("vim"                                ; what is going on??
+		"htop"                      ; ok, a valid program...
+		"less" "more"                       ; M-x view-file)
+		"qemu-system-x86_64"				; qemuのCLI起動時に対応するため
+		))
 
 
 (require 'em-term)
@@ -1304,16 +1304,16 @@ properly disable mozc-mode."
 ;; git diffコマンドを活用した変更箇所の可視化
 
 (use-package git-gutter
-    :custom
-    (git-gutter:modified-sign "~")
-    (git-gutter:added-sign    "+")
-    (git-gutter:deleted-sign  "-")
-    :custom-face
-    (git-gutter:modified ((t (:background "#f1fa8c"))))
-    (git-gutter:added    ((t (:background "#50fa7b"))))
-    (git-gutter:deleted  ((t (:background "#ff79c6"))))
-    :config
-    (global-git-gutter-mode +1))
+  :custom
+  (git-gutter:modified-sign "~")
+  (git-gutter:added-sign    "+")
+  (git-gutter:deleted-sign  "-")
+  :custom-face
+  (git-gutter:modified ((t (:background "#f1fa8c"))))
+  (git-gutter:added    ((t (:background "#50fa7b"))))
+  (git-gutter:deleted  ((t (:background "#ff79c6"))))
+  :config
+  (global-git-gutter-mode +1))
 
 
 ;; ================================================================================
@@ -1397,7 +1397,7 @@ properly disable mozc-mode."
 (use-package real-auto-save
   :ensure t)
 (add-hook 'prog-mode-hook 'real-auto-save-mode)
- (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
+(setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
 
 
