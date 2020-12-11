@@ -56,6 +56,11 @@
 ;; 行番号
 ;;(global-linum-mode t)
 (global-display-line-numbers-mode)
+(add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'imenu-list-major-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
+(add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
+
 ;; カラム番号を表示
 ;;(line-number-mode t)
 (column-number-mode t)
@@ -1213,6 +1218,8 @@ properly disable mozc-mode."
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker))
+(setq docker-container-shell-file-name "/bin/bash")
+
 
 ;; dockerfile-mode
 ;; https://github.com/spotify/dockerfile-mode
