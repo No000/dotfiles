@@ -1400,10 +1400,10 @@ properly disable mozc-mode."
 ;; real-auto-save
 ;; ================================================================================
 ;; 自動で保存をしてくれる
-
+;; lspが走っている場合、保存のたびに構文チェックが毎回走り重くなることがあるので自動保存がほしいモード
 (use-package real-auto-save
   :ensure t)
-(add-hook 'prog-mode-hook 'real-auto-save-mode)
+(add-hook 'emacs-lisp-mode-hook 'real-auto-save-mode)
 (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
 
