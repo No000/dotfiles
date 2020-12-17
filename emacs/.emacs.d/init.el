@@ -106,7 +106,16 @@
 ;; 右クリックで選択領域をコピー
 (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
 
+;; ================================================================================
+;; async
+;; ================================================================================
 
+(use-package async
+  :ensure t)
+(autoload 'dired-async-mode "dired-async.el" nil t) ;これはhelmで効果を発揮するらしいけど、ivyだとどうなんだろ。
+(dired-async-mode 1)
+
+(async-bytecomp-package-mode 1)			;非同期でパッケージのコンパイルを行う
 ;;------------------
 ;; フォントの設定
 ;; フォント設定
@@ -1249,11 +1258,55 @@ properly disable mozc-mode."
   ;; type over a region
   (pending-delete-mode t))
 
+
+;; ================================================================================
+;; xterm-256color
+;; ================================================================================
+;; https://github.com/atomontage/xterm-color
+
+(use-package xterm-color
+  :ensure t)
+
 ;; ================================================================================
 ;; eshell
 ;; ================================================================================
 
+
+
+(require 'eshell)
+
+(with-eval-after-load 'esh-mode
+  (add-hook 'eshell-mode-hook
+          (lambda () (progn
+            (setq xterm-color-preserve-properties t)
+            (setenv "TERM" "xterm-256color"))))
+
 (setq comint-prompt-read-only t)		;これでshellとtermのプロンプトが消されることはなくなる
+
+
+
+(use-package eshell-prompt-extras
+  :ensure t)
+
+(eval-after-load 'esh-opt
+  '(progn (require 'eshell-prompt-extras)
+          (setq eshell-highlight-prompt nil
+                eshell-prompt-function 'epe-theme-lambda)))
+
+(eval-after-load 'esh-opt
+  '(progn (require 'eshell-prompt-extras)
+          (setq eshell-highlight-prompt nil
+                eshell-prompt-function 'epe-theme-lambda)))
+
+
+
+
+  (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
+
+  (setq eshell-output-filter-functions
+  (remove 'eshell-handle-ansi-color eshell-output-filter-functions))
+)
+
 
 (setq eshell-cmpl-ignore-case t)
 (setq eshell-glob-include-dot-dot nil)
@@ -1262,15 +1315,15 @@ properly disable mozc-mode."
 (setq eshell-hist-ignoredups t)
 
 ;; ;; https://github.com/4DA/eshell-toggle
-;; (use-package eshell-toggle
-;;   :ensure t
-;;   :custom
-;;   (eshell-toggle-run-command nil)
-;;   ;; (eshell-toggle-window-side 'above) ; ウィンドウ開く方向を調整できる
-;;   ;; (eshell-toggle-default-directory "~/Desktop") ;関連ファイルがない場合にどこで開くかを指定することができる
-;;   ;; (eshell-toggle-init-function #'eshell-toggle-init-tmux) ; 美しくないのでやめたほうがいい
-;;   :bind
-;;   ("<f7>" . eshell-toggle))
+(use-package eshell-toggle
+  :ensure t
+  :custom
+  (eshell-toggle-run-command nil)
+  ;; (eshell-toggle-window-side 'above) ; ウィンドウ開く方向を調整できる
+  ;; (eshell-toggle-default-directory "~/Desktop") ;関連ファイルがない場合にどこで開くかを指定することができる
+  ;; (eshell-toggle-init-function #'eshell-toggle-init-tmux) ; 美しくないのでやめたほうがいい
+  :bind
+  ("<f7>" . eshell-toggle))
 
 ;; alias
 (defvar *shell-alias* '(("ll" "ls -la")
@@ -1293,15 +1346,37 @@ properly disable mozc-mode."
          "konsole" "-title" "eshell-exec-visual" "-e" args)
   nil)
 
-;; aweshellは消したが戻すとき用に設定だけ残す（戻すときはelispディレクトリに突っ込む）
-(when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
-  (use-package aweshell
-	:ensure nil
-	:bind
-	("<f7>" . aweshell-dedicated-toggle)
-	)
-  )
+;; ;; aweshellは消したが戻すとき用に設定だけ残す（戻すときはelispディレクトリに突っ込む）
+;; (when (file-directory-p "~/dotfiles/emacs/.emacs.d/elisp/aweshell")
+;;   (use-package aweshell
+;; 	:ensure nil
+;; 	:bind
+;; 	("<f7>" . aweshell-dedicated-toggle)
+;; 	)
+;;   )
 
+;; ================================================================================
+;; shell
+;; ================================================================================
+;; shellモードでプロンプトのカラー表示
+(require 'shell)
+(add-hook 'shell-mode-hook
+      (lambda ()
+        (face-remap-set-base 'comint-highlight-prompt :inherit nil)))
+
+(setq comint-output-filter-functions
+      (remove 'ansi-color-process-output comint-output-filter-functions))
+
+(add-hook 'shell-mode-hook
+          (lambda ()
+            ;; Disable font-locking in this buffer to improve performance
+            (font-lock-mode -1)
+            ;; Prevent font-locking from being re-enabled in this buffer
+            (make-local-variable 'font-lock-function)
+            (setq font-lock-function (lambda (_) nil))
+            (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter nil t)))
+
+;; Also set TERM accordingly (xterm-256color) in the shell itself.
 
 ;; ================================================================================
 ;; git-gutter
@@ -1406,5 +1481,23 @@ properly disable mozc-mode."
 (add-hook 'emacs-lisp-mode-hook 'real-auto-save-mode)
 (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
+;; ================================================================================
+;; shift-number
+;; ================================================================================
+;; カーソルの次にある数字をインクリメントしたりデクリメントしたりできる。
+(use-package shift-number
+  :ensure t)
+
+(global-set-key (kbd "M-+") 'shift-number-up)
+(global-set-key (kbd "M-*") 'shift-number-down)
 
 
+;; ================================================================================
+;; shift-number
+;; ================================================================================
+;; goto-lineを強化することができる。
+
+(use-package goto-line-preview
+  :ensure t)
+
+(global-set-key [remap goto-line] 'goto-line-preview)
