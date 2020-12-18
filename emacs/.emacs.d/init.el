@@ -1479,21 +1479,28 @@ properly disable mozc-mode."
 (use-package real-auto-save
   :ensure t)
 (add-hook 'emacs-lisp-mode-hook 'real-auto-save-mode)
+(add-hook 'markdown-mode-hook 'real-auto-save-mode)
 (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
 ;; ================================================================================
 ;; shift-number
 ;; ================================================================================
 ;; カーソルの次にある数字をインクリメントしたりデクリメントしたりできる。
-(use-package shift-number
+;; (use-package shift-number
+;;   :ensure t)
+
+;; (global-set-key (kbd "M-+") 'shift-number-up)
+;; (global-set-key (kbd "M-*") 'shift-number-down)
+
+
+(use-package evil-numbers
   :ensure t)
 
-(global-set-key (kbd "M-+") 'shift-number-up)
-(global-set-key (kbd "M-*") 'shift-number-down)
-
+(global-set-key (kbd "M-+") 'evil-numbers/inc-at-pt)
+(global-set-key (kbd "M-*") 'evil-numbers/dec-at-pt)
 
 ;; ================================================================================
-;; shift-number
+;; goto-line-preview
 ;; ================================================================================
 ;; goto-lineを強化することができる。
 
@@ -1501,3 +1508,37 @@ properly disable mozc-mode."
   :ensure t)
 
 (global-set-key [remap goto-line] 'goto-line-preview)
+
+
+;; migemo
+
+
+(use-package migemo
+  :ensure t)
+
+;; cmigemo(default)
+(setq migemo-command "cmigemo")
+(setq migemo-options '("-q" "--emacs"))
+
+;; Set your installed path
+(setq migemo-dictionary "/usr/share/migemo/utf-8/migemo-dict")
+
+(setq migemo-user-dictionary nil)
+(setq migemo-regex-dictionary nil)
+(setq migemo-coding-system 'utf-8-unix)
+(migemo-init)
+
+;;
+
+(use-package avy-migemo
+  :ensure t)
+;; `avy-migemo-mode' overrides avy's predefined functions using `advice-add'.
+(avy-migemo-mode 1)
+(global-set-key (kbd "M-g m m") 'avy-migemo-mode)
+
+
+(setq avy-timeout-seconds nil)
+(global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
+
+
+(global-set-key (kbd "C-c C-c") 'avy-goto-word-0)

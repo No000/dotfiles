@@ -1,9 +1,9 @@
-# dotfiles
+# dotfiles  
 ドットファイル管理  
 OS：ManjaroLinux-KDE
 
-## ディレクトリ構成
-exa -Tで生成
+## ディレクトリ構成  
+exa -Tで生成  
 <後でやる>
 
 ## セットアップ
@@ -53,6 +53,7 @@ emacs-application-framework関連
 lsp関連  
 ・clnagd  
 ・rust-analyzer  
+・python-language-server  
 
 Magit  
 ・git  
@@ -61,7 +62,10 @@ Docker
 ・docker  
 ・docker-compose  
 
-### git clone
+migemo  
+・cmigemo(AUR)  
+
+### git clone  
 
 elispディレクトリにパッケージを入れる  
 eaf  
