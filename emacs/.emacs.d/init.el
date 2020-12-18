@@ -1492,7 +1492,9 @@ properly disable mozc-mode."
 ;; (global-set-key (kbd "M-+") 'shift-number-up)
 ;; (global-set-key (kbd "M-*") 'shift-number-down)
 
-
+;; ================================================================================
+;; evil-numvers
+;; ================================================================================
 (use-package evil-numbers
   :ensure t)
 
@@ -1510,7 +1512,10 @@ properly disable mozc-mode."
 (global-set-key [remap goto-line] 'goto-line-preview)
 
 
+
+;; ================================================================================
 ;; migemo
+;; ================================================================================
 
 
 (use-package migemo
@@ -1528,7 +1533,10 @@ properly disable mozc-mode."
 (setq migemo-coding-system 'utf-8-unix)
 (migemo-init)
 
-;;
+
+;; ================================================================================
+;; avy-migemo
+;; ================================================================================
 
 (use-package avy-migemo
   :ensure t)
@@ -1536,9 +1544,7 @@ properly disable mozc-mode."
 (avy-migemo-mode 1)
 (global-set-key (kbd "M-g m m") 'avy-migemo-mode)
 
-
 (setq avy-timeout-seconds nil)
 (global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
-
 
 (global-set-key (kbd "C-c C-c") 'avy-goto-word-0)
