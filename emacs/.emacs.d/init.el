@@ -808,6 +808,17 @@ properly disable mozc-mode."
 	:ensure t)
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
+  (setq lsp-clients-clangd-executable "/usr/bin/clangd")
+  (setq lsp-clients-clangd-args
+		'(;;"-j=2"
+         ;; "--background-index"
+          ;;"--clang-tidy"
+         ;; "--completion-style=bundled"
+          ;;"--pch-storage=memory"
+          "--header-insertion=never"
+          ;;"--header-insertion-decorators=0"
+		  ))
+  
   (defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
 
   ;; lsp-modeのパフォーマンスを上げるための調整
