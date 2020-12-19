@@ -1584,7 +1584,7 @@ properly disable mozc-mode."
   (setq avy-timeout-seconds nil)
   (global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
 
-  (global-set-key (kbd "C-c C-c") 'avy-goto-word-0)
+  (global-set-key (kbd "C-c C-v") 'avy-goto-word-0)
 
   ;; ================================================================================
   ;; review-mode
