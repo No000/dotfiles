@@ -742,13 +742,14 @@ properly disable mozc-mode."
 	(pop-to-buffer buffer-or-name action norecord)
 	(other-window -1)
 	)
-
+  
   (custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
   
   (use-package lsp-mode
 	:ensure t
 	:custom
 	(lsp-headerline-breadcrumb-mode t)
+
 	:hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
            (c-mode . lsp)
 		   (c++-mode . lsp)
@@ -1583,9 +1584,15 @@ properly disable mozc-mode."
 
   (setq avy-timeout-seconds nil)
   (global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
+  (global-set-key (kbd "<henkan>") 'avy-goto-word-0)
 
-  (global-set-key (kbd "C-c C-v") 'avy-goto-word-0)
-
+  ;; ================================================================================
+  ;; cc-modeにおいてのショートカット衝突の回避
+  ;; ================================================================================
+   
+  ;; (require 'cc-mode)
+  ;; (define-key c-mode-map (kbd "C-c C-c") nil)
+  ;;  (define-key c++-mode-map (kbd "C-c C-c") nil)
   ;; ================================================================================
   ;; review-mode
   ;; ================================================================================
