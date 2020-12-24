@@ -44,8 +44,8 @@
   ;; (defun my-minibuffer-exit-hook ()
   ;; 	(setq gc-cons-threshold 100000000))
 
-  (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-  (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+  ;; (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+  ;; (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
   
   (require 'package)  ; package.elを有効化
   ;; パッケージリポジトリにMarmaladeとMELPAを追加
