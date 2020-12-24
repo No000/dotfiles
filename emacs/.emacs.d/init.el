@@ -1529,6 +1529,7 @@ properly disable mozc-mode."
   ;; (add-hook 'prog-mode-hook 'real-auto-save-mode)
   (add-hook 'emacs-lisp-mode-hook 'real-auto-save-mode)
   (add-hook 'markdown-mode-hook 'real-auto-save-mode)
+    (add-hook 'org-mode-hook 'real-auto-save-mode)
   (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
   ;; ================================================================================
