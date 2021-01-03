@@ -1645,7 +1645,8 @@ properly disable mozc-mode."
   (setq ivy-re-builders-alist '((t . ivy--regex-plus)
                               (eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)))
 
-  (use-package vimrc-mode)
+  (use-package vimrc-mode
+	:ensure t)
 (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
