@@ -1624,10 +1624,31 @@ properly disable mozc-mode."
   ;; (cua-mode t)  ; cua-modeをオン
   ;; (setq cua-enable-cua-keys nil)  ; CUAキーバインドを無効化
 
-  
+
+  ;; ================================================================================
+  ;; eaf-historyやswipperでmozcが使えない問題を解消
+  ;; ================================================================================
+  ;; migemoを利用している
+  (defun ytn-ivy-migemo-re-builder (str)
+  (let* ((sep " \\|\\^\\|\\.\\|\\*")
+         (splitted (--map (s-join "" it)
+                          (--partition-by (s-matches-p " \\|\\^\\|\\.\\|\\*" it)
+                                          (s-split "" str t)))))
+    (s-join "" (--map (cond ((s-equals? it " ") ".*?")
+                            ((s-matches? sep it) it)
+                            (t (migemo-get-pattern it)))
+                      splitted))))
+
+  (setq ivy-re-builders-alist '((t . ivy--regex-plus)
+								(swiper . ytn-ivy-migemo-re-builder)))
+
+  (setq ivy-re-builders-alist '((t . ivy--regex-plus)
+                              (eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)))
+
+  (use-package vimrc-mode)
+(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
 
-(use-package vimrc-mode)
-(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+
