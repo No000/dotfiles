@@ -360,6 +360,7 @@ properly disable mozc-mode."
 	:ensure t
 	:config
 	(setq mozc-candidate-style 'popup) ; select popup style.
+	;; (setq mozc-candidate-style 'echo-area)
 	)
 
 
@@ -560,8 +561,8 @@ properly disable mozc-mode."
 	;; アクティベート
 	(ivy-mode 1))
 
-  ;; postframeの設定
-  (use-package ivy-posframe)
+  (use-package ivy-posframe
+	:ensure t)
 
   ;; -------------------------------------------------------------------------------swipperの設定
   ;; swiper
@@ -571,6 +572,8 @@ properly disable mozc-mode."
 	(global-set-key (kbd "M-s M-s") 'swiper-thing-at-point))
 
   ;;----------------------------------------------------------------------------------
+  ;; postframeの設定
+  (require 'ivy-posframe)
 
   ;; ivy-postframeの大きさの設定
   ;; (setq   ivy-posframe-height-alist '((t . 20))
