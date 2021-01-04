@@ -354,6 +354,7 @@ properly disable mozc-mode."
 	)
 
 
+
   ;; (use-package mozc-popup					;overlayだと重いため変更
   ;; 	:ensure t
   ;; 	:config
@@ -369,12 +370,12 @@ properly disable mozc-mode."
 ;; (mozc-posframe-register)
 ;; (setq mozc-candidate-style 'posframe)
 
-  (use-package mozc-cand-posframe
-    :ensure t
-    :config
-    (setq mozc-candidate-style 'posframe)
-    :init
-    (use-package posframe :ensure t))
+  ;; (use-package mozc-cand-posframe
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq mozc-candidate-style 'posframe)
+  ;;   :init
+  ;;   (use-package posframe :ensure t))
 
 
   
@@ -1144,7 +1145,7 @@ properly disable mozc-mode."
 	(calendar-mode . centaur-tabs-local-mode)
 	(org-agenda-mode . centaur-tabs-local-mode)
 	(helpful-mode . centaur-tabs-local-mode)
-	(mozc-mode . centaur-tabs-local-mode)
+	;; (mozc-mode . centaur-tabs-local-mode)
 	:bind
 	("C-<prior>" . centaur-tabs-backward)
 	("C-<next>" . centaur-tabs-forward)
