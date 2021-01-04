@@ -355,12 +355,12 @@ properly disable mozc-mode."
 
 
 
-  ;; (use-package mozc-popup					;overlayだと重いため変更
-  ;; 	:ensure t
-  ;; 	:config
-  ;; 	(setq mozc-candidate-style 'popup) ; select popup style.
-  ;; 	;; (setq mozc-candidate-style 'echo-area)
-  ;; 	)
+  (use-package mozc-popup					;overlayだと重いため変更
+	:ensure t
+	:config
+	(setq mozc-candidate-style 'popup) ; select popup style.
+	;; (setq mozc-candidate-style 'echo-area)
+	)
 
 
 ;; download mozc-posframe.el and place it at your load-path.
