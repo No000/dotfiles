@@ -576,9 +576,29 @@ properly disable mozc-mode."
 	;; アクティベート
 	(ivy-mode 1))
 
+
+
   (use-package ivy-posframe
 	:ensure t)
 
+
+  ;; -------------------------------------------------------------------------------counselの設定
+
+  (use-package counsel
+	:ensure t)
+
+
+
+  ;; ;; キーバインドは一例です．好みに変えましょう．
+  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "M-y") 'counsel-yank-pop)
+  (global-set-key (kbd "C-M-z") 'counsel-fzf)
+  (global-set-key (kbd "C-M-r") 'counsel-recentf)
+  (global-set-key (kbd "C-x C-b") 'counsel-ibuffer)
+  (global-set-key (kbd "C-M-f") 'counsel-ag)
+
+  ;; ;; アクティベート
+  ;; (counsel-mode 1)
   ;; -------------------------------------------------------------------------------swipperの設定
   ;; swiper
   (use-package swiper)
@@ -587,25 +607,26 @@ properly disable mozc-mode."
 	(global-set-key (kbd "M-s M-s") 'swiper-thing-at-point))
 
   ;;----------------------------------------------------------------------------------
-  ;; postframeの設定
-  (require 'ivy-posframe)
+  ;; ;; postframeの設定
+  ;; (require 'ivy-posframe)
 
-  ;; ivy-postframeの大きさの設定
+  ;; ;; ;; ivy-postframeの大きさの設定
   ;; (setq   ivy-posframe-height-alist '((t . 20))
   ;;         ivy-posframe-parameters '((internal-border-width . 2))
-  ;;         ;;ivy-posframe '((t (:background "#333244")))
-  ;;         ;;ivy-posframe-border '((t (:background "#abff00")))
-  ;;         ;;ivy-posframe-cursor '((t (:background "#00ff00")))
+  ;;         ;; ivy-posframe '((t (:background "#333244")))
+  ;;         ;; ivy-posframe-border '((t (:background "#abff00")))
+  ;;         ;; ivy-posframe-cursor '((t (:background "#00ff00")))
   ;;         )
 
-  ;; display at `ivy-posframe-style'
-  ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-  ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
-  ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
-  ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))) 
-  (ivy-posframe-mode 1)
+
+  ;; ;; display at `ivy-posframe-style'
+  ;; ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+  ;; ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  ;; ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+  ;; ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+  ;; ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+  ;; ;;(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))) 
+  ;; (ivy-posframe-mode 1)
 
 
   ;; パッケージマネージャーの支援パッケージ
@@ -652,14 +673,25 @@ properly disable mozc-mode."
 	(setq ivy-format-functions-alist '((t . ivy-format-function-arrow))))
 
   ;;-------------------------------------------------------------------------
-  (use-package all-the-icons-ivy)
+  (use-package all-the-icons-ivy
+	:ensure t)
   (when (require 'all-the-icons-ivy nil t)
 	(dolist (command '(counsel-projectile-switch-project
                        counsel-ibuffer))
       (add-to-list 'all-the-icons-ivy-buffer-commands command))
 	(all-the-icons-ivy-setup))
+  (setq all-the-icons-ivy-rich-icon-size 0.5)
 
 
+  (with-eval-after-load "all-the-icons-ivy"
+      (defvar my-tab-width tab-width)
+      (defun my-tab-width-2 () (setq tab-width 2))
+      (defun my-tab-width-1 () (setq tab-width 1))
+      (defun my-tab-width-8 () (setq tab-width 8))
+      (defun my-tab-width-original ()
+        (setq tab-width my-tab-width))
+      (add-hook 'minibuffer-setup-hook #'my-tab-width-2)
+      (add-hook 'minibuffer-exit-hook #'my-tab-width-original))
   ;; ------------------------------------------------------------------------company
   (use-package company)
   (global-company-mode) ; 全バッファで有効にする 
@@ -857,7 +889,7 @@ properly disable mozc-mode."
 
   (use-package yasnippet :ensure t
 	:diminish
-	;; :after (counsel)
+	;;:after (counsel)
 	:after ivy ;; [201904]
 	:bind (
 		   :map yas-minor-mode-map
