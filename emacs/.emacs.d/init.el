@@ -351,19 +351,33 @@ properly disable mozc-mode."
 		(progn                          ;(message "%s" event) ;debug
           ad-do-it)))
 	(ad-activate 'mozc-handle-event)
-
-
 	)
 
 
-  (use-package mozc-popup					;overlayだと重いため変更
-	:ensure t
-	:config
-	(setq mozc-candidate-style 'popup) ; select popup style.
-	;; (setq mozc-candidate-style 'echo-area)
-	)
+  ;; (use-package mozc-popup					;overlayだと重いため変更
+  ;; 	:ensure t
+  ;; 	:config
+  ;; 	(setq mozc-candidate-style 'popup) ; select popup style.
+  ;; 	;; (setq mozc-candidate-style 'echo-area)
+  ;; 	)
 
 
+;; download mozc-posframe.el and place it at your load-path.
+;;   (use-package mozc-posframe
+;; 	:ensure nil
+;; 	:init (use-package posframe :ensure t))
+;; (mozc-posframe-register)
+;; (setq mozc-candidate-style 'posframe)
+
+  (use-package mozc-cand-posframe
+    :ensure t
+    :config
+    (setq mozc-candidate-style 'posframe)
+    :init
+    (use-package posframe :ensure t))
+
+
+  
   (prefer-coding-system 'utf-8)
 
   ;;(set-language-environment "Japanese")
@@ -1130,6 +1144,7 @@ properly disable mozc-mode."
 	(calendar-mode . centaur-tabs-local-mode)
 	(org-agenda-mode . centaur-tabs-local-mode)
 	(helpful-mode . centaur-tabs-local-mode)
+	(mozc-mode . centaur-tabs-local-mode)
 	:bind
 	("C-<prior>" . centaur-tabs-backward)
 	("C-<next>" . centaur-tabs-forward)
