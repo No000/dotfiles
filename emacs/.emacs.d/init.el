@@ -1,5 +1,4 @@
 ;; 全体的な設定を記載
-
 ;; bytecomplie
 ;; scratchバッファに行き
 ;; (byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
@@ -1318,6 +1317,27 @@ properly disable mozc-mode."
 	:config
 	)
 
+  ;; ---------------------------------------------------------------
+  ;; git関連のモード追加
+  ;; ---------------------------------------------------------------
+  (use-package gitignore-mode
+	:ensure t)
+
+(add-to-list 'auto-mode-alist
+             (cons "/.gitignore\\'" 'gitignore-mode))
+  
+  (use-package gitattributes-mode
+	:ensure t)
+
+  (add-to-list 'auto-mode-alist
+             (cons "/.gitattributes\\'" 'gitignore-mode))
+
+  (use-package gitconfig-mode
+	:ensure t)
+  
+  (add-to-list 'auto-mode-alist
+             (cons "/..gitconfig\\'" 'gitignore-mode))
+  
   ;; --------------------------------------------------------------
   ;; Docker関連の設定
   ;; --------------------------------------------------------------
