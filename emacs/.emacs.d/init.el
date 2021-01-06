@@ -199,7 +199,13 @@
   (when (member "Cascadia Code" (font-family-list))
 	(add-to-list 'default-frame-alist '(font . "Cascadia Code 11")))
 
-
+  ;; 絵文字
+(use-package emojify :ensure t
+  :if (display-graphic-p)
+  :hook (after-init . global-emojify-mode)
+  :bind
+  ("C-x e" . 'emojify-insert-emoji)
+  )
 
   ;; Ricty Diminished 11
   ;; Cascadia Code 11
@@ -464,9 +470,9 @@ properly disable mozc-mode."
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   ;; これはタイトルをオシャンティーにするやつ
   (use-package dashboard
-	:bind (("<f5>" . open-dashboard)
-		   :map dashboard-mode-map
-		   ("<f5>" . quit-dashboard))
+	;; :bind (("<f5>" . open-dashboard)
+	;; 	   :map dashboard-mode-map
+	;; 	   ("<f5>" . quit-dashboard))
 	:diminish
 	(dashboard-mode page-break-lines-mode)
 	:custom
@@ -1716,7 +1722,23 @@ properly disable mozc-mode."
   (use-package vimrc-mode
 	:ensure t)
 (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
-  ;; GCを走らせないようにするためのカッコ（消すな）=====================================
+
+  ;; ================================================================================
+  ;; quick-run
+  ;; ================================================================================
+(use-package quickrun
+  :ensure t)
+
+(global-set-key (kbd "<f5>") 'quickrun)
+(global-set-key (kbd "C-<f5>") 'quickrun-with-arg)
+(global-set-key (kbd "M-<f5>") 'quickrun-compile-only)
+
+
+(use-package nasm-mode
+  :ensure t)
+(add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
+
+;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
 
