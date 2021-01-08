@@ -1515,6 +1515,8 @@ properly disable mozc-mode."
 	(git-gutter:modified-sign "~")
 	(git-gutter:added-sign    "+")
 	(git-gutter:deleted-sign  "-")
+	:init
+	(add-hook 'c-mode-hook 'git-gutter-mode) ; add-hookしないとうまくうごかないので
 	:custom-face
 	(git-gutter:modified ((t (:background "#f1fa8c"))))
 	(git-gutter:added    ((t (:background "#50fa7b"))))
@@ -1523,6 +1525,8 @@ properly disable mozc-mode."
 	(global-git-gutter-mode +1))
 
 
+
+  
   ;; ================================================================================
   ;; company-english-helper
   ;; ================================================================================

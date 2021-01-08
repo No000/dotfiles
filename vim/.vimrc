@@ -198,8 +198,8 @@ function! s:on_lsp_buffer_enabled() abort
   setlocal signcolumn=yes
   nmap <buffer> gd <plug>(lsp-definition)
   nmap <buffer> <f2> <plug>(lsp-rename)
-  "inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
-	inoremap <expr> <cr> ((pumvisible())?("\<C-y>"):("\<cr>"))
+	inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
+" 補完表示時のEnterで改行をしない
 endfunction
 
 augroup lsp_install
@@ -214,8 +214,7 @@ let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 0
 let g:asyncomplete_popup_delay = 200
 let g:lsp_text_edit_enabled = 1
-inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
-
+inoremap <expr> <CR> pumvisible() ? 'C-Y' : <CR>
 "---------------------------------------
 " Lightline Plugin
 "---------------------------------------
@@ -442,7 +441,6 @@ set guioptions-=m
 
 set clipboard&
 set clipboard^=unnamedplus
-
 " 検索をかけた際にハイライトが残るのがうっとおしいので修正
 nnoremap <ESC><ESC> :nohl<CR>
 " 困った点
