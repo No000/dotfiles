@@ -65,6 +65,10 @@ Docker
 migemo  
 ・cmigemo(AUR)  
 
+rutic-mode  
+- cargo-outdated
+- cargo-edit
+- 
 ### git clone  
 
 elispディレクトリにパッケージを入れる  
