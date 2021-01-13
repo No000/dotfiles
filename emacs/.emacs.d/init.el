@@ -3,7 +3,6 @@
 ;; scratchバッファに行き
 ;; (byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
 ;; C-j C-eとする
-
 ;; 依存パッケージ（OSのパッケージマネージャーからダウンロードしてねってやつ）
 ;; emacs-mozc:AURにあります。ビルドファイルを編集しないといけませんが、別ファイルに入れておく予定です。
 ;; LSP(Language Sever Protocol)に関して
@@ -1744,6 +1743,20 @@ properly disable mozc-mode."
   :ensure t)
 (add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
 
+
+(use-package doxymacs
+  :ensure nil
+  :load-path "/usr/share/emacs/site-lisp"
+  :init (add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
+  )
+
+(defun doxy-custom-c-mode-hook ()
+			(doxymacs-mode 1)
+			(setq doxymacs-doxygen-style "JavaDoc")
+			(setq doxymacs-command-character "@"))
+
+(add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
+  
 ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================

@@ -68,7 +68,10 @@ migemo
 rutic-mode  
 - cargo-outdated
 - cargo-edit
-- 
+
+Doxymacs
+- doxymacs-git
+
 ### git clone  
 
 elispディレクトリにパッケージを入れる  
