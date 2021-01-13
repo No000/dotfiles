@@ -1307,7 +1307,7 @@ properly disable mozc-mode."
 	:ensure t
 	:hook (org-mode . org-bullets-mode))
 
-
+(setq org-src-preserve-indentation t)		;ソースブロックでインデントの有効化
 
   ;; ---------------------------------------------------------------
   ;; Magitの設定
