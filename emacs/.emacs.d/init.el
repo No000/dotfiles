@@ -1717,11 +1717,13 @@ properly disable mozc-mode."
                             (t (migemo-get-pattern it)))
                       splitted))))
 
+  ;; swipperにmigemoがうまく動いていなかったので修正
   (setq ivy-re-builders-alist '((t . ivy--regex-plus)
+								(eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)
 								(swiper . ytn-ivy-migemo-re-builder)))
 
-  (setq ivy-re-builders-alist '((t . ivy--regex-plus)
-                              (eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)))
+  ;; (setq ivy-re-builders-alist '((t . ivy--regex-plus)
+  ;;                             (eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)))
 
   (use-package vimrc-mode
 	:ensure t)
