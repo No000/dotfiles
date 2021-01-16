@@ -199,12 +199,12 @@
 	(add-to-list 'default-frame-alist '(font . "Cascadia Code 11")))
 
   ;; 絵文字
-(use-package emojify :ensure t
-  :if (display-graphic-p)
-  :hook (after-init . global-emojify-mode)
-  :bind
-  ("C-x e" . 'emojify-insert-emoji)
-  )
+;; (use-package emojify :ensure t
+;;   :if (display-graphic-p)
+;;   :hook (after-init . global-emojify-mode)
+;;   :bind
+;;   ("C-x e" . 'emojify-insert-emoji)
+;;   )
 
   ;; Ricty Diminished 11
   ;; Cascadia Code 11
