@@ -1756,6 +1756,28 @@ properly disable mozc-mode."
 			(setq doxymacs-command-character "@"))
 
 (add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
+
+  ;; ================================================================================
+  ;; transparency
+  ;; ================================================================================
+;; from https://emacs.stackexchange.com/questions/44011/how-to-make-everything-except-the-text-transparent
+
+(setq transparency_level 0)
+(defun my:change_transparency ()
+  "Toggles transparency of Emacs between 3 settings (none, mild, moderate)."
+  (interactive)
+  (if (equal transparency_level 0)
+      (progn (set-frame-parameter (selected-frame) 'alpha '(75 . 85))
+         (setq transparency_level 1))
+    (if (equal transparency_level 1)
+    (progn (set-frame-parameter (selected-frame) 'alpha '(50 . 85))
+           (setq transparency_level 2))
+      (if (equal transparency_level 2)
+      (progn (set-frame-parameter (selected-frame) 'alpha '(100 . 85))
+         (setq transparency_level 0)))
+      )))
+(define-key global-map (kbd "C-c q") 'my:change_transparency)
+
   
 ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
