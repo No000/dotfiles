@@ -1767,7 +1767,7 @@ properly disable mozc-mode."
   "Toggles transparency of Emacs between 3 settings (none, mild, moderate)."
   (interactive)
   (if (equal transparency_level 0)
-      (progn (set-frame-parameter (selected-frame) 'alpha '(75 . 85))
+      (progn (set-frame-parameter (selected-frame) 'alpha '(90 . 85))
          (setq transparency_level 1))
     (if (equal transparency_level 1)
     (progn (set-frame-parameter (selected-frame) 'alpha '(50 . 85))
