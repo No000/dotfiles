@@ -1810,9 +1810,14 @@ properly disable mozc-mode."
       (progn (set-frame-parameter (selected-frame) 'alpha '(100 . 85))
          (setq transparency_level 0)))
       )))
-(define-key global-map (kbd "C-c q") 'my:change_transparency)
 
-  
+
+(setq proced-auto-update-interval 1)
+(defun proced-settings ()
+  (proced-toggle-auto-update t))
+
+(add-hook 'proced-mode-hook 'proced-settings)
+
 ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
