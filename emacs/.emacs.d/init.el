@@ -1042,23 +1042,57 @@ properly disable mozc-mode."
   ;; 追加でpython-pyqt5-sipが必要となる。
   ;; Emacsの２窓をするとかなり不安定になるためおすすめしない。そもそもしないと思うけどデバッグの際に注意が必要
   ;; ea-open-gitはまだ使い方がいまいちわからないので入れていない(必要なパッケージは、PyGit2)
-  (use-package eaf
-	;;:load-path "/usr/share/emacs/site-lisp/eaf" ; Set to "~/.emacs.d/site-lisp/emacs-application-framework" if installed from AUR
-	:load-path "~/dotfiles/emacs/.emacs.d/elisp/emacs-application-framework"
-	:custom
-	(eaf-find-alternate-file-in-dired t)
-	(eaf-browser-continue-where-left-off t)
-	:config
-	(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-	(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-	(eaf-bind-key take_photo "p" eaf-camera-keybinding))
+  ;; (use-package eaf
+  ;; 	;;:load-path "/usr/share/emacs/site-lisp/eaf" ; Set to "~/.emacs.d/site-lisp/emacs-application-framework" if installed from AUR
+  ;; 	:load-path "~/dotfiles/emacs/.emacs.d/elisp/emacs-application-framework"
+  ;; 	:custom
+  ;; 	(eaf-find-alternate-file-in-dired t)
+  ;; 	(eaf-browser-continue-where-left-off t)
+  ;; 	:config
+  ;; 	(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  ;; 	(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  ;; 	(eaf-bind-key take_photo "p" eaf-camera-keybinding))
+  (use-package epc
+	:ensure t
+	:defer t)
 
+  (use-package ctable	
+	:ensure t
+	:defer t)
+
+  (use-package deferred
+	:ensure t
+	)
+  (use-package eaf
+  :load-path "~/dotfiles/emacs/.emacs.d/elisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+  :init
+  (use-package epc
+	:defer t)
+  (use-package ctable
+	:defer t)
+  (use-package deferred
+	:defer t)
+  :custom
+  (eaf-browser-continue-where-left-off t)
+  :config
+  (eaf-setq eaf-browser-enable-adblocker "true")
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+
+
+  
   ;; ブラウザ検索のショートカット
   (global-set-key (kbd "C-c w")  'eaf-search-it)
   ;; ブラウザ履歴の閲覧
   (global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
   ;; ブラウザのURLを叩いて飛ぶ用
   (global-set-key (kbd "C-c u")  'eaf-open-browser)
+
+
+  ;; (require 'cl) を見逃す(起動時の警告対策)
+(setq byte-compile-warnings '(not cl-functions obsolete))
 
   ;; -------------------------------------------------------------------------------------------------
   ;; ace-window
