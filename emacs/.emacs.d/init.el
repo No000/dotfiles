@@ -1802,16 +1802,19 @@ properly disable mozc-mode."
   (interactive)
   (if (equal transparency_level 0)
       (progn (set-frame-parameter (selected-frame) 'alpha '(90 . 85))
-         (setq transparency_level 1))
+			 (setq transparency_level 1))
     (if (equal transparency_level 1)
-    (progn (set-frame-parameter (selected-frame) 'alpha '(50 . 85))
-           (setq transparency_level 2))
+		(progn (set-frame-parameter (selected-frame) 'alpha '(50 . 85))
+			   (setq transparency_level 2))
       (if (equal transparency_level 2)
-      (progn (set-frame-parameter (selected-frame) 'alpha '(100 . 85))
-         (setq transparency_level 0)))
+		  (progn (set-frame-parameter (selected-frame) 'alpha '(100 . 85))
+				 (setq transparency_level 0)))
       )))
 
-
+;; ================================================================================
+;; proced
+;; ================================================================================
+;; Emacsのプロセスモニター
 (setq proced-auto-update-interval 1)
 (defun proced-settings ()
   (proced-toggle-auto-update t))
@@ -1819,7 +1822,7 @@ properly disable mozc-mode."
 (add-hook 'proced-mode-hook 'proced-settings)
 
 ;; GCを走らせないようにするためのカッコ（消すな）=====================================
-  )
+)
 ;; ==================================================================================
 
 
