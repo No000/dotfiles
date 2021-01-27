@@ -1871,7 +1871,7 @@ middle"
 	 (this-window-y-max (nth 3 win-edges))
 	 (fr-height (frame-height)))
     (cond
-     ((eq 0 this-window-y-min) "top")
+    ((eq 0 this-window-y-min) "top")
      ((eq (- fr-height 1) this-window-y-max) "bot")
      (t "mid"))))
 
