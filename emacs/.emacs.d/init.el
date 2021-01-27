@@ -1811,6 +1811,7 @@ properly disable mozc-mode."
 				 (setq transparency_level 0)))
       )))
 
+(define-key global-map (kbd "C-c q") 'my:change_transparency)
 ;; ================================================================================
 ;; proced
 ;; ================================================================================
