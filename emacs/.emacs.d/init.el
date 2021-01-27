@@ -1821,6 +1821,111 @@ properly disable mozc-mode."
 
 (add-hook 'proced-mode-hook 'proced-settings)
 
+
+;; (defun window-resizer ()
+;;   "Control window size and position."
+;;   (interactive)
+;;   (let ((window-obj (selected-window))
+;;         (current-width (window-width))
+;;         (current-height (window-height))
+;;         (dx (if (= (nth 0 (window-edges)) 0) 1
+;;               -1))
+;;         (dy (if (= (nth 1 (window-edges)) 0) 1
+;;               -1))
+;;         action c)
+;;     (catch 'end-flag
+;;       (while t
+;;         (setq action
+;;               (read-key-sequence-vector (format "size[%dx%d]"
+;;                                                 (window-width)
+;;                                                 (window-height))))
+;;         (setq c (aref action 0))
+;;         (cond ((= c ?l)
+;;                (enlarge-window-horizontally dx))
+;;               ((= c ?h)
+;;                (shrink-window-horizontally dx))
+;;               ((= c ?j)
+;;                (enlarge-window dy))
+;;               ((= c ?k)
+;;                (shrink-window dy))
+;;               ;; otherwise
+;;               (t
+;;                (let ((last-command-char (aref action 0))
+;;                      (command (key-binding action)))
+;;                  (when command
+;;                    (call-interactively command)))
+;;                (message "Quit")
+;;                (throw 'end-flag t)))))))
+
+;; (global-set-key "\C-c\C-r" 'window-resizer)
+
+;; ================================================================================
+;; window-resize
+;; ================================================================================
+;; 
+(defun win-resize-top-or-bot ()
+  "Figure out if the current window is on top, bottom or in the
+middle"
+  (let* ((win-edges (window-edges))
+	 (this-window-y-min (nth 1 win-edges))
+	 (this-window-y-max (nth 3 win-edges))
+	 (fr-height (frame-height)))
+    (cond
+     ((eq 0 this-window-y-min) "top")
+     ((eq (- fr-height 1) this-window-y-max) "bot")
+     (t "mid"))))
+
+(defun win-resize-left-or-right ()
+  "Figure out if the current window is to the left, right or in the
+middle"
+  (let* ((win-edges (window-edges))
+	 (this-window-x-min (nth 0 win-edges))
+	 (this-window-x-max (nth 2 win-edges))
+	 (fr-width (frame-width)))
+    (cond
+     ((eq 0 this-window-x-min) "left")
+     ((eq (+ fr-width 4) this-window-x-max) "right")
+     (t "mid"))))
+
+(defun win-resize-enlarge-horiz ()
+  (interactive)
+  (cond
+   ((equal "top" (win-resize-top-or-bot)) (enlarge-window -1))
+   ((equal "bot" (win-resize-top-or-bot)) (enlarge-window 1))
+   ((equal "mid" (win-resize-top-or-bot)) (enlarge-window -1))
+   (t (message "nil"))))
+
+(defun win-resize-minimize-horiz ()
+  (interactive)
+  (cond
+   ((equal "top" (win-resize-top-or-bot)) (enlarge-window 1))
+   ((equal "bot" (win-resize-top-or-bot)) (enlarge-window -1))
+   ((equal "mid" (win-resize-top-or-bot)) (enlarge-window 1))
+   (t (message "nil"))))
+
+(defun win-resize-enlarge-vert ()
+  (interactive)
+  (cond
+   ((equal "left" (win-resize-left-or-right)) (enlarge-window-horizontally -1))
+   ((equal "right" (win-resize-left-or-right)) (enlarge-window-horizontally 1))
+   ((equal "mid" (win-resize-left-or-right)) (enlarge-window-horizontally -1))))
+
+(defun win-resize-minimize-vert ()
+  (interactive)
+  (cond
+   ((equal "left" (win-resize-left-or-right)) (enlarge-window-horizontally 1))
+   ((equal "right" (win-resize-left-or-right)) (enlarge-window-horizontally -1))
+   ((equal "mid" (win-resize-left-or-right)) (enlarge-window-horizontally 1))))
+
+(global-set-key [C-M-down] 'win-resize-minimize-vert)
+(global-set-key [C-M-up] 'win-resize-enlarge-vert)
+(global-set-key [C-M-left] 'win-resize-minimize-horiz)
+(global-set-key [C-M-right] 'win-resize-enlarge-horiz)
+(global-set-key [C-M-up] 'win-resize-enlarge-horiz)
+(global-set-key [C-M-down] 'win-resize-minimize-horiz)
+(global-set-key [C-M-left] 'win-resize-enlarge-vert)
+(global-set-key [C-M-right] 'win-resize-minimize-vert)
+
 ;; GCを走らせないようにするためのカッコ（消すな）=====================================
 )
 ;; ==================================================================================
