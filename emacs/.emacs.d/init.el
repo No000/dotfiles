@@ -1927,6 +1927,13 @@ middle"
 (global-set-key [C-M-left] 'win-resize-enlarge-vert)
 (global-set-key [C-M-right] 'win-resize-minimize-vert)
 
+;; ================================================================================
+;; restart-emacs
+;; ================================================================================
+;; https://github.com/iqbalansari/restart-emacs
+(use-package restart-emacs
+  :ensure t)
+
 ;; GCを走らせないようにするためのカッコ（消すな）=====================================
 )
 ;; ==================================================================================
