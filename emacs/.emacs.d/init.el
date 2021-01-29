@@ -134,7 +134,7 @@
 
   ;; vi-like line insertion
   ;; vim のoコマンドのような挙動に修正
-  (global-set-key (kbd "C-o") (lambda () (interactive)(end-of-line)(newline)))
+  (global-set-key (kbd "C-o") (lambda () (interactive)(end-of-line)(newline-and-indent)))
 
   ;; ================================================================================
   ;; async
