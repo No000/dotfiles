@@ -203,12 +203,12 @@
 	(add-to-list 'default-frame-alist '(font . "Cascadia Code 11")))
 
   ;; 絵文字
-;; (use-package emojify :ensure t
-;;   :if (display-graphic-p)
-;;   :hook (after-init . global-emojify-mode)
-;;   :bind
-;;   ("C-x e" . 'emojify-insert-emoji)
-;;   )
+  ;; (use-package emojify :ensure t
+  ;;   :if (display-graphic-p)
+  ;;   :hook (after-init . global-emojify-mode)
+  ;;   :bind
+  ;;   ("C-x e" . 'emojify-insert-emoji)
+  ;;   )
 
   ;; Ricty Diminished 11
   ;; Cascadia Code 11
@@ -371,12 +371,12 @@ properly disable mozc-mode."
 	)
 
 
-;; download mozc-posframe.el and place it at your load-path.
-;;   (use-package mozc-posframe
-;; 	:ensure nil
-;; 	:init (use-package posframe :ensure t))
-;; (mozc-posframe-register)
-;; (setq mozc-candidate-style 'posframe)
+  ;; download mozc-posframe.el and place it at your load-path.
+  ;;   (use-package mozc-posframe
+  ;; 	:ensure nil
+  ;; 	:init (use-package posframe :ensure t))
+  ;; (mozc-posframe-register)
+  ;; (setq mozc-candidate-style 'posframe)
 
   ;; (use-package mozc-cand-posframe
   ;;   :ensure t
@@ -692,14 +692,14 @@ properly disable mozc-mode."
 
 
   (with-eval-after-load "all-the-icons-ivy"
-      (defvar my-tab-width tab-width)
-      (defun my-tab-width-2 () (setq tab-width 2))
-      (defun my-tab-width-1 () (setq tab-width 1))
-      (defun my-tab-width-8 () (setq tab-width 8))
-      (defun my-tab-width-original ()
-        (setq tab-width my-tab-width))
-      (add-hook 'minibuffer-setup-hook #'my-tab-width-2)
-      (add-hook 'minibuffer-exit-hook #'my-tab-width-original))
+    (defvar my-tab-width tab-width)
+    (defun my-tab-width-2 () (setq tab-width 2))
+    (defun my-tab-width-1 () (setq tab-width 1))
+    (defun my-tab-width-8 () (setq tab-width 8))
+    (defun my-tab-width-original ()
+      (setq tab-width my-tab-width))
+    (add-hook 'minibuffer-setup-hook #'my-tab-width-2)
+    (add-hook 'minibuffer-exit-hook #'my-tab-width-original))
   ;; ------------------------------------------------------------------------company
   (use-package company)
   (global-company-mode) ; 全バッファで有効にする 
@@ -869,9 +869,9 @@ properly disable mozc-mode."
   (setq lsp-clients-clangd-executable "/usr/bin/clangd")
   (setq lsp-clients-clangd-args
 		'(;;"-j=2"
-         ;; "--background-index"
+          ;; "--background-index"
           ;;"--clang-tidy"
-         ;; "--completion-style=bundled"
+          ;; "--completion-style=bundled"
           ;;"--pch-storage=memory"
           "--header-insertion=never"
           ;;"--header-insertion-decorators=0"
@@ -1068,22 +1068,22 @@ properly disable mozc-mode."
 	:ensure t
 	)
   (use-package eaf
-  :load-path "~/dotfiles/emacs/.emacs.d/elisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
-  :init
-  (use-package epc
-	:defer t)
-  (use-package ctable
-	:defer t)
-  (use-package deferred
-	:defer t)
-  :custom
-  (eaf-browser-continue-where-left-off t)
-  :config
-  (eaf-setq eaf-browser-enable-adblocker "true")
-  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-  (eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
+	:load-path "~/dotfiles/emacs/.emacs.d/elisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+	:init
+	(use-package epc
+	  :defer t)
+	(use-package ctable
+	  :defer t)
+	(use-package deferred
+	  :defer t)
+	:custom
+	(eaf-browser-continue-where-left-off t)
+	:config
+	(eaf-setq eaf-browser-enable-adblocker "true")
+	(eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+	(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+	(eaf-bind-key take_photo "p" eaf-camera-keybinding)
+	(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
 
 
   
@@ -1096,7 +1096,7 @@ properly disable mozc-mode."
 
 
   ;; (require 'cl) を見逃す(起動時の警告対策)
-(setq byte-compile-warnings '(not cl-functions obsolete))
+  (setq byte-compile-warnings '(not cl-functions obsolete))
 
   ;; -------------------------------------------------------------------------------------------------
   ;; ace-window
@@ -1345,7 +1345,7 @@ properly disable mozc-mode."
 	:ensure t
 	:hook (org-mode . org-bullets-mode))
 
-(setq org-src-preserve-indentation t)		;ソースブロックでインデントの有効化
+  (setq org-src-preserve-indentation t)		;ソースブロックでインデントの有効化
 
   ;; ---------------------------------------------------------------
   ;; Magitの設定
@@ -1366,20 +1366,20 @@ properly disable mozc-mode."
   (use-package gitignore-mode
 	:ensure t)
 
-(add-to-list 'auto-mode-alist
-             (cons "/.gitignore\\'" 'gitignore-mode))
+  (add-to-list 'auto-mode-alist
+               (cons "/.gitignore\\'" 'gitignore-mode))
   
   (use-package gitattributes-mode
 	:ensure t)
 
   (add-to-list 'auto-mode-alist
-             (cons "/.gitattributes\\'" 'gitignore-mode))
+               (cons "/.gitattributes\\'" 'gitignore-mode))
 
   (use-package gitconfig-mode
 	:ensure t)
   
   (add-to-list 'auto-mode-alist
-             (cons "/..gitconfig\\'" 'gitignore-mode))
+               (cons "/..gitconfig\\'" 'gitignore-mode))
   
   ;; --------------------------------------------------------------
   ;; Docker関連の設定
@@ -1647,7 +1647,7 @@ properly disable mozc-mode."
   ;; (add-hook 'prog-mode-hook 'real-auto-save-mode)
   (add-hook 'emacs-lisp-mode-hook 'real-auto-save-mode)
   (add-hook 'markdown-mode-hook 'real-auto-save-mode)
-    (add-hook 'org-mode-hook 'real-auto-save-mode)
+  (add-hook 'org-mode-hook 'real-auto-save-mode)
   (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
   ;; ================================================================================
@@ -1731,7 +1731,7 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; cc-modeにおいてのショートカット衝突の回避
   ;; ================================================================================
-   
+  
   ;; (require 'cc-mode)
   ;; (define-key c-mode-map (kbd "C-c C-c") nil)
   ;;  (define-key c++-mode-map (kbd "C-c C-c") nil)
@@ -1757,14 +1757,14 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; migemoを利用している
   (defun ytn-ivy-migemo-re-builder (str)
-  (let* ((sep " \\|\\^\\|\\.\\|\\*")
-         (splitted (--map (s-join "" it)
-                          (--partition-by (s-matches-p " \\|\\^\\|\\.\\|\\*" it)
-                                          (s-split "" str t)))))
-    (s-join "" (--map (cond ((s-equals? it " ") ".*?")
-                            ((s-matches? sep it) it)
-                            (t (migemo-get-pattern it)))
-                      splitted))))
+	(let* ((sep " \\|\\^\\|\\.\\|\\*")
+           (splitted (--map (s-join "" it)
+							(--partition-by (s-matches-p " \\|\\^\\|\\.\\|\\*" it)
+											(s-split "" str t)))))
+      (s-join "" (--map (cond ((s-equals? it " ") ".*?")
+                              ((s-matches? sep it) it)
+                              (t (migemo-get-pattern it)))
+						splitted))))
 
   ;; swipperにmigemoがうまく動いていなかったので修正
   (setq ivy-re-builders-alist '((t . ivy--regex-plus)
@@ -1776,182 +1776,181 @@ properly disable mozc-mode."
 
   (use-package vimrc-mode
 	:ensure t)
-(add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
+  (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
 
   ;; ================================================================================
   ;; quick-run
   ;; ================================================================================
-(use-package quickrun
-  :ensure t)
+  (use-package quickrun
+	:ensure t)
 
-(global-set-key (kbd "<f5>") 'quickrun)
-(global-set-key (kbd "C-<f5>") 'quickrun-with-arg)
-(global-set-key (kbd "M-<f5>") 'quickrun-compile-only)
-
-
-(use-package nasm-mode
-  :ensure t)
-(add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
+  (global-set-key (kbd "<f5>") 'quickrun)
+  (global-set-key (kbd "C-<f5>") 'quickrun-with-arg)
+  (global-set-key (kbd "M-<f5>") 'quickrun-compile-only)
 
 
-(use-package doxymacs
-  :ensure nil
-  :load-path "/usr/share/emacs/site-lisp"
-  :init (add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
-  )
+  (use-package nasm-mode
+	:ensure t)
+  (add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
 
-(defun doxy-custom-c-mode-hook ()
-			(doxymacs-mode 1)
-			(setq doxymacs-doxygen-style "JavaDoc")
-			(setq doxymacs-command-character "@"))
 
-(add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
+  (use-package doxymacs
+	:ensure nil
+	:load-path "/usr/share/emacs/site-lisp"
+	:init (add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
+	)
+
+  (defun doxy-custom-c-mode-hook ()
+	(doxymacs-mode 1)
+	(setq doxymacs-doxygen-style "JavaDoc")
+	(setq doxymacs-command-character "@"))
+
+  (add-hook 'c-mode-common-hook 'doxy-custom-c-mode-hook)
 
   ;; ================================================================================
   ;; transparency
   ;; ================================================================================
-;; from https://emacs.stackexchange.com/questions/44011/how-to-make-everything-except-the-text-transparent
+  ;; from https://emacs.stackexchange.com/questions/44011/how-to-make-everything-except-the-text-transparent
 
-(setq transparency_level 0)
-(defun my:change_transparency ()
-  "Toggles transparency of Emacs between 3 settings (none, mild, moderate)."
-  (interactive)
-  (if (equal transparency_level 0)
-      (progn (set-frame-parameter (selected-frame) 'alpha '(90 . 85))
-			 (setq transparency_level 1))
-    (if (equal transparency_level 1)
-		(progn (set-frame-parameter (selected-frame) 'alpha '(50 . 85))
-			   (setq transparency_level 2))
-      (if (equal transparency_level 2)
-		  (progn (set-frame-parameter (selected-frame) 'alpha '(100 . 85))
-				 (setq transparency_level 0)))
-      )))
+  (setq transparency_level 0)
+  (defun my:change_transparency ()
+	"Toggles transparency of Emacs between 3 settings (none, mild, moderate)."
+	(interactive)
+	(if (equal transparency_level 0)
+		(progn (set-frame-parameter (selected-frame) 'alpha '(90 . 85))
+			   (setq transparency_level 1))
+      (if (equal transparency_level 1)
+		  (progn (set-frame-parameter (selected-frame) 'alpha '(50 . 85))
+				 (setq transparency_level 2))
+		(if (equal transparency_level 2)
+			(progn (set-frame-parameter (selected-frame) 'alpha '(100 . 85))
+				   (setq transparency_level 0)))
+		)))
 
-(define-key global-map (kbd "C-c q") 'my:change_transparency)
-;; ================================================================================
-;; proced
-;; ================================================================================
-;; Emacsのプロセスモニター
-(setq proced-auto-update-interval 1)
-(defun proced-settings ()
-  (proced-toggle-auto-update t))
+  (define-key global-map (kbd "C-c q") 'my:change_transparency)
+  ;; ================================================================================
+  ;; proced
+  ;; ================================================================================
+  ;; Emacsのプロセスモニター
+  (setq proced-auto-update-interval 1)
+  (defun proced-settings ()
+	(proced-toggle-auto-update t))
 
-(add-hook 'proced-mode-hook 'proced-settings)
+  (add-hook 'proced-mode-hook 'proced-settings)
 
 
-;; (defun window-resizer ()
-;;   "Control window size and position."
-;;   (interactive)
-;;   (let ((window-obj (selected-window))
-;;         (current-width (window-width))
-;;         (current-height (window-height))
-;;         (dx (if (= (nth 0 (window-edges)) 0) 1
-;;               -1))
-;;         (dy (if (= (nth 1 (window-edges)) 0) 1
-;;               -1))
-;;         action c)
-;;     (catch 'end-flag
-;;       (while t
-;;         (setq action
-;;               (read-key-sequence-vector (format "size[%dx%d]"
-;;                                                 (window-width)
-;;                                                 (window-height))))
-;;         (setq c (aref action 0))
-;;         (cond ((= c ?l)
-;;                (enlarge-window-horizontally dx))
-;;               ((= c ?h)
-;;                (shrink-window-horizontally dx))
-;;               ((= c ?j)
-;;                (enlarge-window dy))
-;;               ((= c ?k)
-;;                (shrink-window dy))
-;;               ;; otherwise
-;;               (t
-;;                (let ((last-command-char (aref action 0))
-;;                      (command (key-binding action)))
-;;                  (when command
-;;                    (call-interactively command)))
-;;                (message "Quit")
-;;                (throw 'end-flag t)))))))
+  ;; (defun window-resizer ()
+  ;;   "Control window size and position."
+  ;;   (interactive)
+  ;;   (let ((window-obj (selected-window))
+  ;;         (current-width (window-width))
+  ;;         (current-height (window-height))
+  ;;         (dx (if (= (nth 0 (window-edges)) 0) 1
+  ;;               -1))
+  ;;         (dy (if (= (nth 1 (window-edges)) 0) 1
+  ;;               -1))
+  ;;         action c)
+  ;;     (catch 'end-flag
+  ;;       (while t
+  ;;         (setq action
+  ;;               (read-key-sequence-vector (format "size[%dx%d]"
+  ;;                                                 (window-width)
+  ;;                                                 (window-height))))
+  ;;         (setq c (aref action 0))
+  ;;         (cond ((= c ?l)
+  ;;                (enlarge-window-horizontally dx))
+  ;;               ((= c ?h)
+  ;;                (shrink-window-horizontally dx))
+  ;;               ((= c ?j)
+  ;;                (enlarge-window dy))
+  ;;               ((= c ?k)
+  ;;                (shrink-window dy))
+  ;;               ;; otherwise
+  ;;               (t
+  ;;                (let ((last-command-char (aref action 0))
+  ;;                      (command (key-binding action)))
+  ;;                  (when command
+  ;;                    (call-interactively command)))
+  ;;                (message "Quit")
+  ;;                (throw 'end-flag t)))))))
 
-;; (global-set-key "\C-c\C-r" 'window-resizer)
+  ;; (global-set-key "\C-c\C-r" 'window-resizer)
 
-;; ================================================================================
-;; window-resize
-;; ================================================================================
-;; 
-(defun win-resize-top-or-bot ()
-  "Figure out if the current window is on top, bottom or in the
+  ;; ================================================================================
+  ;; window-resize
+  ;; ================================================================================
+  ;; 
+  (defun win-resize-top-or-bot ()
+	"Figure out if the current window is on top, bottom or in the
 middle"
-  (let* ((win-edges (window-edges))
-	 (this-window-y-min (nth 1 win-edges))
-	 (this-window-y-max (nth 3 win-edges))
-	 (fr-height (frame-height)))
-    (cond
-    ((eq 0 this-window-y-min) "top")
-     ((eq (- fr-height 1) this-window-y-max) "bot")
-     (t "mid"))))
+	(let* ((win-edges (window-edges))
+		   (this-window-y-min (nth 1 win-edges))
+		   (this-window-y-max (nth 3 win-edges))
+		   (fr-height (frame-height)))
+      (cond
+       ((eq 0 this-window-y-min) "top")
+       ((eq (- fr-height 1) this-window-y-max) "bot")
+       (t "mid"))))
 
-(defun win-resize-left-or-right ()
-  "Figure out if the current window is to the left, right or in the
-middle"
-  (let* ((win-edges (window-edges))
-	 (this-window-x-min (nth 0 win-edges))
-	 (this-window-x-max (nth 2 win-edges))
-	 (fr-width (frame-width)))
-    (cond
-     ((eq 0 this-window-x-min) "left")
-     ((eq (+ fr-width 4) this-window-x-max) "right")
-     (t "mid"))))
+  (defun win-resize-left-or-right ()
+	"Figure out if the current window is to the left, right or in the middle"
+	(let* ((win-edges (window-edges))
+		   (this-window-x-min (nth 0 win-edges))
+		   (this-window-x-max (nth 2 win-edges))
+		   (fr-width (frame-width)))
+      (cond
+       ((eq 0 this-window-x-min) "left")
+       ((eq (+ fr-width 4) this-window-x-max) "right")
+       (t "mid"))))
 
-(defun win-resize-enlarge-horiz ()
-  (interactive)
-  (cond
-   ((equal "top" (win-resize-top-or-bot)) (enlarge-window -1))
-   ((equal "bot" (win-resize-top-or-bot)) (enlarge-window 1))
-   ((equal "mid" (win-resize-top-or-bot)) (enlarge-window -1))
-   (t (message "nil"))))
+  (defun win-resize-enlarge-horiz ()
+	(interactive)
+	(cond
+	 ((equal "top" (win-resize-top-or-bot)) (enlarge-window -1))
+	 ((equal "bot" (win-resize-top-or-bot)) (enlarge-window 1))
+	 ((equal "mid" (win-resize-top-or-bot)) (enlarge-window -1))
+	 (t (message "nil"))))
 
-(defun win-resize-minimize-horiz ()
-  (interactive)
-  (cond
-   ((equal "top" (win-resize-top-or-bot)) (enlarge-window 1))
-   ((equal "bot" (win-resize-top-or-bot)) (enlarge-window -1))
-   ((equal "mid" (win-resize-top-or-bot)) (enlarge-window 1))
-   (t (message "nil"))))
+  (defun win-resize-minimize-horiz ()
+	(interactive)
+	(cond
+	 ((equal "top" (win-resize-top-or-bot)) (enlarge-window 1))
+	 ((equal "bot" (win-resize-top-or-bot)) (enlarge-window -1))
+	 ((equal "mid" (win-resize-top-or-bot)) (enlarge-window 1))
+	 (t (message "nil"))))
 
-(defun win-resize-enlarge-vert ()
-  (interactive)
-  (cond
-   ((equal "left" (win-resize-left-or-right)) (enlarge-window-horizontally -1))
-   ((equal "right" (win-resize-left-or-right)) (enlarge-window-horizontally 1))
-   ((equal "mid" (win-resize-left-or-right)) (enlarge-window-horizontally -1))))
+  (defun win-resize-enlarge-vert ()
+	(interactive)
+	(cond
+	 ((equal "left" (win-resize-left-or-right)) (enlarge-window-horizontally -1))
+	 ((equal "right" (win-resize-left-or-right)) (enlarge-window-horizontally 1))
+	 ((equal "mid" (win-resize-left-or-right)) (enlarge-window-horizontally -1))))
 
-(defun win-resize-minimize-vert ()
-  (interactive)
-  (cond
-   ((equal "left" (win-resize-left-or-right)) (enlarge-window-horizontally 1))
-   ((equal "right" (win-resize-left-or-right)) (enlarge-window-horizontally -1))
-   ((equal "mid" (win-resize-left-or-right)) (enlarge-window-horizontally 1))))
+  (defun win-resize-minimize-vert ()
+	(interactive)
+	(cond
+	 ((equal "left" (win-resize-left-or-right)) (enlarge-window-horizontally 1))
+	 ((equal "right" (win-resize-left-or-right)) (enlarge-window-horizontally -1))
+	 ((equal "mid" (win-resize-left-or-right)) (enlarge-window-horizontally 1))))
 
-(global-set-key [C-M-down] 'win-resize-minimize-vert)
-(global-set-key [C-M-up] 'win-resize-enlarge-vert)
-(global-set-key [C-M-left] 'win-resize-minimize-horiz)
-(global-set-key [C-M-right] 'win-resize-enlarge-horiz)
-(global-set-key [C-M-up] 'win-resize-enlarge-horiz)
-(global-set-key [C-M-down] 'win-resize-minimize-horiz)
-(global-set-key [C-M-left] 'win-resize-enlarge-vert)
-(global-set-key [C-M-right] 'win-resize-minimize-vert)
+  (global-set-key [C-M-down] 'win-resize-minimize-vert)
+  (global-set-key [C-M-up] 'win-resize-enlarge-vert)
+  (global-set-key [C-M-left] 'win-resize-minimize-horiz)
+  (global-set-key [C-M-right] 'win-resize-enlarge-horiz)
+  (global-set-key [C-M-up] 'win-resize-enlarge-horiz)
+  (global-set-key [C-M-down] 'win-resize-minimize-horiz)
+  (global-set-key [C-M-left] 'win-resize-enlarge-vert)
+  (global-set-key [C-M-right] 'win-resize-minimize-vert)
 
-;; ================================================================================
-;; restart-emacs
-;; ================================================================================
-;; https://github.com/iqbalansari/restart-emacs
-(use-package restart-emacs
-  :ensure t)
+  ;; ================================================================================
+  ;; restart-emacs
+  ;; ================================================================================
+  ;; https://github.com/iqbalansari/restart-emacs
+  (use-package restart-emacs
+	:ensure t)
 
-;; GCを走らせないようにするためのカッコ（消すな）=====================================
-)
+  ;; GCを走らせないようにするためのカッコ（消すな）=====================================
+  )
 ;; ==================================================================================
 
 
