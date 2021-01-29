@@ -1,3 +1,4 @@
+
 ;; 全体的な設定を記載
 ;; bytecomplie
 ;; scratchバッファに行き
@@ -134,11 +135,17 @@
 
   ;; vi-like line insertion
   ;; vim のoコマンドのような挙動に修正
+  
+  (global-set-key (kbd "C-c o") 'facemenu-keymap)
   (global-set-key (kbd "C-o") (lambda () (interactive)(end-of-line)(newline-and-indent)))
+  (global-set-key (kbd "M-o") (lambda () (interactive)(previous-line)(end-of-line)(newline-and-indent)))
 
+
+  
   ;; ================================================================================
   ;; async
   ;; ================================================================================
+
 
   (use-package async
 	:ensure t)
