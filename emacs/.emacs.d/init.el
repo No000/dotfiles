@@ -132,6 +132,10 @@
   ;; 右クリックで選択領域をコピー
   (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
 
+  ;; vi-like line insertion
+  ;; vim のoコマンドのような挙動に修正
+  (global-set-key (kbd "C-o") (lambda () (interactive)(end-of-line)(newline)))
+
   ;; ================================================================================
   ;; async
   ;; ================================================================================
@@ -937,14 +941,14 @@ properly disable mozc-mode."
   ;; sublimity
   ;; -------------------------------------------------------------------------------------------------
   ;; -----------------------------------------sublimetext風のminimap
-  ;;(use-package sublimity)
-  ;;  (require 'sublimity)
+  ;; (use-package sublimity
+  ;; 	:ensure t)
   ;;  (require 'sublimity-scroll)
-  ;;
-  ;;(require 'sublimity-map)
-  ;;(setq sublimity-map-size 40)
-  ;;(setq sublimity-map-fraction 0.3)
-  ;;(setq sublimity-map-text-scale -7)
+  
+  ;; (require 'sublimity-map)
+  ;; (setq sublimity-map-size 40)
+  ;; (setq sublimity-map-fraction 0.3)
+  ;; (setq sublimity-map-text-scale -7)
 
   ;; -------------------------------------------------------------------------------------------------
   ;; minimap
@@ -1707,11 +1711,23 @@ properly disable mozc-mode."
   ;; `avy-migemo-mode' overrides avy's predefined functions using `advice-add'.
   (avy-migemo-mode 1)
   (global-set-key (kbd "M-g m m") 'avy-migemo-mode)
-
+  
   (setq avy-timeout-seconds nil)
   (global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
-  (global-set-key (kbd "<henkan>") 'avy-goto-word-0)
 
+  ;; (use-package avy
+  ;; 	:ensure t)
+
+  ;; avy-goto-word-0を１行に限定する関数
+  ;; https://twitter.com/conao_3/status/1355069656466288643?s=20
+  (defun my/avy-goto-word-0 (arg)
+	(interactive "P")
+	(avy-with avy-goto-word-0
+	  (avy-goto-word-0 arg (line-beginning-position) (line-end-position))))
+  
+  (global-set-key (kbd "<henkan>") 'my/avy-goto-word-0)
+
+  
   ;; ================================================================================
   ;; cc-modeにおいてのショートカット衝突の回避
   ;; ================================================================================

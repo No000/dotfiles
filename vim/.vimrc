@@ -198,7 +198,18 @@ function! s:on_lsp_buffer_enabled() abort
   setlocal signcolumn=yes
   nmap <buffer> gd <plug>(lsp-definition)
   nmap <buffer> <f2> <plug>(lsp-rename)
-	inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
+	nnoremap <c-]>  :LspDefinition<CR>
+	nnoremap K      :LspHover<CR>
+	nnoremap gD     :LspImplementation<CR>
+	nnoremap <c-k>  :LspSignatureHelp<CR>
+	nnoremap 1gD    :LspTypeDefinition<CR>
+	nnoremap gr     :LspReferences<CR>
+	nnoremap g0     :LspDocumentSymbol<CR>
+	nnoremap gW     :LspWorkspaceSymbol<CR>
+	nnoremap gd     :LspDeclaration<CR>
+	nnoremap ]e     :LspNextError<CR>
+	nnoremap [e     :LspPreviousError<CR>
+  inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
 " 補完表示時のEnterで改行をしない
 endfunction
 
@@ -214,7 +225,7 @@ let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 0
 let g:asyncomplete_popup_delay = 200
 let g:lsp_text_edit_enabled = 1
-inoremap <expr> <CR> pumvisible() ? 'C-Y' : <CR>
+inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
 "---------------------------------------
 " Lightline Plugin
 "---------------------------------------
@@ -327,11 +338,11 @@ set encoding=utf-8
 " terminal encoding
 set termencoding=utf-8
 
-set fileformats=unix,dos,mac
-set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,utf-16le,utf-16,default
+set fileformats=unix,dos,mac 
+set fileencodings=ucs-bom,utf-8,iso-2022-jp,euc-jp,cp932,utf-16le,utf-16,default 
 
-"---------------------------------------
-" Tab Short cut
+"--------------------------------------- 
+" Tab Short cut 
 "---------------------------------------
 
 " set [Tag] key
