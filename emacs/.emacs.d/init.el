@@ -1727,12 +1727,19 @@ properly disable mozc-mode."
 
   ;; avy-goto-word-0を１行に限定する関数
   ;; https://twitter.com/conao_3/status/1355069656466288643?s=20
-  (defun my/avy-goto-word-0 (arg)
+  (defun avy-goto-word-0-back (arg)
 	(interactive "P")
 	(avy-with avy-goto-word-0
-	  (avy-goto-word-0 arg (line-beginning-position) (line-end-position))))
-  
-  (global-set-key (kbd "<henkan>") 'my/avy-goto-word-0)
+	  (avy-goto-word-0 arg (point) (line-end-position))))
+
+    (defun avy-goto-word-0-forward (arg)
+	(interactive "P")
+	(avy-with avy-goto-word-0
+	  (avy-goto-word-0 arg (line-beginning-position) (point))))
+	
+
+	(global-set-key (kbd "<henkan>") 'avy-goto-word-0-back)
+	(global-set-key (kbd "<muhenkan>") 'avy-goto-word-0-forward)
 
   
   ;; ================================================================================

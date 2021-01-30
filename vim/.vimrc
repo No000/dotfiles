@@ -209,9 +209,11 @@ function! s:on_lsp_buffer_enabled() abort
 	nnoremap gd     :LspDeclaration<CR>
 	nnoremap ]e     :LspNextError<CR>
 	nnoremap [e     :LspPreviousError<CR>
-  inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
 " 補完表示時のEnterで改行をしない
+  inoremap <expr> <cr> pumvisible() ? "\<c-Y>\<cr>" : "\<cr>"
+	
 endfunction
+
 
 augroup lsp_install
   au!
@@ -225,7 +227,7 @@ let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 0
 let g:asyncomplete_popup_delay = 200
 let g:lsp_text_edit_enabled = 1
-inoremap <expr><CR>  pumvisible() ? "<C-y>" : "<CR>"
+inoremap <expr><CR>  pumvisible() ? "<C-Y>" : "<CR>"
 "---------------------------------------
 " Lightline Plugin
 "---------------------------------------
