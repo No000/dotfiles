@@ -141,12 +141,12 @@
   (global-set-key (kbd "M-o") (lambda () (interactive)(previous-line)(end-of-line)(newline-and-indent)))
   (bind-key* "M-h" 'backward-kill-word)
 
-  ;; ;; M-RETにCua-modeを割り当て
-  (cua-mode t)
-  (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
-  (bind-key* "C-c C-SPC" 'cua-set-rectangle-mark)
-  ;; org-modeだとうまくkeyを奪えないので、無効化
-  (add-hook 'org-mode-hook (lambda () (cua-mode -1)))
+  ;; ;; ;; M-RETにCua-modeを割り当て
+  ;; (cua-mode t)
+  ;; (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
+  ;; (bind-key "C-c C-SPC" 'cua-set-rectangle-mark)
+  ;; ;; org-modeだとうまくkeyを奪えないので、無効化
+  ;; (add-hook 'org-mode-hook (lambda () (cua-mode -1)))
 
   ;; ================================================================================
   ;; async
