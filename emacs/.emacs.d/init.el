@@ -139,13 +139,18 @@
   (global-set-key (kbd "C-c o") 'facemenu-keymap)
   (global-set-key (kbd "C-o") (lambda () (interactive)(end-of-line)(newline-and-indent)))
   (global-set-key (kbd "M-o") (lambda () (interactive)(previous-line)(end-of-line)(newline-and-indent)))
+  (bind-key* "M-h" 'backward-kill-word)
 
+  ;; ;; M-RETにCua-modeを割り当て
+  (cua-mode t)
+  (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
+  (bind-key* "C-c C-SPC" 'cua-set-rectangle-mark)
+  ;; org-modeだとうまくkeyを奪えないので、無効化
+  (add-hook 'org-mode-hook (lambda () (cua-mode -1)))
 
-  
   ;; ================================================================================
   ;; async
   ;; ================================================================================
-
 
   (use-package async
 	:ensure t)
@@ -1962,6 +1967,13 @@ middle"
   ;; https://github.com/iqbalansari/restart-emacs
   (use-package restart-emacs
 	:ensure t)
+
+
+  (use-package yafolding
+	:ensure t)
+
+  (add-hook 'prog-mode-hook
+          (lambda () (yafolding-mode)))
 
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
