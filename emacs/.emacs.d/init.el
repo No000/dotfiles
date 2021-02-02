@@ -719,7 +719,6 @@ properly disable mozc-mode."
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
 
-
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
@@ -1737,16 +1736,19 @@ properly disable mozc-mode."
 	(avy-with avy-goto-word-0
 	  (avy-goto-word-0 arg (point) (line-end-position))))
 
-    (defun avy-goto-word-0-forward (arg)
+  (defun avy-goto-word-0-forward (arg)
 	(interactive "P")
 	(avy-with avy-goto-word-0
 	  (avy-goto-word-0 arg (line-beginning-position) (point))))
 	
 
+
+
+
 	(global-set-key (kbd "<henkan>") 'avy-goto-word-0-back)
 	(global-set-key (kbd "<muhenkan>") 'avy-goto-word-0-forward)
 
-  
+
   ;; ================================================================================
   ;; cc-modeにおいてのショートカット衝突の回避
   ;; ================================================================================
