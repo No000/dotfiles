@@ -1078,6 +1078,7 @@ properly disable mozc-mode."
   (use-package deferred
 	:ensure t
 	)
+  
   (use-package eaf
 	:load-path "~/dotfiles/emacs/.emacs.d/elisp/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
 	:init
@@ -1087,6 +1088,9 @@ properly disable mozc-mode."
 	  :defer t)
 	(use-package deferred
 	  :defer t)
+	(use-package s
+	  :defer t
+	  :ensure t)
 	:custom
 	(eaf-browser-continue-where-left-off t)
 	:config
