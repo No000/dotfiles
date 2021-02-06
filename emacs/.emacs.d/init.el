@@ -1981,6 +1981,14 @@ middle"
   (add-hook 'prog-mode-hook
           (lambda () (yafolding-mode)))
 
+
+  ;; ================================================================================
+  ;; all-the-icons-dired
+  ;; ================================================================================
+  ;; https://github.com/jtbm37/all-the-icons-dired
+  (use-package all-the-icons-dired
+	:ensure t)
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
