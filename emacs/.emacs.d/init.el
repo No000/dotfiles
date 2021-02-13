@@ -87,7 +87,8 @@
   (add-hook 'imenu-list-major-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
-
+  (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
+  
   ;; カラム番号を表示
   ;;(line-number-mode t)
   (column-number-mode t)
@@ -330,6 +331,9 @@
   (use-package all-the-icons)
   ;;(all-the-icons-install-fonts) ; 初期インストール
 
+    (setq all-the-icons-mode-icon-alist
+        `(,@all-the-icons-mode-icon-alist
+          (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)))
   ;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
   ;; (add-to-list 'backup-directory-alist	
   ;;			 (cons "." "~/.emacs.d/backups/"))
@@ -1450,41 +1454,56 @@ properly disable mozc-mode."
 
 
 
-  (require 'eshell)
+  ;; (require 'eshell)
 
-  (with-eval-after-load 'esh-mode
-	(add-hook 'eshell-mode-hook
-			  (lambda () (progn
-						   (setq xterm-color-preserve-properties t)
-						   (setenv "TERM" "xterm-256color"))))
-
-	(setq comint-prompt-read-only t)		;これでshellとtermのプロンプトが消されることはなくなる
+  ;; (with-eval-after-load 'esh-mode
+  ;; 	(add-hook 'eshell-mode-hook
+  ;; 			  (lambda () (progn
+  ;; 						   (setq xterm-color-preserve-properties t)
+  ;; 						   (setenv "TERM" "xterm-256color"))))
 
 
+  ;; 	(add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
 
-	(use-package eshell-prompt-extras
-	  :ensure t)
+  ;; 	(setq eshell-output-filter-functions
+  ;; 		  (remove 'eshell-handle-ansi-color eshell-output-filter-functions))
+  ;; 	)
 
-	(eval-after-load 'esh-opt
-	  '(progn (require 'eshell-prompt-extras)
-			  (setq eshell-highlight-prompt nil
-					eshell-prompt-function 'epe-theme-lambda)))
+  (use-package eshell-prompt-extras
+	:ensure t)
 
-	(eval-after-load 'esh-opt
-	  '(progn (require 'eshell-prompt-extras)
-			  (setq eshell-highlight-prompt nil
-					eshell-prompt-function 'epe-theme-lambda)))
+  (eval-after-load 'esh-opt
+	'(progn (require 'eshell-prompt-extras)
+			(setq eshell-highlight-prompt nil
+				  eshell-prompt-function 'epe-theme-lambda)))
+
+  (eval-after-load 'esh-opt
+	'(progn (require 'eshell-prompt-extras)
+			(setq eshell-highlight-prompt nil
+				  eshell-prompt-function 'epe-theme-lambda)))
+
+  (use-package fish-completion
+	:ensure t)
+  
+  (when (and (executable-find "fish")
+			 (require 'fish-completion nil t))
+	(global-fish-completion-mode))
+
+
+  (use-package eshell-syntax-highlighting
+	:ensure t
+	:after esh-mode
+	:demand t ;; Install if not already installed.
+	:config
+	;; Enable in all Eshell buffers.
+	(eshell-syntax-highlighting-global-mode +1))
 
 
 
 
-	(add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
 
-	(setq eshell-output-filter-functions
-		  (remove 'eshell-handle-ansi-color eshell-output-filter-functions))
-	)
-
-
+  (setq comint-prompt-read-only t)		;これでshellとtermのプロンプトが消されることはなくなる
+  
   (setq eshell-cmpl-ignore-case t)
   (setq eshell-glob-include-dot-dot nil)
   (setq eshell-ask-to-save-history (quote always))
