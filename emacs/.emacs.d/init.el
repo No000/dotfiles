@@ -1528,7 +1528,7 @@ properly disable mozc-mode."
 
   ;; ここにeshellだと表示やキーバインドが奪われるコマンドを追記する
   (setq eshell-visual-commands
-		'("vim"                                ; what is going on??
+		'("vim" "nvim"                                ; what is going on??
 		  "htop"                      ; ok, a valid program...
 		  "less" "more"                       ; M-x view-file)
 		  "qemu-system-x86_64"				; qemuのCLI起動時に対応するため
@@ -2000,6 +2000,7 @@ middle"
   (add-hook 'prog-mode-hook
           (lambda () (yafolding-mode)))
 
+  
 
   ;; ================================================================================
   ;; all-the-icons-dired
@@ -2008,6 +2009,7 @@ middle"
   (use-package all-the-icons-dired
 	:ensure t)
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
