@@ -1,4 +1,3 @@
-
 ;; 全体的な設定を記載
 ;; bytecomplie
 ;; scratchバッファに行き
@@ -88,6 +87,7 @@
   (add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   
   ;; カラム番号を表示
   ;;(line-number-mode t)
@@ -213,15 +213,18 @@
 
 
   (when (member "Cascadia Code" (font-family-list))
-	(add-to-list 'default-frame-alist '(font . "Cascadia Code 11")))
+	(add-to-list 'default-frame-alist '(font . "Cascadia Code 11")))  
 
   ;; 絵文字
-  ;; (use-package emojify :ensure t
-  ;;   :if (display-graphic-p)
-  ;;   :hook (after-init . global-emojify-mode)
-  ;;   :bind
-  ;;   ("C-x e" . 'emojify-insert-emoji)
-  ;;   )
+  
+  (use-package emojify :ensure t
+    :if (display-graphic-p)
+    :hook (after-init . global-emojify-mode)
+    :bind
+    ("C-x e" . 'emojify-insert-emoji)
+	:config
+	(add-hook 'prog-mode-hook (lambda () (emojify-mode -1)))
+    )
 
   ;; Ricty Diminished 11
   ;; Cascadia Code 11
@@ -331,10 +334,14 @@
   (use-package all-the-icons)
   ;;(all-the-icons-install-fonts) ; 初期インストール
 
+
+  ;; all-the-iconsを追加する
     (setq all-the-icons-mode-icon-alist
         `(,@all-the-icons-mode-icon-alist
-          (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)))
-  ;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
+          (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
+		 (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)))
+
+	;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
   ;; (add-to-list 'backup-directory-alist	
   ;;			 (cons "." "~/.emacs.d/backups/"))
   ;;(setq auto-save-file-name-transforms
@@ -2000,8 +2007,71 @@ middle"
   (add-hook 'prog-mode-hook
           (lambda () (yafolding-mode)))
 
+
+  ;; ================================================================================
+  ;; restart-emacs
+  ;; ================================================================================
+  ;; https://github.com/iqbalansari/restart-emacs
+  ;; GnuPGが必要になる。
+
+
+  ;; Clear existing twit buffers
+  (defun my/reload-twit ()
+	(mapcar
+	 (lambda (buffer)
+       (twittering-deactivate-buffer buffer)
+       (kill-buffer buffer))
+	 (twittering-get-buffer-list))
+	(twittering-unregister-killed-buffer)
+	;; Clear variables
+	(setq twittering-private-info-file-loaded nil)
+	(setq twittering-account-authorization nil)
+	(setq twittering-oauth-access-token-alist nil)
+	(setq twittering-buffer-info-list nil)
+	(setq twittering-timeline-data-table (make-hash-table :test 'equal))
+	(twit))
+
+  (defun my-twitter-account-1 ()
+	(interactive)
+	(setq twittering-private-info-file 
+          (expand-file-name "~/.emacs.d//twitter/twittering-mode.gpg"))
+	;; timeline to read on startup
+	(setq twittering-initial-timeline-spec-string '(":home" "Wagahaiha_toto/vrchat")) ;ここに初期表示するタイムラインを表示できる
+	(my/reload-twit))
+
+  (defun my-twitter-account-2 ()
+	(interactive)
+	(setq twittering-private-info-file 
+          (expand-file-name "~/.emacs.d//twitter/twittering-mode2.gpg"))
+	;; timeline to read on startup
+	(setq twittering-initial-timeline-spec-string '(":home")) ;ここに初期表示するタイムラインを指定できる
+	(my/reload-twit))
+
+;; Twitterring-mode settings
   
 
+  ;; エラー対策
+  (defalias 'epa--decode-coding-string 'decode-coding-string)
+
+  (use-package twittering-mode
+	:ensure t
+	:init
+	(add-hook 'twittering-mode-hook #'emojify-mode)
+	:config
+	;; 簡単ログインの設定
+	(setq twittering-allow-insecure-server-cert t)
+	(setq twittering-use-master-password t)
+	(setq twittering-private-info-file "~/.emacs.d//twitter/twittering-mode.gpg")
+	(setq twittering-icon-mode t)
+	(setq twittering-initial-timeline-spec-string '(":home" "Wagahaiha_toto/vrchat"))
+	(setq twittering-status-format "%i @%s %S %p: \n\n%T\n[%@]%r %R %f%L\n%FACE[font-lock-warning-face]{%FIELD-IF-NONZERO[↺%d]{retweet_count}} %FACE[font-lock-warning-face]{%FIELD-IF-NONZERO[✶%d]{favorite_count}}\n ------------------------------------------------------------------------" )
+	(define-key twittering-mode-map (kbd "C-c F") 'twittering-favorite)
+	(define-key twittering-mode-map (kbd "C-c U") 'twittering-unfavorite)
+	)
+  
+
+
+  
   ;; ================================================================================
   ;; all-the-icons-dired
   ;; ================================================================================

@@ -31,6 +31,7 @@ stow -v <対象のドットファイルやドットディレクトリー（複�
 フォント関連  
 ・ttf-cascadia-code  
 ・ttf-ricty-diminished  
+・ttf-symbola
 
 emacs-application-framework関連  
 ・emacs-eaf(AUR) <-今は使っていない   
