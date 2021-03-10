@@ -88,6 +88,7 @@
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'slack-mode-hook (lambda () (display-line-numbers-mode -1)))
   
   ;; カラム番号を表示
   ;;(line-number-mode t)
@@ -339,7 +340,8 @@
     (setq all-the-icons-mode-icon-alist
         `(,@all-the-icons-mode-icon-alist
           (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
-		 (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)))
+		  (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
+		  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-purple)))
 
 	;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
   ;; (add-to-list 'backup-directory-alist	
@@ -505,8 +507,7 @@ properly disable mozc-mode."
 	(dashboard-startup-banner 3)
 	(dashboard-items '((recents . 15)
 					   (projects . 5)
-					   (bookmarks . 5)
-					   (agenda . 5)))
+					   (bookmarks . 5)))
 	:hook
 	(after-init . dashboard-setup-startup-hook)
 	:config
@@ -2009,9 +2010,9 @@ middle"
 
 
   ;; ================================================================================
-  ;; restart-emacs
+  ;; twittering-mode
   ;; ================================================================================
-  ;; https://github.com/iqbalansari/restart-emacs
+  ;; https://github.com/hayamiz/twittering-mode
   ;; GnuPGが必要になる。
 
 
@@ -2069,9 +2070,65 @@ middle"
 	(define-key twittering-mode-map (kbd "C-c U") 'twittering-unfavorite)
 	)
   
+  ;; ================================================================================
+  ;; emacs-slack
+  ;; ================================================================================
+  ;; https://github.com/yuya373/emacs-slack
 
 
-  
+  (use-package slack
+	:ensure t
+	
+	:commands (slack-start)
+	:init
+	(setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+	(setq slack-prefer-current-team t)
+	:config
+	;; (slack-register-team
+	;;  :name "emacs-slack"
+	;;  :default t
+	;;  :token "xoxs-sssssssssss-88888888888-hhhhhhhhhhh-jjjjjjjjjj"
+	;;  :subscribed-channels '(test-rename rrrrr)
+	;;  :full-and-display-names t)
+
+	;; (slack-register-team
+	;;  :name "test"
+	;;  :token "xoxs-yyyyyyyyyy-zzzzzzzzzzz-hhhhhhhhhhh-llllllllll"
+	;;  :subscribed-channels '(hoge fuga))
+
+	;; (evil-define-key 'normal slack-info-mode-map
+	;; 				 ",u" 'slack-room-update-messages)
+	;; (evil-define-key 'normal slack-mode-map
+	;; 				 ",c" 'slack-buffer-kill
+	;; 				 ",ra" 'slack-message-add-reaction
+	;; 				 ",rr" 'slack-message-remove-reaction
+	;; 				 ",rs" 'slack-message-show-reaction-users
+	;; 				 ",pl" 'slack-room-pins-list
+	;; 				 ",pa" 'slack-message-pins-add
+	;; 				 ",pr" 'slack-message-pins-remove
+	;; 				 ",mm" 'slack-message-write-another-buffer
+	;; 				 ",me" 'slack-message-edit
+	;; 				 ",md" 'slack-message-delete
+	;; 				 ",u" 'slack-room-update-messages
+	;; 				 ",2" 'slack-message-embed-mention
+	;; 				 ",3" 'slack-message-embed-channel
+	;; 				 "\C-n" 'slack-buffer-goto-next-message
+	;; 				 "\C-p" 'slack-buffer-goto-prev-message)
+	;; (evil-define-key 'normal slack-edit-message-mode-map
+	;; 				 ",k" 'slack-message-cancel-edit
+	;; 				 ",s" 'slack-message-send-from-buffer
+	;; 				 ",2" 'slack-message-embed-mention
+	;; 				 ",3" 'slack-message-embed-channel)
+	)
+
+  (use-package alert
+	:ensure t
+	:commands (alert)
+	:init
+	(setq alert-default-style 'notifier))
+
+  (load "slack-token")						; トークンをロード
+
   ;; ================================================================================
   ;; all-the-icons-dired
   ;; ================================================================================
@@ -2079,6 +2136,25 @@ middle"
   (use-package all-the-icons-dired
 	:ensure t)
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
+  ;; ================================================================================
+  ;; org-caldav
+  ;; ================================================================================
+  ;; https://github.com/myuhe/org-gcal.el
+  (use-package calfw
+	:ensure t
+	)
+  ;; ================================================================================
+  ;; org-gcal
+  ;; ================================================================================
+  ;; https://github.com/myuhe/org-gcal.el
+
+  ;; (use-package org-gcal
+  ;; 	:ensure t
+  ;; 	:config
+  ;; 	(load "gcal-config")
+  ;; 	(setq org-gcal-dir "~/.emacs.d/googlecal-org"))
+
   
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
