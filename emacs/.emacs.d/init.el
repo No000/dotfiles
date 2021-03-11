@@ -89,6 +89,7 @@
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'slack-mode-hook (lambda () (display-line-numbers-mode -1)))
+   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
   
   ;; カラム番号を表示
   ;;(line-number-mode t)
@@ -222,9 +223,10 @@
     :if (display-graphic-p)
     :hook (after-init . global-emojify-mode)
     :bind
-    ("C-x e" . 'emojify-insert-emoji)
+    ("C-c E" . 'emojify-insert-emoji)
 	:config
 	(add-hook 'prog-mode-hook (lambda () (emojify-mode -1)))
+	(add-hook 'vterm-mode-hook (lambda () (emojify-mode -1)))
     )
 
   ;; Ricty Diminished 11
@@ -571,7 +573,7 @@ properly disable mozc-mode."
   (use-package all-the-icons)
   (use-package neotree)
   ;; F8でnetreee-windowが開くようにする
-  (global-set-key [f8] 'neotree-toggle)
+  (global-set-key [f7] 'neotree-toggle)
   ;; neotreeでファイルを新規作成した場合のそのファイルを開く
   (setq neo-create-file-auto-open t)
   ;; delete-other-window で neotree ウィンドウを消さない
@@ -977,23 +979,23 @@ properly disable mozc-mode."
   ;; minimap
   ;; -------------------------------------------------------------------------------------------------
   ;; VScodeやsublimetextのように右にminmapを表示することができる。
-  (use-package minimap
-	:commands
-	(minimap-bufname minimap-create minimap-kill)
-	:custom
-	(minimap-major-modes '(prog-mode))
+  ;; (use-package minimap
+  ;; 	:commands
+  ;; 	(minimap-bufname minimap-create minimap-kill)
+  ;; 	:custom
+  ;; 	(minimap-major-modes '(prog-mode))
 
-	(minimap-window-location 'right)
-	(minimap-update-delay 0.2)
-	(minimap-minimum-width 20)
-	:bind
-	([f9] . minimap-mode)
+  ;; 	(minimap-window-location 'right)
+  ;; 	(minimap-update-delay 0.2)
+  ;; 	(minimap-minimum-width 20)
+  ;; 	:bind
+  ;; 	([f9] . minimap-mode)
 
-	:config
-	(custom-set-faces
-	 '(minimap-active-region-background
-       ((((background dark)) (:background "#555555555555"))
-		(t (:background "#C847D8FEFFFF"))) :group 'minimap)))
+  ;; 	:config
+  ;; 	(custom-set-faces
+  ;; 	 '(minimap-active-region-background
+  ;;      ((((background dark)) (:background "#555555555555"))
+  ;; 		(t (:background "#C847D8FEFFFF"))) :group 'minimap)))
 
 
 
@@ -1527,7 +1529,7 @@ properly disable mozc-mode."
 	;; (eshell-toggle-default-directory "~/Desktop") ;関連ファイルがない場合にどこで開くかを指定することができる
 	;; (eshell-toggle-init-function #'eshell-toggle-init-tmux) ; 美しくないのでやめたほうがいい
 	:bind
-	("<f7>" . eshell-toggle))
+	("<f8>" . eshell-toggle))
 
   ;; alias
   (defvar *shell-alias* '(("ll" "ls -la")
@@ -2155,9 +2157,59 @@ middle"
   ;; 	(load "gcal-config")
   ;; 	(setq org-gcal-dir "~/.emacs.d/googlecal-org"))
 
-  
+
+  ;; ================================================================================
+  ;; vterm
+  ;; ================================================================================
+  ;; https://github.com/akermu/emacs-libvterm
+
+  (use-package vterm
+    :ensure t
+	;; :custom
+	;; (vterm-keymap-exceptions . "<f9>") ; vterm側に制御を取られたくないキーを指定
+	:bind
+	("<f9>" . vterm-toggle)
+	:config
+	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
+	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
+	)
+
+
+  ;; ================================================================================
+  ;; vterm-toggle
+  ;; ================================================================================
+  ;; https://github.com/jixiuf/vterm-toggle
+  (use-package vterm-toggle
+	:ensure t
+	:custom
+	(vterm-toggle-s)
+	:config
+	(global-set-key [f9] 'vterm-toggle)
+	;; https://naokton.hatenablog.com/entry/2020/12/08/150130
+    (add-to-list 'display-buffer-alist
+				 '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                   (display-buffer-reuse-window display-buffer-in-direction)
+                   (direction . bottom)
+                   (reusable-frames . visible)
+                   (window-height . 0.4)))
+	;; Above display config affects all vterm command, not only vterm-toggle
+	(defun my/vterm-new-buffer-in-current-window()
+      (interactive)
+      (let ((display-buffer-alist nil))
+        (vterm))))
+  ;; ================================================================================
+  ;; git-timemachine
+  ;; ================================================================================
+  ;; https://gitlab.com/pidu/git-timemachine/tree/8d675750e921a047707fcdc36d84f8439b19a907
+  (use-package git-timemachine
+	:ensure t
+	:config
+	(bind-key "C-c g" 'git-timemachine-toggle))
+
+
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
+
 
 
