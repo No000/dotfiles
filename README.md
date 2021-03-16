@@ -29,42 +29,43 @@ stow -v <対象のドットファイルやドットディレクトリー（複�
 
 ### 必要なパッケージ
 フォント関連  
-・ttf-cascadia-code  
-・ttf-ricty-diminished  
-・ttf-symbola
+- ttf-cascadia-code  
+- ttf-ricty-diminished  
+- ttf-symbola
 
 emacs-application-framework関連  
-・emacs-eaf(AUR) <-今は使っていない   
-・python-pyqt5  
-・python-pyqt5-sip  
-・python-pyqtwebengine  
-・python-qrcode  
-・python-feedparser  
-・python-dbus  
-・python-pyinotify  
-・python-markdown  
-・nodejs  
-・aria2  
-・libreoffice  
-・python-grip  
-・python-qtconsole  
-・filebrowser-bin  
-・wmctrl  
+- emacs-eaf(AUR) <-今は使っていない   
+- python-pyqt5  
+- python-pyqt5-sip  
+- python-pyqtwebengine  
+- python-qrcode  
+- python-feedparser  
+- python-dbus  
+- python-pyinotify  
+- python-markdown  
+- nodejs  
+- aria2  
+- libreoffice  
+- python-grip  
+- python-qtconsole  
+- filebrowser-bin  
+- wmctrl  
 
 lsp関連  
-・clnagd  
-・rust-analyzer  
-・python-language-server  
+- clnagd  
+- rust-analyzer  
+- python-language-server  
+- bash-language-server
 
 Magit  
-・git  
+- git  
 
 Docker  
-・docker  
-・docker-compose  
+- docker  
+- docker-compose  
 
 migemo  
-・cmigemo(AUR)  
+- cmigemo(AUR)  
 
 rutic-mode  
 - cargo-outdated
@@ -72,6 +73,9 @@ rutic-mode
 
 Doxymacs
 - doxymacs-git
+
+vterm
+- cmake
 
 ### git clone  
 

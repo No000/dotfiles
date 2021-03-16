@@ -89,7 +89,8 @@
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'slack-mode-hook (lambda () (display-line-numbers-mode -1)))
-   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
   
   ;; カラム番号を表示
   ;;(line-number-mode t)
@@ -151,6 +152,36 @@
   ;; ;; org-modeだとうまくkeyを奪えないので、無効化
   ;; (add-hook 'org-mode-hook (lambda () (cua-mode -1)))
 
+  ;; 各言語の設定
+  ;; C-mode
+  ;; (c-add-style "microsoft"
+  ;;         '("stroustrup"
+  ;;           (c-offsets-alist
+  ;;            (innamespace . -)
+  ;;            (inline-open . 0)
+  ;;            (inher-cont . c-lineup-multi-inher)
+  ;;            (arglist-cont-nonempty . +)
+  ;;            (template-args-cont . +))))
+  ;; (setq
+  ;;  ;; c-default-style "linux"
+  ;;  c-default-style "microsoft"
+  ;;       ;; c-basic-offset 4
+  ;; 		)
+  ;; google c-styleを導入する
+  ;; (use-package google-c-style
+  ;;   :ensure t)
+
+
+  ;; (defun cc-mode-init ()
+  ;;   (google-set-c-style)
+	(setq-default c-basic-offset 4     ;;基本インデント量4
+				  tab-width 4          ;;タブ幅4
+				  indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+	;; )
+
+;; (add-hook 'c-mode-hook 'cc-mode-init)
+;; (add-hook 'c++-mode-hook 'cc-mode-init)
+  
   ;; ================================================================================
   ;; async
   ;; ================================================================================
@@ -343,7 +374,8 @@
         `(,@all-the-icons-mode-icon-alist
           (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
 		  (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
-		  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-purple)))
+		  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)))
+
 
 	;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
   ;; (add-to-list 'backup-directory-alist	
@@ -359,7 +391,7 @@
 
 
 
-  ;; ------------------------------------------------------------------------------日本語入力
+  ;; 
   ;; emacs-mozc（packgeでmozcをインストールしてから有効化する）
   ;;(setq ac-use-menu-map t) 
   ;; overlayは処理が重いため変更する
@@ -839,6 +871,7 @@ properly disable mozc-mode."
 		   ;;		   (nim-mode . lsp)
 		   (rustic-mode . lsp)
 		   (python-mode . lsp)
+           (sh-mode . lsp)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration)
            (lsp-managed-mode . lsp-modeline-diagnostics-mode)
@@ -1113,7 +1146,6 @@ properly disable mozc-mode."
 	(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
 	(eaf-bind-key take_photo "p" eaf-camera-keybinding)
 	(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-
 
   
   ;; ブラウザ検索のショートカット
@@ -2129,7 +2161,10 @@ middle"
 	:init
 	(setq alert-default-style 'notifier))
 
-  (load "slack-token")						; トークンをロード
+  ;; (load "slack-token")						; トークンをロード
+(defun my-slack-load-token-1()
+    (interactive)
+  (load "slack-token"))
 
   ;; ================================================================================
   ;; all-the-icons-dired
@@ -2163,15 +2198,22 @@ middle"
   ;; ================================================================================
   ;; https://github.com/akermu/emacs-libvterm
 
+
   (use-package vterm
     :ensure t
-	;; :custom
-	;; (vterm-keymap-exceptions . "<f9>") ; vterm側に制御を取られたくないキーを指定
 	:bind
 	("<f9>" . vterm-toggle)
 	:config
+	;; (setq vterm-keymap-exceptions . '("C-x"))
 	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
 	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
+ 	(define-key vterm-mode-map (kbd "C-x") nil)
+	(setq vterm-max-scrollback 10000)
+	(setq vterm-buffer-name-string "vterm: %s")
+    ;; (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
+    ;; (setq vterm-keymap-exceptions '("C-c" "C-x"))
+	:bind
+	("<f9>" . vterm-toggle)
 	)
 
 
@@ -2181,10 +2223,10 @@ middle"
   ;; https://github.com/jixiuf/vterm-toggle
   (use-package vterm-toggle
 	:ensure t
-	:custom
-	(vterm-toggle-s)
 	:config
-	(global-set-key [f9] 'vterm-toggle)
+	(setq vterm-toggle-scope 'project)
+	(bind-key "<f9>" 'vterm-toggle)
+	(bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
 	;; https://naokton.hatenablog.com/entry/2020/12/08/150130
     (add-to-list 'display-buffer-alist
 				 '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
@@ -2207,9 +2249,9 @@ middle"
 	(bind-key "C-c g" 'git-timemachine-toggle))
 
 
+  ;; 次回のタスクvtermでC-xを送る方法を考える
+
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 ;; ==================================================================================
-
-
 

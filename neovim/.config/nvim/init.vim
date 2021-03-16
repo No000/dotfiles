@@ -55,7 +55,10 @@ if plug_install
 endif
 unlet plug_install
 
+" neovim組み込みの設定
+
 set number             "行番号を表示
+set relativenumber	   "相対的な行番号表示をサポート
 set autoindent         "改行時に自動でインデントする
 set tabstop=2          "タブを何文字の空白に変換するか
 set shiftwidth=2       "自動インデント時に入力する空白の数
@@ -65,6 +68,7 @@ set clipboard=unnamed  "yank した文字列をクリップボードにコピー
 set hls                "検索した文字をハイライトする
 set encoding=UTF-8
 
+" Nerdtree用の設定
 let g:NERDTreeGitStatusIndicatorMapCustom = {
 \		"Modified"  : "✹",
 \		"Staged"    : "✚",
@@ -199,3 +203,4 @@ let g:airline_right_alt_sep = "\ue0b3"
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
+
