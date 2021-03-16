@@ -85,3 +85,6 @@ eaf
 
 aweshell  
 > https://github.com/manateelazycat/aweshell.git  
+
+emacs-doc
+> https://ayatakesi.github.io/  
