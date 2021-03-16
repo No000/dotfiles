@@ -2248,10 +2248,44 @@ middle"
 	:config
 	(bind-key "C-c g" 'git-timemachine-toggle))
 
+  
+  ;; ================================================================================
+  ;; emacs-docの日本語化
+  ;; ================================================================================
+  ;; 
+
+(add-to-list 'Info-directory-list "~/.emacs.d/japanese-info/emacs-27.1")
+(defun Info-find-node--info-ja (orig-fn filename &rest args)
+  (apply orig-fn
+         (pcase filename
+           ("emacs" "emacs-ja")
+           (t filename))
+         args))
+(advice-add 'Info-find-node :around 'Info-find-node--info-ja)
+
+ (setq Info-default-directory-list
+   (append Info-default-directory-list (list (expand-file-name "~/.emacs.d/japanese-info/emacs-27.1"))))
+ (defun Info-find-node--elisp-ja (orig-fn filename &rest args)
+   (apply orig-fn
+     (pcase filename
+       ("elisp" "elisp-ja")
+       (t filename))
+     args))
+ (advice-add 'Info-find-node :around 'Info-find-node--elisp-ja)
+
+;; (add-to-list 'Info-directory-list "~/.emacs.d/japanese-info/emacs-27.1")
+;; (defun Info-find-node--info-ja (orig-fn filename &rest args)
+;;   (apply orig-fn
+;;          (pcase filename
+;;            ("elisp" "elisp-ja")
+;;            (t filename))
+;;          args))
+;; (advice-add 'Info-find-node :around 'Info-find-node--info-ja)
 
   ;; 次回のタスクvtermでC-xを送る方法を考える
 
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
+(setq gc-cons-threshold 100000000)
 ;; ==================================================================================
 
