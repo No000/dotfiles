@@ -48,6 +48,21 @@ call plug#begin('~/.config/nvim/plugins')
 	" air-lineの追加
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
+	" vimのファイラ
+	if has('nvim')
+  	Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+	else
+  	Plug 'Shougo/defx.nvim'
+  	Plug 'roxma/nvim-yarp'
+  	Plug 'roxma/vim-hug-neovim-rpc'
+	endif
+	if has('nvim')
+		Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+	else
+		Plug 'Shougo/denite.nvim'
+		Plug 'roxma/nvim-yarp'
+		Plug 'roxma/vim-hug-neovim-rpc'
+endif	
 call plug#end()
 
 if plug_install
@@ -204,3 +219,5 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
+" shellをfishに変更
+set sh=/bin/fish

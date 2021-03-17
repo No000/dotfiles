@@ -91,6 +91,8 @@
   (add-hook 'slack-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'mu4e-main-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'mu4e-view-mode-hook (lambda () (display-line-numbers-mode -1)))
   
   ;; カラム番号を表示
   ;;(line-number-mode t)
@@ -365,15 +367,16 @@
 	(prog-mode . rainbow-delimiters-mode))
 
 
-  (use-package all-the-icons)
+  (use-package all-the-icons
+    )
   ;;(all-the-icons-install-fonts) ; 初期インストール
 
 
   ;; all-the-iconsを追加する
     (setq all-the-icons-mode-icon-alist
-        `(,@all-the-icons-mode-icon-alist
-          (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
-		  (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
+          `(,@all-the-icons-mode-icon-alist
+            (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
+		    (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
 		  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)))
 
 
@@ -504,6 +507,7 @@ properly disable mozc-mode."
 	(doom-modeline-icon t)
 	(doom-modeline-major-mode-icon t)
 	(doom-modeline-minor-modes nil)
+    (doom-modeline-mu4e t)
 	:hook
 	(after-init . doom-modeline-mode)
 	:config
@@ -1146,7 +1150,7 @@ properly disable mozc-mode."
 	(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
 	(eaf-bind-key take_photo "p" eaf-camera-keybinding)
 	(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-
+(add-hook 'eaf-mode-hook 'eaf--update-modeline-icon)
   
   ;; ブラウザ検索のショートカット
   (global-set-key (kbd "C-c w")  'eaf-search-it)
@@ -2282,8 +2286,63 @@ middle"
 ;;          args))
 ;; (advice-add 'Info-find-node :around 'Info-find-node--info-ja)
 
-  ;; 次回のタスクvtermでC-xを送る方法を考える
 
+  ;; ================================================================================
+  ;; mu4e
+  ;; ================================================================================
+ ;;
+
+ ;; muの初期設定
+ ;; mu init --maildir=~/.mail/gmail
+ ;; mu index --maildir=~/.mail/gmail
+
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+ 
+(setq
+ mue4e-headers-skip-duplicates  t
+ mu4e-view-show-images t
+ mu4e-view-show-addresses t
+ mu4e-compose-format-flowed nil
+ mu4e-date-format "%y/%m/%d"
+ mu4e-headers-date-format "%Y/%m/%d"
+ mu4e-change-filenames-when-moving t
+ mu4e-attachments-dir "~/Downloads"
+
+ mu4e-maildir       "~/.mail/gmail"   ;; top-level Maildir
+ ;; note that these folders below must start with /
+ ;; the paths are relative to maildir root
+ mu4e-refile-folder "/Archive"
+ mu4e-sent-folder   "/Sent"
+ mu4e-drafts-folder "/Drafts"
+ mu4e-trash-folder  "/Trash"
+ mu4e-update-interval (* 60 5)) ;; nil
+
+;; this setting allows to re-sync and re-index mail
+;; by pressing U
+(setq mu4e-get-mail-command  "mbsync -a")
+
+ 
+  ;; 次回のタスクvtermでC-xを送る方法を考える
+;; mu4e-alert
+(use-package mu4e-alert
+  :ensure t
+  :config
+  (mu4e-alert-enable-mode-line-display))
+
+
+;; SMTP
+;; https://text.baldanders.info/remark/2019/06/send-mail-without-mail-service/
+;; mu4e - msmtp
+
+  (setq message-send-mail-function 'message-send-mail-with-sendmail) ;; sendmail-query-once
+  (setq sendmail-program "/usr/bin/msmtp")  ;; /usr/sbin/sendmail
+       ;;(setq message-sendmail-extra-arguments)
+  ;;(setq message-sendmail-f-is-evil t) ;; nil
+  (require 'recentf)
+  (recentf-mode 1)
+  (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail") )
+ 
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 (setq gc-cons-threshold 100000000)
