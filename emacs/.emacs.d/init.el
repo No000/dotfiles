@@ -376,8 +376,8 @@
     (setq all-the-icons-mode-icon-alist
           `(,@all-the-icons-mode-icon-alist
             (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
-		    (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
-		  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)))
+    	    (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
+    	  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)))
 
 
 	;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
@@ -506,6 +506,7 @@ properly disable mozc-mode."
 	(doom-modeline-buffer-file-name-style 'truncate-with-project)
 	(doom-modeline-icon t)
 	(doom-modeline-major-mode-icon t)
+    ;; (doom-modeline-major-mode-color-icon t)
 	(doom-modeline-minor-modes nil)
     (doom-modeline-mu4e t)
 	:hook
@@ -513,6 +514,12 @@ properly disable mozc-mode."
 	:config
 	(line-number-mode 0)
 	(column-number-mode 0)
+    ;; ;; Whether display the icon for the buffer state. It respects `doom-modeline-icon'.
+    ;; (setq doom-modeline-buffer-state-icon t)
+
+    ;; ;; Whether display the modification icon for the buffer.
+    ;; ;; It respects `doom-modeline-icon' and `doom-modeline-buffer-state-icon'.
+    ;; (setq doom-modeline-buffer-modification-icon t)
 	;; ace-windowやwinum-modeで使いやすいように
 	;; (doom-modeline-def-modeline 'main
 	;;   '(bar  matches buffer-info remote-host buffer-position parrot selection-info)
@@ -533,7 +540,7 @@ properly disable mozc-mode."
   (use-package projectile)
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map) ;jupyterを使うために退避
   ;; これはタイトルをオシャンティーにするやつ
   (use-package dashboard
 	;; :bind (("<f5>" . open-dashboard)
@@ -1158,6 +1165,7 @@ properly disable mozc-mode."
   (global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
   ;; ブラウザのURLを叩いて飛ぶ用
   (global-set-key (kbd "C-c u")  'eaf-open-browser)
+  (global-set-key (kbd "C-c p")  'eaf-open-jupyter) ;jupyterのキーバインド割当
 
 
   ;; (require 'cl) を見逃す(起動時の警告対策)
@@ -2342,7 +2350,8 @@ middle"
   (require 'recentf)
   (recentf-mode 1)
   (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail") )
- 
+
+
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 (setq gc-cons-threshold 100000000)
