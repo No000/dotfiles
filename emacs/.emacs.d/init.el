@@ -147,6 +147,11 @@
   (global-set-key (kbd "M-o") (lambda () (interactive)(previous-line)(end-of-line)(newline-and-indent)))
   (bind-key* "M-h" 'backward-kill-word)
 
+
+
+
+  ;; 画面拡大ショートカット割当
+  (define-key global-map (kbd "C-<f11>") 'toggle-frame-maximized)
   ;; ;; ;; M-RETにCua-modeを割り当て
   ;; (cua-mode t)
   ;; (setq cua-enable-cua-keys nil) ; デフォルトキーバインドを無効化
@@ -556,7 +561,8 @@ properly disable mozc-mode."
 	:hook
 	(after-init . dashboard-setup-startup-hook)
 	:config
-	(add-to-list 'dashboard-items '(agenda) t))
+	;; (add-to-list 'dashboard-items '(agenda) t)
+    )
 
 
   (defun open-dashboard ()
