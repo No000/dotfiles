@@ -45,9 +45,27 @@ call plug#begin('~/.config/nvim/plugins')
 	" lsp
 	" Use release branch (recommend)
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+    "  ctagのプラグイン
+    Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+    " indentのガイド
+    Plug 'Yggdroot/indentLine'
 	" air-lineの追加
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
+
+
+    " foatterm
+    Plug 'voldikss/vim-floaterm'
+
+    " vimのテーマ関連
+    Plug 'joshdick/onedark.vim'
+    " doom-one
+    Plug 'romgrk/doom-one.vim'
+    " kill-ring的な
+    Plug 'Shougo/neoyank.vim'
+    " fzf
+    Plug 'junegunn/fzf.vim'
 	" vimのファイラ
 	if has('nvim')
   	Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -56,13 +74,16 @@ call plug#begin('~/.config/nvim/plugins')
   	Plug 'roxma/nvim-yarp'
   	Plug 'roxma/vim-hug-neovim-rpc'
 	endif
-	if has('nvim')
+    Plug 'kristijanhusak/defx-icons'
+    Plug 'ryanoasis/vim-devicons'
+
+    if has('nvim')
 		Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
 	else
 		Plug 'Shougo/denite.nvim'
 		Plug 'roxma/nvim-yarp'
 		Plug 'roxma/vim-hug-neovim-rpc'
-endif	
+    endif	
 call plug#end()
 
 if plug_install
@@ -82,6 +103,7 @@ set splitright         "画面を縦分割する際に右に開く
 set clipboard=unnamed  "yank した文字列をクリップボードにコピー
 set hls                "検索した文字をハイライトする
 set encoding=UTF-8
+set showcmd
 
 " Nerdtree用の設定
 let g:NERDTreeGitStatusIndicatorMapCustom = {
@@ -221,3 +243,17 @@ let g:airline_symbols.linenr = ''
 
 " shellをfishに変更
 set sh=/bin/fish
+
+" fzf.vimの設定
+nmap <M-c> :Files<cr>
+
+nmap <M-x> :Commands<cr>
+
+
+" colorscheme onedark
+let g:airline_theme='onedark'
+set termguicolors
+colorscheme doom-one
+" ctag
+map <F10> :TagbarToggle<CR>
+let g:floaterm_keymap_toggle = '<F9>'
