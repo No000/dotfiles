@@ -1831,7 +1831,9 @@ properly disable mozc-mode."
 	(global-set-key (kbd "<henkan>") 'avy-goto-word-0-back)
 	(global-set-key (kbd "<muhenkan>") 'avy-goto-word-0-forward)
 
-
+  ;; avyで行移動のショートカットを追加（C-c j）
+    (global-set-key (kbd "<hiragana-katakana>") 'avy-goto-line)
+    
   ;; ================================================================================
   ;; cc-modeにおいてのショートカット衝突の回避
   ;; ================================================================================
@@ -2366,6 +2368,41 @@ middle"
   (use-package nhexl-mode
     :ensure t)
 
+
+  ;; ================================================================================
+  ;; deepl
+  ;; ================================================================================
+  ;;
+
+  (defun my/trans-deepl (beg end)
+  (interactive "r")
+  (let ((str (buffer-substring beg end)))
+    (browse-url
+     (concat "https://www.deepl.com/translator#en/ja/" (url-hexify-string str)))))
+
+  ;; begとendを外したらエラーになる理由を調べる
+  (defun my/trans-deepl-killring ()
+  (interactive)
+  (let ((str (current-kill 0 t)))
+    (browse-url
+     (concat "https://www.deepl.com/translator#en/ja/" (url-hexify-string str)))))
+
+  ;; ================================================================================
+  ;; tree-sitter-mode
+  ;; ================================================================================
+  ;; 
+
+  (use-package tree-sitter
+    :ensure t)
+
+  (use-package tree-sitter-langs
+    :ensure t)
+  
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+
+  
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 (setq gc-cons-threshold 100000000)
