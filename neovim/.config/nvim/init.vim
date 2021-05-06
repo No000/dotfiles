@@ -66,6 +66,7 @@ call plug#begin('~/.config/nvim/plugins')
     Plug 'Shougo/neoyank.vim'
     " fzf
     Plug 'junegunn/fzf.vim'
+		Plug 'junegunn/fzf'
 	" vimのファイラ
 	if has('nvim')
   	Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }

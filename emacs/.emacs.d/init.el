@@ -188,7 +188,6 @@
 
 ;; (add-hook 'c-mode-hook 'cc-mode-init)
 ;; (add-hook 'c++-mode-hook 'cc-mode-init)
-  
   ;; ================================================================================
   ;; async
   ;; ================================================================================
@@ -375,12 +374,14 @@
   (use-package all-the-icons
     )
   ;;(all-the-icons-install-fonts) ; 初期インストール
-
+  (use-package all-the-icons-ibuffer
+    :ensure t
+    :init (all-the-icons-ibuffer-mode 1))
 
   ;; all-the-iconsを追加する
     (setq all-the-icons-mode-icon-alist
           `(,@all-the-icons-mode-icon-alist
-            (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
+            ;; (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
     	    (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
     	  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)))
 
@@ -632,6 +633,11 @@ properly disable mozc-mode."
   (setq neo-window-fixed-size nil)		;固定されていたウィンドウサイズを変更かのうへ　
   (setq neo-window-width 30)				;20から40に変更
 
+
+  ;; ---------------------------------------------------------------------------smex
+  ;; (use-package smex
+  ;;   :ensure t)
+  
   ;;-------------------------------------------------------------------------------ivy
   (use-package ivy)
   (when (require 'ivy nil t)
@@ -673,12 +679,15 @@ properly disable mozc-mode."
 
 
   ;; ;; キーバインドは一例です．好みに変えましょう．
-  ;; (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "M-y") 'counsel-yank-pop)
   (global-set-key (kbd "C-M-z") 'counsel-fzf)
   (global-set-key (kbd "C-M-r") 'counsel-recentf)
   (global-set-key (kbd "C-x C-b") 'counsel-ibuffer)
   (global-set-key (kbd "C-M-f") 'counsel-ag)
+  (global-set-key (kbd "C-M-f") 'counsel-ag)
+  (global-set-key (kbd "C-M-f") 'counsel-ag)
+  (global-set-key (kbd "C-c h") 'counsel-recentf)
 
   ;; ;; アクティベート
   ;; (counsel-mode 1)
@@ -763,8 +772,16 @@ properly disable mozc-mode."
                        counsel-ibuffer))
       (add-to-list 'all-the-icons-ivy-buffer-commands command))
 	(all-the-icons-ivy-setup))
-  (setq all-the-icons-ivy-rich-icon-size 0.5)
+  ;; (setq all-the-icons-ivy-rich-icon-size 0.5)
 
+
+  (use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+(use-package ivy-rich
+  :ensure t
+  :init (ivy-rich-mode 1))
 
   (with-eval-after-load "all-the-icons-ivy"
     (defvar my-tab-width tab-width)
@@ -859,12 +876,7 @@ properly disable mozc-mode."
 
   ;; (define-key eglot-mode-map (kbd "<f6>") 'xref-find-definitions)
 
-  ;; ===========================================================================================
-  ;; lsp-mode
-  ;; ===========================================================================================
 
-  ;; eglotの対応が少ないのが辛いのでlsp-modeに移行する
-  ;;set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 
   ;;(add-to-list 'exec-path(expand-file-name "~/.nimble/bin/"))
   (use-package rustic
@@ -874,7 +886,42 @@ properly disable mozc-mode."
 	(pop-to-buffer buffer-or-name action norecord)
 	(other-window -1)
 	)
-  
+
+  ;; ========================================================================================
+  ;; go-mode
+  ;; ========================================================================================
+
+;; Golang
+(defun lsp-go-install-save-hooks()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(use-package go-mode
+  :ensure t
+  :mode (("\\.go\\'" . go-mode))
+  :init
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
+
+;; Company mode
+(setq company-idle-delay 0)
+(setq company-minimum-prefix-length 1)
+
+;; Go - lsp-mode
+;; Set up before-save hooks to format buffer and add/delete imports.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; Start LSP Mode and YASnippet mode
+(add-hook 'go-mode-hook #'lsp-deferred)
+(add-hook 'go-mode-hook #'yas-minor-mode)
+    ;; ===========================================================================================
+  ;; lsp-mode
+  ;; ===========================================================================================
+
+  ;; eglotの対応が少ないのが辛いのでlsp-modeに移行する
+  ;;set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
   
   (use-package lsp-mode
@@ -889,12 +936,13 @@ properly disable mozc-mode."
 		   (rustic-mode . lsp)
 		   (python-mode . lsp)
            (sh-mode . lsp)
+           (go-mode . lsp-deferred)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration)
            (lsp-managed-mode . lsp-modeline-diagnostics-mode)
            (lsp-mode . lsp-headerline-breadcrumb-mode)
            (lsp-mode . lsp-modeline-code-actions-mode))
-	:commands lsp)
+	:commands lsp lsp-deferred)
 
   (setq-default rustic-format-trigger 'on-save)
   (setq rustic-lsp-server 'rust-analyzer)
@@ -1163,7 +1211,8 @@ properly disable mozc-mode."
 	(eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
 	(eaf-bind-key take_photo "p" eaf-camera-keybinding)
 	(eaf-bind-key nil "M-q" eaf-browser-keybinding)) ;; unbind, see more in the Wiki
-(add-hook 'eaf-mode-hook 'eaf--update-modeline-icon)
+  ;; (add-hook 'eaf-mode-hook 'eaf--update-modeline-icon)
+  (require 'eaf-all-the-icons)
   
   ;; ブラウザ検索のショートカット
   (global-set-key (kbd "C-c w")  'eaf-search-it)
@@ -2359,6 +2408,10 @@ middle"
   (recentf-mode 1)
   (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail") )
 
+
+  (with-eval-after-load 'mu4e
+    (define-key mu4e-view-mode-map (kbd "c") 'eaf-open-mail-as-html))
+  
     ;; ================================================================================
   ;; nhexl-mode
   ;; ================================================================================
@@ -2401,8 +2454,15 @@ middle"
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
+  ;; ================================================================================
+  ;; trdr.el
+  ;; ================================================================================
+  ;;
+  (use-package tldr
+    :ensure t)
 
-  
+
+    
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )
 (setq gc-cons-threshold 100000000)

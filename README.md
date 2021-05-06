@@ -56,6 +56,7 @@ lsp関連
 - rust-analyzer  
 - python-language-server  
 - bash-language-server
+- gopls
 
 Magit  
 - git  
@@ -71,11 +72,16 @@ rutic-mode
 - cargo-outdated
 - cargo-edit
 
-Doxymacs
-- doxymacs-git
+Doxymacs  
+- doxymacs-git  
 
-vterm
-- cmake
+vterm  
+- cmake  
+
+
+Vim 
+ctag  
+- ctag  
 
 ### git clone  
 
