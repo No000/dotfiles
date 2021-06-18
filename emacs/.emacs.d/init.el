@@ -88,7 +88,7 @@
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'slack-mode-hook (lambda () (display-line-numbers-mode -1)))
+  ;; (add-hook 'slack-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'mu4e-main-mode-hook (lambda () (display-line-numbers-mode -1)))
@@ -383,7 +383,8 @@
           `(,@all-the-icons-mode-icon-alist
             ;; (eaf-mode all-the-icons-fileicon "emacs" :v-adjust 0.0 :face all-the-icons-red)
     	    (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
-    	  (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)))
+    	  ;; (slack-mode all-the-icons-faicon "slack" :v-adjust 0.0 :face all-the-icons-)
+          ))
 
 
 	;; -----------------------------------------------------------------------------オートセーブ・バックアップ関連
@@ -688,6 +689,7 @@ properly disable mozc-mode."
   (global-set-key (kbd "C-M-f") 'counsel-ag)
   (global-set-key (kbd "C-M-f") 'counsel-ag)
   (global-set-key (kbd "C-c h") 'counsel-recentf)
+    ;; (global-set-key (kbd "C-c b") 'counsel-switch-buffer)
 
   ;; ;; アクティベート
   ;; (counsel-mode 1)
@@ -1065,13 +1067,14 @@ properly disable mozc-mode."
   ;; -------------------------------------------------------------------------------------------------
   ;; -----------------------------------------sublimetext風のminimap
   ;; (use-package sublimity
-  ;; 	:ensure t)
+  ;;   :ensure t)
   ;;  (require 'sublimity-scroll)
   
   ;; (require 'sublimity-map)
-  ;; (setq sublimity-map-size 40)
+  ;; (setq sublimity-map-size 20)
   ;; (setq sublimity-map-fraction 0.3)
   ;; (setq sublimity-map-text-scale -7)
+  ;; (sublimity-mode 1)
 
   ;; -------------------------------------------------------------------------------------------------
   ;; minimap
@@ -1163,7 +1166,7 @@ properly disable mozc-mode."
   ;; EmacsApplicationFramework
   ;; -------------------------------------------------------------------------------------------------
   ;; Emacs内でWebブラウザやビデオ再生を可能とするフレームワーク
-  ;; dbusでPyQtと通信を行い、オーバーレイすることで表示を行っている
+  ;; dbusでPyQtと通信を行い、オー;; バーレイすることで表示を行っている
   ;; AURでemacs-eafをインストールする必要がある。
   ;; オプションは全部インストールすること。(明示的には入れてくれないので、自身で入れる)
   ;; 追加でpython-pyqt5-sipが必要となる。
@@ -1411,6 +1414,9 @@ properly disable mozc-mode."
   ;; org-mode
   ;;------------------------------------------------------------------------------------------------
 
+  ;; 折り返すようにする
+  (setq org-startup-truncated nil)
+  
   ;; 画像をインラインで表示
   (setq org-startup-with-inline-images t)
 
@@ -1419,6 +1425,10 @@ properly disable mozc-mode."
 
   ;; LOGBOOK drawerに時間を格納する
   (setq org-clock-into-drawer t)
+
+  ;; ソースのインデントをなくす
+  (setq org-src-preserve-indentation nil
+      org-edit-src-content-indentation 0)
 
   ;; .orgファイルは自動的にorg-mode
   (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
@@ -1789,8 +1799,8 @@ properly disable mozc-mode."
 	:ensure t)
   ;; (add-hook 'prog-mode-hook 'real-auto-save-mode)
   (add-hook 'emacs-lisp-mode-hook 'real-auto-save-mode)
-  (add-hook 'markdown-mode-hook 'real-auto-save-mode)
-  (add-hook 'org-mode-hook 'real-auto-save-mode)
+  ;; (add-hook 'markdown-mode-hook 'real-auto-save-mode)
+  ;; (add-hook 'org-mode-hook 'real-auto-save-mode)
   (setq real-auto-save-interval 1) ;; １秒刻みで自動保存を行う
 
   ;; ================================================================================
@@ -1924,7 +1934,9 @@ properly disable mozc-mode."
   ;; swipperにmigemoがうまく動いていなかったので修正
   (setq ivy-re-builders-alist '((t . ivy--regex-plus)
 								(eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)
-								(swiper . ytn-ivy-migemo-re-builder)))
+								(swiper . ytn-ivy-migemo-re-builder)
+							    (ivy-switch-buffer . ytn-ivy-migemo-re-builder)
+                                								(counsel-ibuffer . ytn-ivy-migemo-re-builder)))
 
   ;; (setq ivy-re-builders-alist '((t . ivy--regex-plus)
   ;;                             (eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)))
@@ -2104,7 +2116,10 @@ middle"
   (use-package restart-emacs
 	:ensure t)
 
-
+  ;; =================================================================================
+  ;; yafolding
+  ;; =================================================================================
+  
   (use-package yafolding
 	:ensure t)
 
@@ -2179,50 +2194,50 @@ middle"
   ;; https://github.com/yuya373/emacs-slack
 
 
-  (use-package slack
-    :ensure t
+  ;; (use-package slack
+  ;;   :ensure t
 	
-    :commands (slack-start)
-    :init
-    (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
-    (setq slack-prefer-current-team t)
-    :config
-    ;; (slack-register-team
-    ;;  :name "emacs-slack"
-    ;;  :default t
-    ;;  :token "xoxs-sssssssssss-88888888888-hhhhhhhhhhh-jjjjjjjjjj"
-    ;;  :subscribed-channels '(test-rename rrrrr)
-    ;;  :full-and-display-names t)
+  ;;   :commands (slack-start)
+  ;;   :init
+  ;;   (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+  ;;   (setq slack-prefer-current-team t)
+  ;;   :config
+  ;;   ;; (slack-register-team
+  ;;   ;;  :name "emacs-slack"
+  ;;   ;;  :default t
+  ;;   ;;  :token "xoxs-sssssssssss-88888888888-hhhhhhhhhhh-jjjjjjjjjj"
+  ;;   ;;  :subscribed-channels '(test-rename rrrrr)
+  ;;   ;;  :full-and-display-names t)
 
-    ;; (slack-register-team
-    ;;  :name "test"
-    ;;  :token "xoxs-yyyyyyyyyy-zzzzzzzzzzz-hhhhhhhhhhh-llllllllll"
-    ;;  :subscribed-channels '(hoge fuga))
+  ;;   ;; (slack-register-team
+  ;;   ;;  :name "test"
+  ;;   ;;  :token "xoxs-yyyyyyyyyy-zzzzzzzzzzz-hhhhhhhhhhh-llllllllll"
+  ;;   ;;  :subscribed-channels '(hoge fuga))
 
-    ;; (evil-define-key 'normal slack-info-mode-map
-    ;; 				 ",u" 'slack-room-update-messages)
-    ;; (evil-define-key 'normal slack-mode-map
-    ;; 				 ",c" 'slack-buffer-kill
-    ;; 				 ",ra" 'slack-message-add-reaction
-    ;; 				 ",rr" 'slack-message-remove-reaction
-    ;; 				 ",rs" 'slack-message-show-reaction-users
-    ;; 				 ",pl" 'slack-room-pins-list
-    ;; 				 ",pa" 'slack-message-pins-add
-    ;; 				 ",pr" 'slack-message-pins-remove
-    ;; 				 ",mm" 'slack-message-write-another-buffer
-    ;; 				 ",me" 'slack-message-edit
-    ;; 				 ",md" 'slack-message-delete
-    ;; 				 ",u" 'slack-room-update-messages
-    ;; 				 ",2" 'slack-message-embed-mention
-    ;; 				 ",3" 'slack-message-embed-channel
-    ;; 				 "\C-n" 'slack-buffer-goto-next-message
-    ;; 				 "\C-p" 'slack-buffer-goto-prev-message)
-    ;; (evil-define-key 'normal slack-edit-message-mode-map
-    ;; 				 ",k" 'slack-message-cancel-edit
-    ;; 				 ",s" 'slack-message-send-from-buffer
-    ;; 				 ",2" 'slack-message-embed-mention
-    ;; 				 ",3" 'slack-message-embed-channel)
-    )
+  ;;   ;; (evil-define-key 'normal slack-info-mode-map
+  ;;   ;; 				 ",u" 'slack-room-update-messages)
+  ;;   ;; (evil-define-key 'normal slack-mode-map
+  ;;   ;; 				 ",c" 'slack-buffer-kill
+  ;;   ;; 				 ",ra" 'slack-message-add-reaction
+  ;;   ;; 				 ",rr" 'slack-message-remove-reaction
+  ;;   ;; 				 ",rs" 'slack-message-show-reaction-users
+  ;;   ;; 				 ",pl" 'slack-room-pins-list
+  ;;   ;; 				 ",pa" 'slack-message-pins-add
+  ;;   ;; 				 ",pr" 'slack-message-pins-remove
+  ;;   ;; 				 ",mm" 'slack-message-write-another-buffer
+  ;;   ;; 				 ",me" 'slack-message-edit
+  ;;   ;; 				 ",md" 'slack-message-delete
+  ;;   ;; 				 ",u" 'slack-room-update-messages
+  ;;   ;; 				 ",2" 'slack-message-embed-mention
+  ;;   ;; 				 ",3" 'slack-message-embed-channel
+  ;;   ;; 				 "\C-n" 'slack-buffer-goto-next-message
+  ;;   ;; 				 "\C-p" 'slack-buffer-goto-prev-message)
+  ;;   ;; (evil-define-key 'normal slack-edit-message-mode-map
+  ;;   ;; 				 ",k" 'slack-message-cancel-edit
+  ;;   ;; 				 ",s" 'slack-message-send-from-buffer
+  ;;   ;; 				 ",2" 'slack-message-embed-mention
+  ;;   ;; 				 ",3" 'slack-message-embed-channel)
+  ;;   )
 
   (use-package alert
 	:ensure t
@@ -2231,9 +2246,9 @@ middle"
 	(setq alert-default-style 'notifier))
 
   ;; (load "slack-token")						; トークンをロード
-(defun my-slack-load-token-1()
-    (interactive)
-  (load "slack-token"))
+;; (defun my-slack-load-token-1()
+;;     (interactive)
+;;   (load "slack-token"))
 
   ;; ================================================================================
   ;; all-the-icons-dired
@@ -2461,7 +2476,21 @@ middle"
   (use-package tldr
     :ensure t)
 
+  ;; ================================================================================
+  ;; package-utils
+  ;; ================================================================================
+  ;;
+  (use-package package-utils
+    :ensure t)
 
+
+    ;; ================================================================================
+  ;; power-mode
+  ;; ================================================================================
+  ;;
+(use-package power-mode
+  :load-path "elisp/power-mode.el"
+  )
     
   ;; GCを走らせないようにするためのカッコ（消すな）=====================================
   )

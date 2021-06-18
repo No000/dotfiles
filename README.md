@@ -78,6 +78,8 @@ Doxymacs
 vterm  
 - cmake  
 
+counsel
+- mlocate(インストール後にsudo updatedbする必要あり)
 
 Vim 
 ctag  
