@@ -116,7 +116,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 
 " lexima.vim(勝手にカッコを閉じてくれるプラグイン)
-Plug 'cohama/lexima.vim'
+" Plug 'cohama/lexima.vim'
 
 " vim-orgmode
 Plug 'jceb/vim-orgmode'
@@ -203,7 +203,7 @@ function! s:on_lsp_buffer_enabled() abort
   setlocal signcolumn=yes
   nmap <buffer> gd <plug>(lsp-definition)
   nmap <buffer> <f2> <plug>(lsp-rename)
-  inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
+  " inoremap <expr> <cr> pumvisible() ? "\<c-y>\<cr>" : "\<cr>"
 endfunction
 
 augroup lsp_install
