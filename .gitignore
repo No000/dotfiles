@@ -1,4 +1,5 @@
 emacs/.emacs.d/*
+emacs-ubuntu/.emacs.d/*
 !emacs/.emacs.d/auto-save-list
 !emacs/.emacs.d/backup/
 !emacs/.emacs.d/conf/
