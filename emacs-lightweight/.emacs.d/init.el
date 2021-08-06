@@ -53,6 +53,7 @@
   (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
   ;; ================================================================================
@@ -438,6 +439,7 @@ properly disable mozc-mode."
 	(dashboard-mode page-break-lines-mode)
 	:custom
 	(dashboard-startup-banner 3)
+    ;; (dashboard-set-navigator t)
 	(dashboard-items '((recents . 15)
 					   (projects . 5)
 					   (bookmarks . 5)))
@@ -446,6 +448,8 @@ properly disable mozc-mode."
 	:config
 	;; (add-to-list 'dashboard-items '(agenda) t)
     )
+
+  (setq dashboard-set-navigator t)
 
 
   (defun open-dashboard ()
@@ -1824,5 +1828,127 @@ middle"
 
 
 
+  ;; ================================================================================
+  ;; vterm
+  ;; ================================================================================
+  ;; https://github.com/akermu/emacs-libvterm
+
+
+  (use-package vterm
+    :ensure t
+	:bind
+	("<f9>" . vterm-toggle)
+	:config
+	;; (setq vterm-keymap-exceptions . '("C-x"))
+	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
+	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
+ 	(define-key vterm-mode-map (kbd "C-x") nil)
+	(setq vterm-max-scrollback 10000)
+	(setq vterm-buffer-name-string "vterm: %s")
+    ;; (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
+    ;; (setq vterm-keymap-exceptions '("C-c" "C-x"))
+	:bind
+	("<f9>" . vterm-toggle)
+	)
+
+
+  ;; ================================================================================
+  ;; vterm-toggle
+  ;; ================================================================================
+  ;; https://github.com/jixiuf/vterm-toggle
+  (use-package vterm-toggle
+	:ensure t
+	:config
+	(setq vterm-toggle-scope 'project)
+	(bind-key "<f9>" 'vterm-toggle)
+	(bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
+	;; https://naokton.hatenablog.com/entry/2020/12/08/150130
+    (add-to-list 'display-buffer-alist
+				 '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                   (display-buffer-reuse-window display-buffer-in-direction)
+                   (direction . bottom)
+                   (reusable-frames . visible)
+                   (window-height . 0.4)))
+	;; Above display config affects all vterm command, not only vterm-toggle
+	(defun my/vterm-new-buffer-in-current-window()
+      (interactive)
+      (let ((display-buffer-alist nil))
+        (vterm))))
+
+
+   ;; ================================================================================
+  ;; mu4e
+  ;; ================================================================================
+ ;;
+
+ ;; muの初期設定
+ ;; mu init --maildir=~/.mail/gmail
+ ;; mu index --maildir=~/.mail/gmail
+
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+ 
+(setq
+ mue4e-headers-skip-duplicates  t
+ mu4e-view-show-images t
+ mu4e-view-show-addresses t
+ mu4e-compose-format-flowed nil
+ mu4e-date-format "%y/%m/%d"
+ mu4e-headers-date-format "%Y/%m/%d"
+ mu4e-change-filenames-when-moving t
+ mu4e-attachments-dir "~/Downloads"
+
+ mu4e-maildir       "~/.mail/gmail"   ;; top-level Maildir
+ ;; note that these folders below must start with /
+ ;; the paths are relative to maildir root
+ mu4e-refile-folder "/Archive"
+ mu4e-sent-folder   "/Sent"
+ mu4e-drafts-folder "/Drafts"
+ mu4e-trash-folder  "/Trash"
+ mu4e-update-interval (* 60 5)) ;; nil
+
+;; this setting allows to re-sync and re-index mail
+;; by pressing U
+(setq mu4e-get-mail-command  "mbsync -a")
+
+ 
+  ;; 次回のタスクvtermでC-xを送る方法を考える
+;; mu4e-alert
+(use-package mu4e-alert
+  :ensure t
+  :config
+  (mu4e-alert-enable-mode-line-display))
+
+
+;; SMTP
+;; https://text.baldanders.info/remark/2019/06/send-mail-without-mail-service/
+;; mu4e - msmtp
+
+  (setq message-send-mail-function 'message-send-mail-with-sendmail) ;; sendmail-query-once
+  (setq sendmail-program "/usr/bin/msmtp")  ;; /usr/sbin/sendmail
+       ;;(setq message-sendmail-extra-arguments)
+  ;;(setq message-sendmail-f-is-evil t) ;; nil
+  (require 'recentf)
+  (recentf-mode 1)
+  (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail") )
+
+
+  (with-eval-after-load 'mu4e
+    (define-key mu4e-view-mode-map (kbd "c") 'eaf-open-mail-as-html))
+
+    ;; ================================================================================
+  ;; tree-sitter-mode
+  ;; ================================================================================
+  ;; 
+
+  (use-package tree-sitter
+    :ensure t)
+
+  (use-package tree-sitter-langs
+    :ensure t)
+  
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  
   )
 (setq gc-cons-threshold 100000000)
