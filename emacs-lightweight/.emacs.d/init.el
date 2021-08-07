@@ -423,7 +423,13 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; dashboard
   ;; ================================================================================
-  (use-package page-break-lines)
+
+
+  
+  (use-package page-break-lines
+    :ensure t
+    :init
+    (page-break-lines-mode t))
 
   ;; プロジェクト管理パッケージ
   (use-package projectile)
@@ -440,16 +446,22 @@ properly disable mozc-mode."
 	:custom
 	(dashboard-startup-banner 3)
     ;; (dashboard-set-navigator t)
+    (setq dashboard-page-separator "\n\f\n")
 	(dashboard-items '((recents . 15)
 					   (projects . 5)
 					   (bookmarks . 5)))
 	:hook
 	(after-init . dashboard-setup-startup-hook)
 	:config
+    ;; (dashboard-page-separator . "\n\f\n")
+
 	;; (add-to-list 'dashboard-items '(agenda) t)
+    (setq dashboard-set-heading-icons t)
+    (setq dashboard-set-file-icons t)
     )
 
   (setq dashboard-set-navigator t)
+
 
 
   (defun open-dashboard ()
@@ -672,7 +684,13 @@ properly disable mozc-mode."
 	(other-window -1)
 	)
 
+  ;; ================================================================================
+  ;; zig-mode
+  ;; ================================================================================
 
+  (use-package zig-mode
+    :ensure t)
+  
   ;; ===========================================================================================
   ;; lsp-mode
   ;; ===========================================================================================
@@ -698,6 +716,7 @@ properly disable mozc-mode."
 		   (python-mode . lsp)
            (sh-mode . lsp)
            (go-mode . lsp-deferred)
+           (zig-mode . lsp)
            ;; if you want which-key integration
            (lsp-mode . lsp-enable-which-key-integration)
            (lsp-managed-mode . lsp-modeline-diagnostics-mode)
@@ -748,9 +767,9 @@ properly disable mozc-mode."
 	:ensure t
 	:commands lsp-ivy-workspace-symbol)
 
-  ;; (use-package lsp-treemacs
-  ;;   :ensure t
-  ;;   :commands lsp-treemacs-errors-list)
+  (use-package lsp-treemacs
+    :ensure t
+    :commands lsp-treemacs-errors-list)
 
   ;; optionally if you want to use debugger
   (use-package dap-mode
@@ -1827,55 +1846,6 @@ middle"
   (exec-path-from-shell-initialize))
 
 
-
-  ;; ================================================================================
-  ;; vterm
-  ;; ================================================================================
-  ;; https://github.com/akermu/emacs-libvterm
-
-
-  (use-package vterm
-    :ensure t
-	:bind
-	("<f9>" . vterm-toggle)
-	:config
-	;; (setq vterm-keymap-exceptions . '("C-x"))
-	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
-	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
- 	(define-key vterm-mode-map (kbd "C-x") nil)
-	(setq vterm-max-scrollback 10000)
-	(setq vterm-buffer-name-string "vterm: %s")
-    ;; (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
-    ;; (setq vterm-keymap-exceptions '("C-c" "C-x"))
-	:bind
-	("<f9>" . vterm-toggle)
-	)
-
-
-  ;; ================================================================================
-  ;; vterm-toggle
-  ;; ================================================================================
-  ;; https://github.com/jixiuf/vterm-toggle
-  (use-package vterm-toggle
-	:ensure t
-	:config
-	(setq vterm-toggle-scope 'project)
-	(bind-key "<f9>" 'vterm-toggle)
-	(bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
-	;; https://naokton.hatenablog.com/entry/2020/12/08/150130
-    (add-to-list 'display-buffer-alist
-				 '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
-                   (display-buffer-reuse-window display-buffer-in-direction)
-                   (direction . bottom)
-                   (reusable-frames . visible)
-                   (window-height . 0.4)))
-	;; Above display config affects all vterm command, not only vterm-toggle
-	(defun my/vterm-new-buffer-in-current-window()
-      (interactive)
-      (let ((display-buffer-alist nil))
-        (vterm))))
-
-
    ;; ================================================================================
   ;; mu4e
   ;; ================================================================================
@@ -1930,11 +1900,313 @@ middle"
   ;;(setq message-sendmail-f-is-evil t) ;; nil
   (require 'recentf)
   (recentf-mode 1)
-  (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail") )
+  (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail"))
 
 
-  (with-eval-after-load 'mu4e
-    (define-key mu4e-view-mode-map (kbd "c") 'eaf-open-mail-as-html))
+  ;; ================================================================================
+  ;; volatile-hights
+  ;; ================================================================================
+  ;;
+  (use-package volatile-highlights
+    :ensure t
+    :diminish
+    :hook
+    (after-init . volatile-highlights-mode)
+    :custom-face
+    (vhl/default-face ((nil (:foreground "#FF3333" :background "#FFCDCD")))))
+
+
+  (use-package key-chord
+    :ensure t)
+
+
+  (defun hydra-title(title) (propertize title 'face `(:inherit font-lock-warning-face :weight bold)))
+      (defun command-name(title) (propertize title 'face `(:foreground "#f8f8f2")))
+    (defun spacer() (propertize "." 'face `(:foreground "#282a36")))
+  (bind-key "C-c <SPC>" 'hydra-pinky/body)
+  (key-chord-define-global
+   "::"
+   (defhydra hydra-pinky (:color red :hint nil)
+     ;;   "
+     ;; ：_0_._1_._2_._3_._o_._S_._x_   ：_j_._k_._h_._l_._c_._a_._e_._b_._SPC_._m_._w_._s_._/_   ：_n_._p_._u_._t_   ：-_:_-   ：_q_uit"
+     
+     ;;    "
+     ;; ：_j_._k_._h_._l_ ：_q_uit"
+     (format
+      (format "%s" (propertize 
+                    "
+     ((%s))^^^^^^^^
+^^^^^^ ──────────────────────────────────────────────────────────────────────
+        ^_k_^
+        ^^↑^^
+    _h_ ←   → _l_
+        ^^↓^^
+        ^_j_^
+^^^^^^ ┌─────────────────────────────────────────────────────────────────────
+                           [_q_uit]"'face `(:inherit font-lock-doc-face)))
+                           (hydra-title "key-move")
+                           ;; (hydra-title "Zoom")
+                           ;; (hydra-title "Split")
+                           ;; (hydra-title "Window")
+                           ;; (hydra-title "Buffer")
+                           ;; (hydra-title "Misc")
+                           ;; (all-the-icons-material "zoom_in" :height .85 :face 'font-lock-doc-face)
+                           ;; (command-name "_o_ther")
+                           ;; (command-name "page")
+                           ;; (command-name "_r_centf")
+                           ;; (command-name "_s_wap")
+                           ;; (all-the-icons-faicon "slideshare" :height .85 :face 'font-lock-doc-face)
+                           ;; (command-name "_p_mode")
+                           ;; (command-name "w_i_ndow")
+                           ;; (command-name "_m_aximize")
+                           ;; (command-name "_s_witch")
+                           ;; (command-name "_d_elete")
+                           ;; (command-name "_D_elete")
+                           ;; (all-the-icons-material "zoom_out" :height .85 :face 'font-lock-doc-face)
+                           ;; (command-name "del_O_thers")
+                           ;; (command-name "quit")
+                           ;; (command-name "rotate")
+)
+   ;; window
+   ;; ("0" delete-window)
+   ;; ("1" delete-other-windows)
+   ;; ("2" split-window-below)
+   ;; ("3" split-window-right)
+   ;; ("o" other-window-or-split)
+   ;; ("S" window-swap-states)
+   ;; ("x" window-toggle-division)
+   ;; page
+   ;; ("a" seq-home)
+   ;; ("e" seq-end)
+   ("j" next-line)
+   ("k" previous-line)
+   ("l" forward-char)
+   ("h" backward-char)
+   ;; ("c" recenter-top-bottom)
+   ;; ("<down>" next-line)
+   ;; ("<up>" previous-line)
+   ;; ("<right>" forward-char)
+   ;; ("<left>" backward-char)
+   ;; ("<C-up>" backward-paragraph)
+   ;; ("<C-down>" forward-paragraph)
+   ;; ("<C-left>" left-word)
+   ;; ("<C-right>" right-word)
+   ;; ("b" scroll-down-command)
+   ;; ("SPC" scroll-up-command)
+   ;; ("m" set-mark-command)
+   ;; ("w" avy-goto-word-1)
+   ;; ("s" swiper-isearch-region)
+   ;; git
+   ;; ("n" git-gutter:next-hunk)
+   ;; ("p" git-gutter:previous-hunk)
+   ;; ("u" git-gutter:popup-hunk)
+   ;; ("t" git-gutter:toggle-popup-hunk)
+   ;; buffer
+   ;; ("/" kill-buffer)
+   ;; (":" counsel-switch-buffer)
+   ;; ("<" iflipb-previous-buffer)
+   ;; (">" iflipb-next-buffer)
+   ;; quit
+   ("q" nil)))
+
+;; sequential-command
+;; (use-package sequential-command-config
+;;   :commands sequential-command-setup-keys
+;;   :hook (after-init . sequential-command-setup-keys))
+
+;; other-window-or-split
+;; (bind-key
+;;  "C-q"
+;;  (defun other-window-or-split ()
+;;    "If there is one window, open split window.
+;; If there are two or more windows, it will go to another window."
+;;    (interactive)
+;;    (when (one-window-p)
+;;      (split-window-horizontally))
+;;    (other-window 1)))
+
+;; ;; window-toggle-division
+;; (defun window-toggle-division ()
+;;   "Replace vertical <-> horizontal when divided into two."
+;;   (interactive)
+;;   (unless (= (count-windows 1) 2)
+;;     (error "Not divided into two!"))
+;;   (let ((before-height)
+;;         (other-buf (window-buffer (next-window))))
+;;     (setq before-height (window-height))
+;;     (delete-other-windows)
+;;     (if (= (window-height) before-height)
+;;         (split-window-vertically)
+;;       (split-window-horizontally))
+;;     (other-window 1)
+;;     (switch-to-buffer other-buf)
+;;     (other-window -1)))
+
+;; ;; iflipb
+;; (setq iflipb-wrap-around t)
+;; (setq iflipb-ignore-buffers (list "^[*]" "^magit" "dir]$"))
+;; sequential-command
+;; (use-package sequential-command-config
+;;   :ensure t
+;;   :commands sequential-command-setup-keys
+;;   :hook (after-init . sequential-command-setup-keys))
+
+
+
+
+
+
+
+
+
+;;  (use-package ace-window
+;;     :functions hydra-frame-window/body
+;;     :bind
+;;     ("C-M-o" . hydra-frame-window/body)
+;;     ;; ("M-t m" . ladicle/toggle-window-maximize)
+;;     :custom
+;;     (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
+;;     :custom-face
+;;     (aw-leading-char-face ((t (:height 4.0 :foreground "#f1fa8c"))))
+;;     :preface
+;;     (defvar is-window-maximized nil)
+;;     (defun hydra-title(title) (propertize title 'face `(:inherit font-lock-warning-face :weight bold)))
+;;     (defun command-name(title) (propertize title 'face `(:foreground "#f8f8f2")))
+;;     (defun spacer() (propertize "." 'face `(:foreground "#282a36")))
+;;     :config
+;;     (with-eval-after-load 'hydra
+;;         (defhydra hydra-frame-window (:color blue :hint nil)
+;;         (format
+;;          (format "%s" (propertize "                                                                       ╔════════╗
+;;     ((%s))^^^^^^^^   ((%s))^^^^  ((%s))^^  ((%s))^^  ((%s))^^^^^^  ((%s))^   ║ Window ║
+;; ^^^^^^ ──────────────────────────────────────────────────────────────────────╨────────╜
+;;         ^_k_^        %s_+_         _-_       %s     _,_ ← %s → _._^  %s
+;;         ^^↑^^          ^↑^         ^↑^       %s
+;;     _h_ ←   → _l_   ^^%s%s^^^^^    ^%s    ^^^%s^^^^     %s
+;;         ^^↓^^          ^↓^         ^↓^       %s^^       %s
+;;         ^_j_^        %s_=_         _/_       %s
+;; ^^^^^^ ┌──────────────────────────────────────────────────────────────────────────────┘
+;;                            [_q_]: %s, [_<SPC>_]: %s" 'face `(:inherit font-lock-doc-face)))
+;;                            (hydra-title "key-move")
+;;                            (hydra-title "Zoom")
+;;                            (hydra-title "Split")
+;;                            (hydra-title "Window")
+;;                            (hydra-title "Buffer")
+;;                            (hydra-title "Misc")
+;;                            (all-the-icons-material "zoom_in" :height .85 :face 'font-lock-doc-face)
+;;                            (command-name "_o_ther")
+;;                            (command-name "page")
+;;                            (command-name "_r_centf")
+;;                            (command-name "_s_wap")
+;;                            (all-the-icons-faicon "slideshare" :height .85 :face 'font-lock-doc-face)
+;;                            (command-name "_p_mode")
+;;                            (command-name "w_i_ndow")
+;;                            (command-name "_m_aximize")
+;;                            (command-name "_s_witch")
+;;                            (command-name "_d_elete")
+;;                            (command-name "_D_elete")
+;;                            (all-the-icons-material "zoom_out" :height .85 :face 'font-lock-doc-face)
+;;                            (command-name "del_O_thers")
+;;                            (command-name "quit")
+;;                            (command-name "rotate")
+;;                            )
+
+;;           ("K" kill-current-buffer :exit t)
+;;           ("D" kill-buffer-and-window :exit t)
+;;           ("O" delete-other-windows  :exit t)
+;;           ("F" toggle-frame-fullscreen)
+;;           ("i" ace-window)
+;;           ("s" ace-swap-window :exit t)
+;;           ("d" ace-delete-window)
+;;           ("m" ladicle/toggle-window-maximize :exit t)
+;;           ("=" text-scale-decrease)
+;;           ("+" text-scale-increase)
+;;           ("-" split-window-vertically)
+;;           ("/" split-window-horizontally)
+
+          
+;;           ("h" backward-char :exit t)
+;;           ("k" shrink-window)
+;;           ("j" enlarge-window)
+;;           ("l" enlarge-window-horizontally)
+;;           ("," previous-buffer)
+;;           ("." next-buffer)
+;;           ("o" other-window)
+;;           ("p" presentation-mode)
+;;           ("r" counsel-recentf :exit t)
+;;           ("s" switch-to-buffer :exit t)
+;;           ("D" kill-buffer-and-window)
+;;           ("<SPC>" rotate-layout)
+;;           ("q" nil)))
+;;           )
+
+
+
+
+
+
+  ;;=================================================================================
+  ;;  _____                              _      __  __           _       _
+  ;; |  __ \                            (_)    |  \/  |         | |     | |
+  ;; | |  | |_   _ _ __   __ _ _ __ ___  _  ___| \  / | ___   __| |_   _| | ___
+  ;; | |  | | | | | '_ \ / _` | '_ ` _ \| |/ __| |\/| |/ _ \ / _` | | | | |/ _ \
+  ;; | |__| | |_| | | | | (_| | | | | | | | (__| |  | | (_) | (_| | |_| | |  __/
+  ;; |_____/ \__, |_| |_|\__,_|_| |_| |_|_|\___|_|  |_|\___/ \__,_|\__,_|_|\___|
+  ;;          __/ |
+  ;;         |___/
+  ;; ===============================================================================
+
+
+
+  
+  ;; ================================================================================
+  ;; vterm
+  ;; ================================================================================
+  ;; https://github.com/akermu/emacs-libvterm
+
+
+  (use-package vterm
+    :ensure t
+	:bind
+	("<f9>" . vterm-toggle)
+	:config
+	;; (setq vterm-keymap-exceptions . '("C-x"))
+	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
+	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
+ 	(define-key vterm-mode-map (kbd "C-x") nil)
+	(setq vterm-max-scrollback 10000)
+	(setq vterm-buffer-name-string "vterm: %s")
+    ;; (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
+    ;; (setq vterm-keymap-exceptions '("C-c" "C-x"))
+	:bind
+	("<f9>" . vterm-toggle)
+	)
+
+
+  ;; ================================================================================
+  ;; vterm-toggle
+  ;; ================================================================================
+  ;; https://github.com/jixiuf/vterm-toggle
+  (use-package vterm-toggle
+	:ensure t
+	:config
+	(setq vterm-toggle-scope 'project)
+	(bind-key "<f9>" 'vterm-toggle)
+	(bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
+	;; https://naokton.hatenablog.com/entry/2020/12/08/150130
+    (add-to-list 'display-buffer-alist
+				 '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                   (display-buffer-reuse-window display-buffer-in-direction)
+                   (direction . bottom)
+                   (reusable-frames . visible)
+                   (window-height . 0.4)))
+	;; Above display config affects all vterm command, not only vterm-toggle
+	(defun my/vterm-new-buffer-in-current-window()
+      (interactive)
+      (let ((display-buffer-alist nil))
+        (vterm))))
+
+
 
     ;; ================================================================================
   ;; tree-sitter-mode
