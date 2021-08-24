@@ -54,6 +54,8 @@
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'treemacs-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
   ;; ================================================================================
@@ -109,6 +111,11 @@
   ;; 右クリックで選択領域をコピー
   (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
 
+
+  ;; C-v M-vでスクロールした場合に残す量
+  (setq next-screen-context-lines 10)
+  ;; カーソル位置維持
+  (setq scroll-preserve-screen-position t)
   ;; vi-like line insertion
   ;; vim のoコマンドのような挙動に修正
   
@@ -456,6 +463,7 @@ properly disable mozc-mode."
     ;; (dashboard-page-separator . "\n\f\n")
 
 	;; (add-to-list 'dashboard-items '(agenda) t)
+    (setq dashboard-center-content t)
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     )
@@ -655,19 +663,46 @@ properly disable mozc-mode."
     (add-hook 'minibuffer-setup-hook #'my-tab-width-2)
     (add-hook 'minibuffer-exit-hook #'my-tab-width-original))
   ;; ------------------------------------------------------------------------company
-  (use-package company)
-  (global-company-mode) ; 全バッファで有効にする 
+  (use-package company
+    :ensure t)
+  (global-company-mode) ; 全バッファで有効にする
+  ;; (setq company-auto-expand nil) ;; 1個目を自動的に補完
   (setq company-idle-delay 0) ; デフォルトは0.5
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+  (setq company-auto-complete nil)
+
+  ;; https://github.com/company-mode/company-mode/blob/master/NEWS.md
+  ;; (with-eval-after-load 'company
+  ;;   (dolist (map (list company-active-map company-search-map))
+  ;;     (define-key map (kbd "C-n") nil)
+  ;;     (define-key map (kbd "C-p") nil)
+  ;;     (define-key map (kbd "M-n") #'company-select-next)
+  ;;     (define-key map (kbd "M-p") #'company-select-previous)))
+
+  
+
+  ;; もしM-nで起動させたい場合
+  ;; (global-set-key (kbd "M-n") 'company-complete)
+  ;; (global-set-key (kbd "M-p") 'company-complete)
 
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") nil)
+  (define-key company-active-map (kbd "C-p") nil)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
 
 
+  
+  ;; (defun complete-or-indent ()
+  ;;   (interactive)
+  ;;   (if (company-manual-begin)
+  ;;       (company-complete-common)
+  ;;     (indent-according-to-mode)))
+
+  ;; (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 
   
   ;; ================================================================================
@@ -684,6 +719,36 @@ properly disable mozc-mode."
 	(other-window -1)
 	)
 
+
+    ;; ========================================================================================
+  ;; go-mode
+  ;; ========================================================================================
+
+;; Golang
+(defun lsp-go-install-save-hooks()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(use-package go-mode
+  :ensure t
+  :mode (("\\.go\\'" . go-mode))
+  :init
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
+
+;; Company mode
+(setq company-idle-delay 0)
+(setq company-minimum-prefix-length 1)
+
+;; Go - lsp-mode
+;; Set up before-save hooks to format buffer and add/delete imports.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; Start LSP Mode and YASnippet mode
+(add-hook 'go-mode-hook #'lsp-deferred)
+(add-hook 'go-mode-hook #'yas-minor-mode)
   ;; ================================================================================
   ;; zig-mode
   ;; ================================================================================
@@ -698,30 +763,41 @@ properly disable mozc-mode."
   ;; eglotの対応が少ないのが辛いのでlsp-modeに移行する
   ;;set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 
-  (add-to-list 'global-mode-string '(t (:eval lsp-modeline--code-actions-string)))
+  (require 'imenu)
+
+  (setq lsp-zig-zls-executable "/usr/bin/zls")
+  ;; (add-to-list 'global-mode-string '(t (:eval lsp-modeline--code-actions-string)))
   (custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
   
   (use-package lsp-mode
 	:ensure t
+    :init
+    ;; (setq lsp-keep-workspace-alive nil)
     :config
-    (setq lsp-headerline-breadcrumb-enable nil)
+    ;; (setq lsp-headerline-breadcrumb-enable nil)
+    (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 	:custom
 	(lsp-headerline-breadcrumb-mode t)
 
-	:hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-           (c-mode . lsp)
-		   (c++-mode . lsp)
-		   ;;		   (nim-mode . lsp)
-		   (rustic-mode . lsp)
-		   (python-mode . lsp)
-           (sh-mode . lsp)
-           (go-mode . lsp-deferred)
-           (zig-mode . lsp)
-           ;; if you want which-key integration
-           (lsp-mode . lsp-enable-which-key-integration)
-           (lsp-managed-mode . lsp-modeline-diagnostics-mode)
-           (lsp-mode . lsp-headerline-breadcrumb-mode)   ;; Ubunutuだと調子がわるくなるので設定
-           (lsp-mode . lsp-modeline-code-actions-mode))
+	:hook
+    ;; (lsp-mode . (lambda ()
+    ;;               (let ((lsp-keymap-prefix "C-c l"))
+    ;;                 (lsp-enable-which-key-integration))))
+    
+    (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+     (c-mode . lsp)
+	 (c++-mode . lsp)
+	 ;;		   (nim-mode . lsp)
+	 (rustic-mode . lsp)
+	 (python-mode . lsp)
+     (sh-mode . lsp)
+     (go-mode . lsp-deferred)
+     (zig-mode . lsp)
+     ;; if you want which-key integration
+     (lsp-mode . lsp-enable-which-key-integration)
+     (lsp-managed-mode . lsp-modeline-diagnostics-mode)
+     (lsp-mode . lsp-headerline-breadcrumb-mode)   ;; Ubunutuだと調子がわるくなるので設定
+     (lsp-mode . lsp-modeline-code-actions-mode))
     
 	:commands lsp lsp-deferred)
 
@@ -755,8 +831,9 @@ properly disable mozc-mode."
 			(lsp-ui-doc--hide-frame))
 		(lsp-ui-doc-mode 1)))
 	:bind
+    ("C-<f10>" . lsp-ui-imenu)
 	("C-c r" . lsp-ui-peek-find-references)
-	("<f6>"   . ladicle/toggle-lsp-ui-doc)
+	("C-<f6>"   . ladicle/toggle-lsp-ui-doc)
 	;; ("C-c j" . lsp-ui-peek-find-definitions)
 	;; ("C-c i"   . lsp-ui-peek-find-implementation) ; clangdがサポートしていない
 	)
@@ -769,14 +846,28 @@ properly disable mozc-mode."
 
   (use-package lsp-treemacs
     :ensure t
-    :commands lsp-treemacs-errors-list)
-
+    :commands lsp-treemacs-errors-list
+    :custom
+    (lsp-treemacs-sync-mode 1)
+    )
+  (defun db/lsp-treemacs-symbols-toggle ()
+    "Toggle the lsp-treemacs-symbols buffer."
+    (interactive)
+    (if (get-buffer "*LSP Symbols List*")
+        (kill-buffer "*LSP Symbols List*")
+      (progn (lsp-treemacs-symbols)
+             (other-window -1))))
+  (global-set-key (kbd "C-x t s")  'db/lsp-treemacs-symbols-toggle)
+  
   ;; optionally if you want to use debugger
   (use-package dap-mode
 	:ensure t)
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
   (setq lsp-clients-clangd-executable "/usr/bin/clangd")
+
+
+  
   (setq lsp-clients-clangd-args
 		'(;;"-j=2"
           ;; "--background-index"
@@ -835,17 +926,31 @@ properly disable mozc-mode."
 	;; -------------------------------------------------------------------------------------------------
 	;; ivy-yasnippets : call ivy-yasnippet in yas-minor-mode.
 	(use-package ivy-yasnippet :ensure t
-	  :bind ("C-c y s" . ivy-yasnippet)
+	  :bind ("C-c y" . ivy-yasnippet)
 	  :config
 	  (setq ivy-yasnippet-expand-keys "smart") ; nil "always" , "smart"
 	  ;; https://github.com/seagle0128/.emacs.d/blob/master/lisp/init-ivy.el
 	  (advice-add #'ivy-yasnippet--preview :override #'ignore)
 	  )
 	)
+  
 
+  ;; -------------------------------------------------------------------------------------------------
+  ;; sublimity
+  ;; -------------------------------------------------------------------------------------------------
+  ;; -----------------------------------------sublimetext風のminimap
+  (use-package sublimity
+    :ensure t)
+   (require 'sublimity-scroll)
+  
+  ;; (require 'sublimity-map)
+  ;; (setq sublimity-map-size 20)
+  ;; (setq sublimity-map-fraction 0.3)
+  ;; (setq sublimity-map-text-scale -7)
+  ;; (require 'sublimity-attractive)
+  (sublimity-mode 1)
 
-
-
+  
   ;; -------------------------------------------------------------------------------------------------
   ;; モダンな補完機能
   (use-package company-box
@@ -1035,13 +1140,21 @@ properly disable mozc-mode."
 	(calendar-mode . centaur-tabs-local-mode)
 	(org-agenda-mode . centaur-tabs-local-mode)
 	(helpful-mode . centaur-tabs-local-mode)
+    (vterm-mode . centaur-tabs-local-mode)
+    (eshell-mode . centaur-tabs-local-mode)
+    (sublimity-mode . centaur-tabs-local-mode)
 	;; (mozc-mode . centaur-tabs-local-mode)
+
+
+    
 	:bind
 	("C-<prior>" . centaur-tabs-backward)
 	("C-<next>" . centaur-tabs-forward)
-	("C-c t s" . centaur-tabs-counsel-switch-group)
-	("C-c t p" . centaur-tabs-group-by-projectile-project)
-	("C-c t g" . centaur-tabs-group-buffer-groups))
+    ;; つかってないでしょ〜〜〜
+	;; ("C-c t s" . centaur-tabs-counsel-switch-group)
+	;; ("C-c t p" . centaur-tabs-group-by-projectile-project)
+	;; ("C-c t g" . centaur-tabs-group-buffer-groups)
+    )
 
 
 
@@ -1136,7 +1249,7 @@ properly disable mozc-mode."
   (setq org-log-done 'time)
 
   ;; ショートカットキー
-  (global-set-key "\C-cl" 'org-store-link)
+  ;; (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-cc" 'org-capture)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
@@ -1519,6 +1632,7 @@ properly disable mozc-mode."
 
 
   (global-set-key (kbd "<henkan>") 'avy-goto-word-0-back)
+  (global-set-key (kbd "C-<henkan>") 'avy-goto-word-0)
   (global-set-key (kbd "<muhenkan>") 'avy-goto-word-0-forward)
 
   ;; avyで行移動のショートカットを追加（C-c j）
@@ -1937,12 +2051,12 @@ middle"
                     "
      ((%s))^^^^^^^^
 ^^^^^^ ──────────────────────────────────────────────────────────────────────
-        ^_k_^
-        ^^↑^^
-    _h_ ←   → _l_
-        ^^↓^^
-        ^_j_^
-^^^^^^ ┌─────────────────────────────────────────────────────────────────────
+        ^_k_^          \t|%s
+        ^^↑^^         \t|
+    _h_ ←   → _l_    \t|
+        ^^↓^^         \t|
+        ^_j_^          \t|
+^^^^^^ ──────────────────────────────────────────────────────────────────────
                            [_q_uit]"'face `(:inherit font-lock-doc-face)))
                            (hydra-title "key-move")
                            ;; (hydra-title "Zoom")
@@ -1951,12 +2065,12 @@ middle"
                            ;; (hydra-title "Buffer")
                            ;; (hydra-title "Misc")
                            ;; (all-the-icons-material "zoom_in" :height .85 :face 'font-lock-doc-face)
-                           ;; (command-name "_o_ther")
-                           ;; (command-name "page")
-                           ;; (command-name "_r_centf")
-                           ;; (command-name "_s_wap")
+                           (command-name "_dd_")
+                           ;; (command-name "_<<_")
+                           ;; (command-name "__>>__")
+                           ;; (command-name "wap")
                            ;; (all-the-icons-faicon "slideshare" :height .85 :face 'font-lock-doc-face)
-                           ;; (command-name "_p_mode")
+                           ;; (command-name "mode")
                            ;; (command-name "w_i_ndow")
                            ;; (command-name "_m_aximize")
                            ;; (command-name "_s_witch")
@@ -1982,6 +2096,8 @@ middle"
    ("k" previous-line)
    ("l" forward-char)
    ("h" backward-char)
+   ("dd" kill-whole-line)
+   ;; ("<<" )
    ;; ("c" recenter-top-bottom)
    ;; ("<down>" next-line)
    ;; ("<up>" previous-line)
@@ -2142,9 +2258,198 @@ middle"
 
 
 
+  (use-package elf-mode
+    :ensure t)
+
+
+  (use-package evil
+    :ensure t
+    :bind
+    ("C-c v" . evil-mode))
+
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay      0.5
+          treemacs-directory-name-transformer    #'identity
+          treemacs-display-in-side-window        t
+          treemacs-eldoc-display                 t
+          treemacs-file-event-delay              5000
+          treemacs-file-extension-regex          treemacs-last-period-regex-value
+          treemacs-file-follow-delay             0.2
+          treemacs-file-name-transformer         #'identity
+          treemacs-follow-after-init             t
+          treemacs-expand-after-init             t
+          treemacs-git-command-pipe              ""
+          treemacs-goto-tag-strategy             'refetch-index
+          treemacs-indentation                   2
+          treemacs-indentation-string            " "
+          treemacs-is-never-other-window         nil
+          treemacs-max-git-entries               5000
+          treemacs-missing-project-action        'ask
+          treemacs-move-forward-on-expand        nil
+          treemacs-no-png-images                 nil
+          treemacs-no-delete-other-windows       t
+          treemacs-project-follow-cleanup        nil
+          treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                      'left
+          treemacs-read-string-input             'from-child-frame
+          treemacs-recenter-distance             0.1
+          treemacs-recenter-after-file-follow    nil
+          treemacs-recenter-after-tag-follow     nil
+          treemacs-recenter-after-project-jump   'always
+          treemacs-recenter-after-project-expand 'on-distance
+          treemacs-litter-directories            '("/node_modules" "/.venv" "/.cask")
+          treemacs-show-cursor                   nil
+          treemacs-show-hidden-files             t
+          treemacs-silent-filewatch              nil
+          treemacs-silent-refresh                nil
+          treemacs-sorting                       'alphabetic-asc
+          treemacs-space-between-root-nodes      t
+          treemacs-tag-follow-cleanup            t
+          treemacs-tag-follow-delay              1.5
+          treemacs-user-mode-line-format         nil
+          treemacs-user-header-line-format       nil
+          treemacs-width                         35
+          treemacs-width-is-initially-locked     t
+          treemacs-workspace-switch-cleanup      nil)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode 'always)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-evil
+  :after (treemacs evil)
+  :ensure t)
+
+(use-package treemacs-projectile
+  :after (treemacs projectile)
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :after (treemacs dired)
+  :ensure t
+  :config (treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after (treemacs magit)
+  :ensure t)
+
+(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
+  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
+  :ensure t
+  :config (treemacs-set-scope-type 'Perspectives))
+
+  ;; ================================================================================
+  ;; twittering-mode
+  ;; ================================================================================
+  ;; https://github.com/hayamiz/twittering-mode
+  ;; GnuPGが必要になる。
+
+
+  ;; Clear existing twit buffers
+  (defun my/reload-twit ()
+	(mapcar
+	 (lambda (buffer)
+       (twittering-deactivate-buffer buffer)
+       (kill-buffer buffer))
+	 (twittering-get-buffer-list))
+	(twittering-unregister-killed-buffer)
+	;; Clear variables
+	(setq twittering-private-info-file-loaded nil)
+	(setq twittering-account-authorization nil)
+	(setq twittering-oauth-access-token-alist nil)
+	(setq twittering-buffer-info-list nil)
+	(setq twittering-timeline-data-table (make-hash-table :test 'equal))
+	(twit))
+
+  (defun my-twitter-account-1 ()
+	(interactive)
+	(setq twittering-private-info-file 
+          (expand-file-name "~/.emacs.d//twitter/twittering-mode.gpg"))
+	;; timeline to read on startup
+	(setq twittering-initial-timeline-spec-string '(":home" "Wagahaiha_toto/vrchat")) ;ここに初期表示するタイムラインを表示できる
+	(my/reload-twit))
+
+  (defun my-twitter-account-2 ()
+	(interactive)
+	(setq twittering-private-info-file 
+          (expand-file-name "~/.emacs.d//twitter/twittering-mode2.gpg"))
+	;; timeline to read on startup
+	(setq twittering-initial-timeline-spec-string '(":home")) ;ここに初期表示するタイムラインを指定できる
+	(my/reload-twit))
+
+;; Twitterring-mode settings
+  
+
+  ;; エラー対策
+  (defalias 'epa--decode-coding-string 'decode-coding-string)
+
+  (use-package twittering-mode
+	:ensure t
+	:init
+	(add-hook 'twittering-mode-hook #'emojify-mode)
+	:config
+	;; 簡単ログインの設定
+	(setq twittering-allow-insecure-server-cert t)
+	(setq twittering-use-master-password t)
+	(setq twittering-private-info-file "~/.emacs.d//twitter/twittering-mode.gpg")
+	(setq twittering-icon-mode t)
+	(setq twittering-initial-timeline-spec-string '(":home" "Wagahaiha_toto/vrchat"))
+	(setq twittering-status-format "%i @%s %S %p: \n\n%T\n[%@]%r %R %f%L\n%FACE[font-lock-warning-face]{%FIELD-IF-NONZERO[↺%d]{retweet_count}} %FACE[font-lock-warning-face]{%FIELD-IF-NONZERO[✶%d]{favorite_count}}\n ------------------------------------------------------------------------" )
+	(define-key twittering-mode-map (kbd "C-c F") 'twittering-favorite)
+	(define-key twittering-mode-map (kbd "C-c U") 'twittering-unfavorite)
+	)
+
+
+  ;; ================================================================================
+  ;; ytel
+  ;; ================================================================================
+  (use-package ytel
+    :ensure t)
+
+  (defun ytel-watch ()
+    "Stream video at point in mpv."
+    (interactive)
+    (let* ((video (ytel-get-current-video))
+     	   (id    (ytel-video-id video)))
+      (start-process "ytel mpv" nil
+    	     "mpv"                      ; 公式リポジトリからmpvをインストール
+    	     (concat "https://www.youtube.com/watch?v=" id))
+    	     "--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
+      (message "Starting streaming..."))
+
+
+  (define-key ytel-mode-map "y" #'ytel-watch)
 
 
 
+  (setq ytel-invidious-api-url "https://youtube.076.ne.jp/")
   ;;=================================================================================
   ;;  _____                              _      __  __           _       _
   ;; |  __ \                            (_)    |  \/  |         | |     | |

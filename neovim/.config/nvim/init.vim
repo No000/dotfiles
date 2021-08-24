@@ -19,7 +19,7 @@ unlet autoload_plug_path
 set nocompatible
 
 call plug#begin('~/.config/nvim/plugins')
-	Plug 'scrooloose/nerdtree'
+	" Plug 'scrooloose/nerdtree'
 	Plug 'Xuyuanp/nerdtree-git-plugin'
 	Plug 'jistr/vim-nerdtree-tabs'
 	" gitgutter
@@ -85,6 +85,19 @@ call plug#begin('~/.config/nvim/plugins')
 		Plug 'roxma/nvim-yarp'
 		Plug 'roxma/vim-hug-neovim-rpc'
     endif	
+
+    " nerdtreeの近代実装
+    Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+    
+	" tagの表示
+	Plug 'liuchengxu/vista.vim'
+
+    " vimeasymotion
+    Plug 'easymotion/vim-easymotion'
+
+    " nvim-treesitter
+    " :TSInstall allが必要
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
 call plug#end()
 
 if plug_install
@@ -106,21 +119,26 @@ set hls                "検索した文字をハイライトする
 set encoding=UTF-8
 set showcmd
 
+" leaderキーのセット
+let mapleader = "\<Space>"
+
 " Nerdtree用の設定
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-\		"Modified"  : "✹",
-\		"Staged"    : "✚",
-\		"Untracked" : "✭",
-\		"Renamed"   : "➜",
-\		"Unmerged"  : "═",
-\		"Deleted"   : "✖",
-\		"Dirty"     : "✗",
-\		"Clean"     : "✓",
-\		"Unknown"   : "?"
-\	}
+" let g:NERDTreeGitStatusIndicatorMapCustom = {
+" \		"Modified"  : "✹",
+" \		"Staged"    : "✚",
+" \		"Untracked" : "✭",
+" \		"Renamed"   : "➜",
+" \		"Unmerged"  : "═",
+" \		"Deleted"   : "✖",
+" \		"Dirty"     : "✗",
+" \		"Clean"     : "✓",
+" \		"Unknown"   : "?"
+" \	}
 
-map <C-n> <plug>NERDTreeTabsToggle<CR>
+" map <C-n> <plug>NERDTreeTabsToggle<CR>
 
+"chadtree
+nnoremap <leader>v <cmd>CHADopen<cr>
 
 "スクロールバーを消す
 set guioptions-=r
@@ -258,3 +276,74 @@ colorscheme doom-one
 " ctag
 map <F10> :TagbarToggle<CR>
 let g:floaterm_keymap_toggle = '<F9>'
+
+
+
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+set statusline+=%{NearestMethodOrFunction()}
+
+" By default vista.vim never run if you don't call it explicitly.
+"
+" If you want to show the nearest function in your statusline automatically,
+" you can add the following line to your vimrc
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+
+
+" How each level is indented and what to prepend.
+" This could make the display more compact or more spacious.
+" e.g., more compact: ["▸ ", ""]
+" Note: this option only works for the kind renderer, not the tree renderer.
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+
+" Executive used when opening vista sidebar without specifying it.
+" See all the avaliable executives via `:echo g:vista#executives`.
+let g:vista_default_executive = 'ctags'
+
+" Set the executive for some filetypes explicitly. Use the explicit executive
+" instead of the default one for these filetypes when using `:Vista` without
+" specifying the executive.
+let g:vista_executive_for = {
+  \ 'cpp': 'vim_lsp',
+  \ 'php': 'vim_lsp',
+  \ }
+
+" Declare the command including the executable and options used to generate ctags output
+" for some certain filetypes.The file path will be appened to your custom command.
+" For example:
+let g:vista_ctags_cmd = {
+      \ 'haskell': 'hasktags -x -o - -c',
+      \ }
+
+" To enable fzf's preview window set g:vista_fzf_preview.
+" The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
+" For example:
+let g:vista_fzf_preview = ['right:50%']
+
+
+" Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
+let g:vista#renderer#enable_icon = 1
+
+" The default icons can't be suitable for all the filetypes, you can extend it as you wish.
+" let g:vista#renderer#icons = {
+" \   "function": "\uf794",
+" \   "variable": "\uf71b",
+" \  }
+
+" easymotionの設定
+let g:EasyMotion_use_migemo = 1
+
+
+" nvim-treesitterの設定
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+}
+EOF
