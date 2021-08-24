@@ -699,5 +699,3 @@ set sh=/bin/zsh
 " fzf
 nnoremap <leader>f <cmd>Files<cr>
 nnoremap <leader>c <cmd>Commands<cr>
-" nmap <M-c> :Files<cr>
-" nmap <M-x> :Commands<cr>
