@@ -260,7 +260,7 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-" shellをfishに変更
+" shellをzshに変更
 set sh=/bin/zsh
 
 
