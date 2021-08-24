@@ -261,7 +261,8 @@ let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
 " shellをfishに変更
-set sh=/bin/fish
+set sh=/bin/zsh
+
 
 " fzf.vimの設定
 nmap <M-c> :Files<cr>
