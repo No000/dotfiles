@@ -141,6 +141,7 @@
     (setenv "PATH" (concat '"/usr/local/bin:" (getenv "PATH"))))
 (if (not (member "/usr/local/bin" exec-path))
     (setq exec-path (cons "/usr/local/bin" exec-path)))
+(setenv "PATH" (concat '"/usr/local/opt/llvm/bin/:" (getenv "PATH")))
 )
   ;; ================================================================================
   ;; async
