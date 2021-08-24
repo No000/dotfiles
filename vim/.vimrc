@@ -14,6 +14,8 @@
 
 filetype off
 filetype plugin indent off
+" leaderキーのセット
+let mapleader = "\<Space>"
 
 "---------------------------------------
 " Plugin
@@ -131,6 +133,15 @@ Plug 'rhysd/clever-f.vim'
 Plug 'vim-scripts/fcitx.vim'
 " tagを見るための拡張（lsp)
 Plug 'liuchengxu/vista.vim'
+
+"" foatterm
+    Plug 'voldikss/vim-floaterm'
+" vimeasymotion
+    Plug 'easymotion/vim-easymotion'
+
+    " fzf
+    Plug 'junegunn/fzf.vim'
+	Plug 'junegunn/fzf'
 
 call plug#end()
 "---------------------------------------
@@ -678,3 +689,15 @@ let g:vista#renderer#icons = {
 \   "function": "\uf794",
 \   "variable": "\uf71b",
 \  }
+
+" foattermの設定
+let g:floaterm_keymap_toggle = '<F9>'
+" shellをzshに変更
+set sh=/bin/zsh
+
+
+" fzf
+nnoremap <leader>f <cmd>Files<cr>
+nnoremap <leader>c <cmd>Commands<cr>
+" nmap <M-c> :Files<cr>
+" nmap <M-x> :Commands<cr>
