@@ -136,9 +136,12 @@
   (setq-default c-basic-offset 4     ;;基本インデント量4
 				tab-width 4          ;;タブ幅4
 				indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
-
-
-
+  (when (equal system-type 'darwin)
+(if (not (string-match "\\(^\\|:\\)/usr/local/bin\\($\\|\\:\\)" (getenv "PATH")))
+    (setenv "PATH" (concat '"/usr/local/bin:" (getenv "PATH"))))
+(if (not (member "/usr/local/bin" exec-path))
+    (setq exec-path (cons "/usr/local/bin" exec-path)))
+)
   ;; ================================================================================
   ;; async
   ;; ================================================================================
@@ -1598,7 +1601,9 @@ properly disable mozc-mode."
   (setq migemo-options '("-q" "--emacs"))
 
   ;; Set your installed path
-  (setq migemo-dictionary "/usr/share/migemo/utf-8/migemo-dict")
+    (setq migemo-dictionary "/usr/share/migemo/utf-8/migemo-dict")
+
+
 
   (setq migemo-user-dictionary nil)
   (setq migemo-regex-dictionary nil)
@@ -1971,7 +1976,7 @@ middle"
  ;; muの初期設定
  ;; mu init --maildir=~/.mail/gmail
  ;; mu index --maildir=~/.mail/gmail
-
+(when (equal system-type 'gnu/linux)
 (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
 (require 'mu4e)
  
@@ -2018,7 +2023,7 @@ middle"
   (require 'recentf)
   (recentf-mode 1)
   (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail"))
-
+)
 
   ;; ================================================================================
   ;; volatile-hights
@@ -2472,7 +2477,7 @@ middle"
   ;; ================================================================================
   ;; https://github.com/akermu/emacs-libvterm
 
-
+  (when (equal system-type 'gnu/linux)
   (use-package vterm
     :ensure t
 	:bind
@@ -2513,7 +2518,7 @@ middle"
       (interactive)
       (let ((display-buffer-alist nil))
         (vterm))))
-
+)
 
 
     ;; ================================================================================
