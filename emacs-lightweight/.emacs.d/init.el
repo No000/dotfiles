@@ -453,7 +453,8 @@ properly disable mozc-mode."
 	:custom
 	(dashboard-startup-banner 3)
     ;; (dashboard-set-navigator t)
-    (setq dashboard-page-separator "\n\f\n")
+    (dashboard-page-separator "\n\f\n")
+    (dashboard-center-content t)
 	(dashboard-items '((recents . 15)
 					   (projects . 5)
 					   (bookmarks . 5)))
@@ -461,9 +462,11 @@ properly disable mozc-mode."
 	(after-init . dashboard-setup-startup-hook)
 	:config
     ;; (dashboard-page-separator . "\n\f\n")
+    ;; (dashboard-page-separator . "\n\f\n")
 
-	;; (add-to-list 'dashboard-items '(agenda) t)
-    (setq dashboard-center-content t)
+
+	;; ;; (add-to-list 'dashboard-items '(agenda) t)
+    ;; (setq dashboard-center-content t)
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     )
