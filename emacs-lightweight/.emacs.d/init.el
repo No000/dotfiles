@@ -106,7 +106,7 @@
   (electric-pair-mode 1)					; かぎかっこを対応させる
 
   ;; マウスのスクロール
-  (setq mouse-wheel-scroll-amount '(0.07))
+  (setq mouse-wheel-scroll-amount '(0.04))
   (setq mouse-wheel-progressive-speed nil)
   ;; 右クリックで選択領域をコピー
   (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
