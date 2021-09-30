@@ -124,7 +124,19 @@
   (global-set-key (kbd "M-o") (lambda () (interactive)(previous-line)(end-of-line)(newline-and-indent)))
   (bind-key* "M-h" 'backward-kill-word)
 
+  ;; 時間の表示
+  ;; 以下の書式に従ってモードラインに日付・時刻を表示する
+  (setq display-time-string-forms
+        '((format "%s/%s/%s(%s) %s:%s" year month day dayname 24-hours minutes)
+          load
+          (if mail " Mail" "")))
+  ;; 時刻表示の左隣に日付を追加。
+  (setq display-time-kawakami-form t)
+  ;; 24時間制
+  (setq display-time-24hr-format t)
 
+  ;; 時間を表示
+  (display-time)
 
 
   ;; 画面拡大ショートカット割当
@@ -134,8 +146,8 @@
 
 
   (setq-default c-basic-offset 4     ;;基本インデント量4
-				tab-width 4          ;;タブ幅4
-				indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+    			tab-width 4          ;;タブ幅4
+    			indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
   (when (equal system-type 'darwin)
 (if (not (string-match "\\(^\\|:\\)/usr/local/bin\\($\\|\\:\\)" (getenv "PATH")))
     (setenv "PATH" (concat '"/usr/local/bin:" (getenv "PATH"))))
@@ -372,6 +384,21 @@ properly disable mozc-mode."
   
   (prefer-coding-system 'utf-8)
 
+  ;; C-n,C-pを追加
+  (defun advice:mozc-key-event-with-ctrl-key--with-ctrl (r)
+    (cond ((and (not (null (cdr r))) (eq (cadr r) 'control) (null (cddr r)))
+           (case (car r)
+             (102 r) ; C-f
+             (98 r) ; C-b
+             (110 '(down)) ; C-n
+             (112 '(up))  ; C-p
+             (t r)
+             ))
+          (t r)))
+
+  (advice-add 'mozc-key-event-to-key-and-modifiers :filter-return 'advice:mozc-key-event-with-ctrl-key--with-ctrl)
+;; (advice-remove 'mozc-key-event-to-key-and-modifiers 'mozc-key-event-with-ctrl-key)
+
   ;; ================================================================================
   ;; doom-thema & doom-modeline
   ;; ================================================================================
@@ -422,15 +449,17 @@ properly disable mozc-mode."
 	(doom-modeline-icon t)
 	(doom-modeline-major-mode-icon t)
     ;; (doom-modeline-major-mode-color-icon t)
-	(doom-modeline-minor-modes nil)
+    (doom-modeline-unicode-fallback t)
+	(doom-modeline-minor-modes nil)     ;うっとおしい
     (doom-modeline-mu4e t)
+    (doom-modeline-indent-info t)
+    (doom-modeline-display-default-persp-name t)
 	:hook
 	(after-init . doom-modeline-mode)
 	:config
 	(line-number-mode 0)
 	(column-number-mode 0)
 	)
-
   ;; ================================================================================
   ;; dashboard
   ;; ================================================================================
@@ -535,7 +564,7 @@ properly disable mozc-mode."
   (setq neo-persist-show t)
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-show-hidden-files t) ;隠しファイルを表示
-  (setq neo-window-fixed-size nil)		;固定されていたウィンドウサイズを変更かのうへ　
+  (setq neo-window-fixed-size nil)		;固定されていたウィンドウサイズを変更かのうへ
   (setq neo-window-width 30)				;20から40に変更
 
   ;; ================================================================================
@@ -587,8 +616,7 @@ properly disable mozc-mode."
   (use-package counsel
 	:ensure t)
 
-
-
+  
   ;; ;; キーバインドは一例です．好みに変えましょう．
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "M-y") 'counsel-yank-pop)
@@ -599,6 +627,8 @@ properly disable mozc-mode."
   (global-set-key (kbd "C-M-f") 'counsel-ag)
   (global-set-key (kbd "C-M-f") 'counsel-ag)
   (global-set-key (kbd "C-c h") 'counsel-recentf)
+  (global-set-key (kbd "C-c C-<SPC>") 'counsel-linux-app)
+  
   ;; (global-set-key (kbd "C-c b") 'counsel-switch-buffer)
 
 
@@ -679,6 +709,7 @@ properly disable mozc-mode."
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   (setq company-auto-complete nil)
 
+
   ;; https://github.com/company-mode/company-mode/blob/master/NEWS.md
   ;; (with-eval-after-load 'company
   ;;   (dolist (map (list company-active-map company-search-map))
@@ -692,7 +723,8 @@ properly disable mozc-mode."
   ;; もしM-nで起動させたい場合
   ;; (global-set-key (kbd "M-n") 'company-complete)
   ;; (global-set-key (kbd "M-p") 'company-complete)
-
+  ;; (global-set-key (kbd "M-/") 'company-complete)
+  (global-set-key (kbd "M-/") 'company-capf)
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
   (define-key company-active-map (kbd "C-n") nil)
@@ -700,6 +732,8 @@ properly disable mozc-mode."
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
+
+  (define-key company-active-map (kbd "C-s") 'counsel-company) ; c-modeでspaceが入れ込まれる挙動がある
 
 
   
@@ -1616,10 +1650,12 @@ properly disable mozc-mode."
   ;; avy-migemo
   ;; ================================================================================
 
+  (use-package avy
+    :ensure t)
   (use-package avy-migemo
 	:ensure t)
   ;; `avy-migemo-mode' overrides avy's predefined functions using `advice-add'.
-  (avy-migemo-mode 1)
+  ;; (avy-migemo-mode 1)
   (global-set-key (kbd "M-g m m") 'avy-migemo-mode)
   (setq avy-timeout-seconds nil)
   (global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
@@ -1641,7 +1677,7 @@ properly disable mozc-mode."
 
 
   (global-set-key (kbd "<henkan>") 'avy-goto-word-0-back)
-  (global-set-key (kbd "C-<henkan>") 'avy-goto-word-0)
+  (global-set-key (kbd "C-<henkan>") 'avy-goto-word-1)
   (global-set-key (kbd "<muhenkan>") 'avy-goto-word-0-forward)
 
   ;; avyで行移動のショートカットを追加（C-c j）
@@ -2439,26 +2475,69 @@ middle"
   ;; ================================================================================
   ;; ytel
   ;; ================================================================================
-  (use-package ytel
+  ;; (use-package ytel
+  ;;   :ensure t)
+
+  ;; (defun ytel-watch ()
+  ;;   "Stream video at point in mpv."
+  ;;   (interactive)
+  ;;   (let* ((video (ytel-get-current-video))
+  ;;    	   (id    (ytel-video-id video)))
+  ;;     (start-process "ytel mpv" nil
+  ;;   	     "mpv"                      ; 公式リポジトリからmpvをインストール
+  ;;   	     (concat "https://www.youtube.com/watch?v=" id))
+  ;;   	     "--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
+  ;;     (message "Starting streaming..."))
+
+
+  ;; (define-key ytel-mode-map "y" #'ytel-watch)
+
+
+  ;; ================================================================================
+  ;; soundcloud.el
+  ;; ================================================================================
+
+  ;; (use-package emms
+  ;;   :ensure t)
+
+  ;; (require 'emms-setup)
+  ;; (emms-standard)
+  ;; (emms-default-players)
+
+  ;; (use-package soundcloud
+  ;;   :ensure t)
+
+
+  ;; org-slide
+
+  (use-package org-tree-slide
     :ensure t)
 
-  (defun ytel-watch ()
-    "Stream video at point in mpv."
-    (interactive)
-    (let* ((video (ytel-get-current-video))
-     	   (id    (ytel-video-id video)))
-      (start-process "ytel mpv" nil
-    	     "mpv"                      ; 公式リポジトリからmpvをインストール
-    	     (concat "https://www.youtube.com/watch?v=" id))
-    	     "--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
-      (message "Starting streaming..."))
+  (with-eval-after-load "org-tree-slide"
+  (define-key org-tree-slide-mode-map (kbd "C-c <f7>") 'org-tree-slide-move-previous-tree)
+  (define-key org-tree-slide-mode-map (kbd "C-c <f8>") 'org-tree-slide-move-next-tree)
+  )
 
-
-  (define-key ytel-mode-map "y" #'ytel-watch)
-
-
+  (setq org-tree-slide-heading-emphasis t)
 
   (setq ytel-invidious-api-url "https://youtube.076.ne.jp/")
+
+
+
+  ;; common lisp
+  ;; roswell install
+  ;; next, ros setup -> ros install slime
+  ;; lemに移行
+  ;; (load (expand-file-name "~/.roswell/helper.el"))  ; slime 起動スクリプト
+  ;; (setq inferior-lisp-program "ros -Q run")
+
+
+  ;; ;; SLIMEからの入力をUTF-8に設定
+  ;; (setq slime-net-coding-system 'utf-8-unix)
+
+
+
+
   ;;=================================================================================
   ;;  _____                              _      __  __           _       _
   ;; |  __ \                            (_)    |  \/  |         | |     | |

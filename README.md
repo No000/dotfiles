@@ -81,6 +81,9 @@ vterm
 counsel
 - mlocate(インストール後にsudo updatedbする必要あり)
 
+emms-soundcloud
+- mplayer
+
 Vim 
 ctag  
 - ctag  
