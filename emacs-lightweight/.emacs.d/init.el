@@ -142,7 +142,8 @@
   ;; 画面拡大ショートカット割当
   (define-key global-map (kbd "C-<f11>") 'toggle-frame-maximized)
 
-
+  ;; バッテリー情報を表示
+  (display-battery-mode 1)
 
 
   (setq-default c-basic-offset 4     ;;基本インデント量4
