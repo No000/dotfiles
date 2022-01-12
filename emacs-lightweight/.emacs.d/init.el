@@ -981,16 +981,17 @@ properly disable mozc-mode."
   ;; sublimity
   ;; -------------------------------------------------------------------------------------------------
   ;; -----------------------------------------sublimetext風のminimap
-  (use-package sublimity
-    :ensure t)
-   (require 'sublimity-scroll)
+  ;; パフォーマンスに影響するため無効化
+  ;; (use-package sublimity
+  ;;   :ensure t)
+  ;;  (require 'sublimity-scroll)
   
-  ;; (require 'sublimity-map)
-  ;; (setq sublimity-map-size 20)
-  ;; (setq sublimity-map-fraction 0.3)
-  ;; (setq sublimity-map-text-scale -7)
-  ;; (require 'sublimity-attractive)
-  (sublimity-mode 1)
+  ;; ;; (require 'sublimity-map)
+  ;; ;; (setq sublimity-map-size 20)
+  ;; ;; (setq sublimity-map-fraction 0.3)
+  ;; ;; (setq sublimity-map-text-scale -7)
+  ;; ;; (require 'sublimity-attractive)
+  ;; (sublimity-mode 1)
 
   
   ;; -------------------------------------------------------------------------------------------------
