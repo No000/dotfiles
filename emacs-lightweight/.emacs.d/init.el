@@ -56,6 +56,7 @@
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'treemacs-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
+   (add-hook 'lsp-ui-imenu-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
   ;; ================================================================================
@@ -873,7 +874,7 @@ properly disable mozc-mode."
 			(lsp-ui-doc--hide-frame))
 		(lsp-ui-doc-mode 1)))
 	:bind
-    ("C-<f10>" . lsp-ui-imenu)
+    ("C-c <f10>" . lsp-ui-imenu)
 	("C-c r" . lsp-ui-peek-find-references)
 	("C-<f6>"   . ladicle/toggle-lsp-ui-doc)
 	;; ("C-c j" . lsp-ui-peek-find-definitions)
