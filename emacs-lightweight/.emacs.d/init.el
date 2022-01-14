@@ -272,7 +272,7 @@
 			  (normal-top-level-add-subdirs-to-load-path))))))
 
   ;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
-  (add-to-load-path "elisp" "conf" "public_repos")
+  (add-to-load-path "elisp" "conf")
 
   ;; カスタムファイルを別ファイルにする
   (setq custom-file (locate-user-emacs-file "~/.emacs.d/custom.el"))
@@ -447,21 +447,23 @@ properly disable mozc-mode."
   ;; https://github.com/seagle0128/doom-modeline
   (use-package doom-modeline
 	:custom
+    (setq doom-modeline-buffer-file-name-style 'auto)
 	(doom-modeline-buffer-file-name-style 'truncate-with-project)
-	(doom-modeline-icon t)
+	;; (doom-modeline-icon t)
+    (doom-modeline-icon (display-graphic-p)) ;GUIかの変数から拾わせる
 	(doom-modeline-major-mode-icon t)
-    ;; (doom-modeline-major-mode-color-icon t)
+    (doom-modeline-major-mode-color-icon t)
     (doom-modeline-unicode-fallback t)
 	(doom-modeline-minor-modes nil)     ;うっとおしい
     (doom-modeline-mu4e t)
     (doom-modeline-indent-info t)
     (doom-modeline-display-default-persp-name t)
-	:hook
-	(after-init . doom-modeline-mode)
+    :init (doom-modeline-mode 1)
 	:config
 	(line-number-mode 0)
 	(column-number-mode 0)
 	)
+
   ;; ================================================================================
   ;; dashboard
   ;; ================================================================================
@@ -2604,7 +2606,7 @@ middle"
 )
 
 
-    ;; ================================================================================
+  ;; ================================================================================
   ;; tree-sitter-mode
   ;; ================================================================================
   ;; 
@@ -2617,6 +2619,33 @@ middle"
   
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
   
+
+  ;; ================================================================================
+  ;; emacs-application-framework
+  ;; ================================================================================
+  (use-package eaf
+  :load-path "~/.emacs.d/public_repos/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+  :custom
+  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  (eaf-browser-continue-where-left-off t)
+  (eaf-browser-enable-adblocker t)
+  (browse-url-browser-function 'eaf-open-browser)
+  :config
+  (defalias 'browse-web #'eaf-open-browser))
+
+
+  (require 'eaf-browser)
+  (require 'eaf-pdf-viewer)
+  (require 'eaf-all-the-icons)
+
+    ;; ブラウザ検索のショートカット
+  (global-set-key (kbd "C-c w")  'eaf-search-it)
+  ;; ブラウザ履歴の閲覧
+  (global-set-key (kbd "C-c W")  'eaf-open-browser-with-history)
+  ;; ブラウザのURLを叩いて飛ぶ用
+  (global-set-key (kbd "C-c u")  'eaf-open-browser)
+  (global-set-key (kbd "C-c p")  'eaf-open-jupyter) ;jupyterのキーバインド割当
   )
 (setq gc-cons-threshold 100000000)
