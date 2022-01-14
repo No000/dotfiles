@@ -2625,6 +2625,7 @@ middle"
   ;; ================================================================================
   ;; emacs-application-framework
   ;; ================================================================================
+
   (use-package eaf
   :load-path "~/.emacs.d/public_repos/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
   :custom
@@ -2635,10 +2636,21 @@ middle"
   :config
   (defalias 'browse-web #'eaf-open-browser))
 
-
+  (require 'eaf-all-the-icons)
   (require 'eaf-browser)
   (require 'eaf-pdf-viewer)
-  (require 'eaf-all-the-icons)
+
+  ;; カスタムしろと変更されたので古いコードで再定義(後日アドバイスに変更すること))
+  ;; (defun eaf-all-the-icons-update-icon()
+  ;;   (when (and doom-modeline-mode doom-modeline-icon doom-modeline-major-mode-icon)
+  ;;     (setq-local doom-modeline--buffer-file-icon (eaf-all-the-icons-icon mode-name))))
+  (defun custom-eaf-all-the-icons-update-icon()
+    (when (and doom-modeline-mode doom-modeline-icon doom-modeline-major-mode-icon)
+      (setq-local doom-modeline--buffer-file-icon (eaf-all-the-icons-icon mode-name))))
+
+  (advice-add #'eaf-all-the-icons-update-icon :override #'custom-eaf-all-the-icons-update-icon)
+
+
 
     ;; ブラウザ検索のショートカット
   (global-set-key (kbd "C-c w")  'eaf-search-it)
