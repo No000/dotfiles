@@ -389,7 +389,7 @@ properly disable mozc-mode."
   ;; C-n,C-pを追加
   (defun advice:mozc-key-event-with-ctrl-key--with-ctrl (r)
     (cond ((and (not (null (cdr r))) (eq (cadr r) 'control) (null (cddr r)))
-           (case (car r)
+           (pcase (car r)               ;case からpcaseに変更(最新だと動かった)
              (102 r) ; C-f
              (98 r) ; C-b
              (110 '(down)) ; C-n
