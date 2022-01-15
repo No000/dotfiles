@@ -427,7 +427,7 @@ properly disable mozc-mode."
 	(load-theme 'doom-Iosvkem t)			;ここでテーマの種類を変えることができる。
 	;; (load-theme 'doom-dracula t)
 	;; (load-theme 'doom-horizon t)			;ここでテーマの種類を変えることができる。
-	;;(load-theme 'doom-zenburn t)
+	;; (load-theme 'doom-zenburn t)
 	;; ----------------------------------------------------------------------
 	;; ----------------------------------------------------------------------
 	(doom-themes-neotree-config)
@@ -533,6 +533,7 @@ properly disable mozc-mode."
 			   (bound-and-true-p winner-mode))
       (winner-undo)
       (setq dashboard-recover-layout-p nil)))
+  
   ;; ================================================================================
   ;; multi-term
   ;; ================================================================================
@@ -1022,7 +1023,45 @@ properly disable mozc-mode."
 	:custom
 	(imenu-list-focus-after-activation t)
 	(imenu-list-auto-resize nil))
-  ;; GCを走らせないようにするためのカッコ（消すな）=====================================
+
+    ;; アイコンをcompany-boxベースのアイコンに変更
+    (defun entry-icon (entry)
+      (pcase entry
+        ("Variable" "")
+        ("Variables" "")
+        ("Constant" "")
+        ("Types" "")
+        ("Function" "")
+        ("Method" "")
+        ("Field" "")
+        ("Class" "")
+        ("Interface" "")
+        (_ "")))
+
+    ;; アドバイスを使ってオーバーライドする
+    (defun custom-imenu-list--insert-entry (entry depth)
+      "Insert a line for ENTRY with DEPTH."
+      (if (imenu--subalist-p entry)
+          (progn
+            (insert (imenu-list--depth-string depth))
+            (insert-button (format "%s %s" (entry-icon (car entry)) (car entry)) ; change
+                           'face (imenu-list--get-face depth t)
+                           'help-echo (format "Toggle: %s"
+                                              (car entry))
+                           'follow-link t
+                           'action ;; #'imenu-list--action-goto-entry
+                           #'imenu-list--action-toggle-hs)
+            (insert "\n"))
+        (insert (imenu-list--depth-string depth))
+        (insert-button (format "%s" (car entry))
+                       'face (imenu-list--get-face depth nil)
+                       'help-echo (format "Go to: %s"
+                                          (car entry))
+                       'follow-link t
+                       'action #'imenu-list--action-goto-entry)
+        (insert "\n")))
+    ;; 活性化
+    (advice-add #'imenu-list--insert-entry :override #'custom-imenu-list--insert-entry)
 
 
   ;; -------------------------------------------------------------------------------------------------
@@ -1189,6 +1228,7 @@ properly disable mozc-mode."
     (vterm-mode . centaur-tabs-local-mode)
     (eshell-mode . centaur-tabs-local-mode)
     (sublimity-mode . centaur-tabs-local-mode)
+    (imenu-list-minor-mode . centaur-tabs-local-mode)
 	;; (mozc-mode . centaur-tabs-local-mode)
 
 
@@ -2645,7 +2685,7 @@ middle"
   ;;   (when (and doom-modeline-mode doom-modeline-icon doom-modeline-major-mode-icon)
   ;;     (setq-local doom-modeline--buffer-file-icon (eaf-all-the-icons-icon mode-name))))
   (defun custom-eaf-all-the-icons-update-icon()
-    (when (and doom-modeline-mode doom-modeline-icon doom-modeline-major-mode-icon)
+    (if (and doom-modeline-mode doom-modeline-icon doom-modeline-major-mode-icon )
       (setq-local doom-modeline--buffer-file-icon (eaf-all-the-icons-icon mode-name))))
 
   (advice-add #'eaf-all-the-icons-update-icon :override #'custom-eaf-all-the-icons-update-icon)
