@@ -376,12 +376,20 @@ properly disable mozc-mode."
 	(ad-activate 'mozc-handle-event)
 	)
 
+  ;; (setq mozc-candidate-style 'echo-area)
+  ;; (define-key minibuffer-local-map (kbd "eisu-toggle") 'toggle-input-method)
+  ;; (define-key minibuffer-local-map (kbd "zenkaku-hankaku") 'toggle-input-method)
+
+
+  ;; (use-package popup
+  ;;   :ensure t)
 
   (use-package mozc-popup					;overlayだと重いため変更
-	:ensure t
-	:config
-	(setq mozc-candidate-style 'popup) ; select popup style.
-	)
+    :ensure t
+    :config
+    (setq mozc-candidate-style 'popup) ; select popup style.
+    )
+
 
   
   (prefer-coding-system 'utf-8)
@@ -906,8 +914,22 @@ properly disable mozc-mode."
   (global-set-key (kbd "C-x t s")  'db/lsp-treemacs-symbols-toggle)
   
   ;; optionally if you want to use debugger
+  ;; (use-package dap-mode
+  ;;   :ensure t)
   (use-package dap-mode
-	:ensure t)
+    :ensure t
+    :after lsp-mode
+    ;; :custom
+    ;; (dap-auto-configure-features '(sessions locals breakpoints expressions repl controls tooltip))
+    :config
+    (setq dap-python-debugger 'debugpy)
+    (dap-mode 1)
+    (dap-auto-configure-mode 1)
+    
+    (require 'dap-hydra) ; hydraでDAPの操作を楽にするもの(Optional)
+    (require 'dap-python)
+    :bind
+    ("C-c l d" . dap-hydra))
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
   (setq lsp-clients-clangd-executable "/usr/bin/clangd")
@@ -1229,9 +1251,12 @@ properly disable mozc-mode."
     (eshell-mode . centaur-tabs-local-mode)
     (sublimity-mode . centaur-tabs-local-mode)
     (imenu-list-minor-mode . centaur-tabs-local-mode)
+    (treemacs-mode . centaur-tabs-local-mode)
 	;; (mozc-mode . centaur-tabs-local-mode)
 
+    
 
+    
     
 	:bind
 	("C-<prior>" . centaur-tabs-backward)
@@ -2679,6 +2704,7 @@ middle"
   (require 'eaf-all-the-icons)
   (require 'eaf-browser)
   (require 'eaf-pdf-viewer)
+  (require 'eaf-jupyter)
 
   ;; カスタムしろと変更されたので古いコードで再定義(後日アドバイスに変更すること))
   ;; (defun eaf-all-the-icons-update-icon()
