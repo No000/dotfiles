@@ -2,10 +2,6 @@
 ドットファイル管理  
 OS：ManjaroLinux-KDE
 
-## ディレクトリ構成  
-exa -Tで生成  
-<後でやる>
-
 ## セットアップ
 GNU Stowを利用する
 > https://www.gnu.org/software/stow/
