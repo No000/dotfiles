@@ -18,6 +18,7 @@ cd ~
 git clone https://github.com/No000/dotfiles.git
 cd ~/dotfiles
 stow -v <対象のドットファイルやドットディレクトリー（複数選択可）>
+
 ```
 
 ### Emacs  
