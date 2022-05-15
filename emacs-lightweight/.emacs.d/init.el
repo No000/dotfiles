@@ -241,14 +241,14 @@
 
   ;; 絵文字
   
-  (use-package emojify :ensure t
-    :if (display-graphic-p)
-    :hook (after-init . global-emojify-mode)
-    :bind
-    ("C-c E" . 'emojify-insert-emoji)
-	:config
-	(add-hook 'prog-mode-hook (lambda () (emojify-mode -1)))
-    )
+  ;; (use-package emojify :ensure t
+  ;;   :if (display-graphic-p)
+  ;;   :hook (after-init . global-emojify-mode)
+  ;;   :bind
+  ;;   ("C-c E" . 'emojify-insert-emoji)
+  ;;   :config
+  ;;   (add-hook 'prog-mode-hook (lambda () (emojify-mode -1)))
+  ;;   )
 
 
   ;; Use variable width font faces in current buffer
@@ -392,7 +392,7 @@ properly disable mozc-mode."
 	(ad-activate 'mozc-handle-event)
 	)
 
-  ;; (setq mozc-candidate-style 'echo-area)
+  (setq mozc-candidate-style 'echo-area)
   ;; (define-key minibuffer-local-map (kbd "eisu-toggle") 'toggle-input-method)
   ;; (define-key minibuffer-local-map (kbd "zenkaku-hankaku") 'toggle-input-method)
 
@@ -400,11 +400,11 @@ properly disable mozc-mode."
   ;; (use-package popup
   ;;   :ensure t)
 
-  (use-package mozc-popup					;overlayだと重いため変更
-    :ensure t
-    :config
-    (setq mozc-candidate-style 'popup) ; select popup style.
-    )
+  ;; (use-package mozc-popup					;overlayだと重いため変更
+  ;;   :ensure t
+  ;;   :config
+  ;;   (setq mozc-candidate-style 'popup) ; select popup style.
+  ;;   )
 
 
   
@@ -479,7 +479,7 @@ properly disable mozc-mode."
     (doom-modeline-major-mode-color-icon t)
     (doom-modeline-unicode-fallback t)
 	(doom-modeline-minor-modes nil)     ;うっとおしい
-    (doom-modeline-mu4e t)
+    ;; (doom-modeline-mu4e t)
     (doom-modeline-indent-info t)
     (doom-modeline-display-default-persp-name t)
     :init (doom-modeline-mode 1)
@@ -575,6 +575,7 @@ properly disable mozc-mode."
   ;; undotree
   ;; ================================================================================
   (use-package undo-tree)
+  (setq undo-tree-auto-save-history nil) ; 勝手に保存するファイルを無効化する
   (when (require 'undo-tree nil t)
 	(global-undo-tree-mode))
 
@@ -779,15 +780,22 @@ properly disable mozc-mode."
   ;; rustic
   ;; ================================================================================
 
+  (use-package poly-markdown
+    :ensure t)
+  
   ;; cargoのPATHの設定
   (add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
   (use-package rustic
 	:ensure t)
+
   ;; 本当にwithout switchしているわけではなく前のウィンドウにフォーカスを戻すだけ
   (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
 	(pop-to-buffer buffer-or-name action norecord)
 	(other-window -1)
 	)
+
+
+
 
 
     ;; ========================================================================================
@@ -877,7 +885,7 @@ properly disable mozc-mode."
 
   
 
-  (setq-default rustic-format-trigger 'on-save)
+  (setq-default rustic-format-trigger nil) ; 勝手にフォーマットされるのが辛いので
   (setq rustic-lsp-server 'rust-analyzer)
   ;; optionally
   (use-package lsp-ui
@@ -944,6 +952,7 @@ properly disable mozc-mode."
     
     (require 'dap-hydra) ; hydraでDAPの操作を楽にするもの(Optional)
     (require 'dap-python)
+    (require 'dap-cpptools)
     :bind
     ("C-c l d" . dap-hydra))
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
@@ -1429,23 +1438,24 @@ properly disable mozc-mode."
   ;; ---------------------------------------------------------------
   ;; git関連のモード追加
   ;; ---------------------------------------------------------------
-  (use-package gitignore-mode
-	:ensure t)
+  ;; 
+  ;; (use-package gitignore-mode
+  ;;   :ensure t)
 
-  (add-to-list 'auto-mode-alist
-               (cons "/.gitignore\\'" 'gitignore-mode))
+  ;; (add-to-list 'auto-mode-alist
+  ;;              (cons "/.gitignore\\'" 'gitignore-mode))
   
-  (use-package gitattributes-mode
-	:ensure t)
+  ;; (use-package gitattributes-mode
+  ;;   :ensure t)
 
-  (add-to-list 'auto-mode-alist
-               (cons "/.gitattributes\\'" 'gitignore-mode))
+  ;; (add-to-list 'auto-mode-alist
+  ;;              (cons "/.gitattributes\\'" 'gitignore-mode))
 
-  (use-package gitconfig-mode
-	:ensure t)
+  ;; (use-package gitconfig-mode
+  ;;   :ensure t)
   
-  (add-to-list 'auto-mode-alist
-               (cons "/..gitconfig\\'" 'gitignore-mode))
+  ;; (add-to-list 'auto-mode-alist
+  ;;              (cons "/..gitconfig\\'" 'gitignore-mode))
   
   ;; --------------------------------------------------------------
   ;; Docker関連の設定
@@ -1915,9 +1925,9 @@ middle"
   ;; all-the-icons-dired
   ;; ================================================================================
   ;; https://github.com/jtbm37/all-the-icons-dired
-  (use-package all-the-icons-dired
-	:ensure t)
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  ;; (use-package all-the-icons-dired
+  ;;   :ensure t)
+  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
  
   ;; ================================================================================
@@ -2098,55 +2108,57 @@ middle"
 
  ;; muの初期設定
  ;; mu init --maildir=~/.mail/gmail
- ;; mu index --maildir=~/.mail/gmail
-(when (equal system-type 'gnu/linux)
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-(require 'mu4e)
+;; mu index --maildir=~/.mail/gmail
+;; ここからコメントアウト
+;; (when (equal system-type 'gnu/linux)
+;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+;; (require 'mu4e)
  
-(setq
- mue4e-headers-skip-duplicates  t
- mu4e-view-show-images t
- mu4e-view-show-addresses t
- mu4e-compose-format-flowed nil
- mu4e-date-format "%y/%m/%d"
- mu4e-headers-date-format "%Y/%m/%d"
- mu4e-change-filenames-when-moving t
- mu4e-attachments-dir "~/Downloads"
+;; (setq
+;;  mue4e-headers-skip-duplicates  t
+;;  mu4e-view-show-images t
+;;  mu4e-view-show-addresses t
+;;  mu4e-compose-format-flowed nil
+;;  mu4e-date-format "%y/%m/%d"
+;;  mu4e-headers-date-format "%Y/%m/%d"
+;;  mu4e-change-filenames-when-moving t
+;;  mu4e-attachments-dir "~/Downloads"
 
- mu4e-maildir       "~/.mail/gmail"   ;; top-level Maildir
- ;; note that these folders below must start with /
- ;; the paths are relative to maildir root
- mu4e-refile-folder "/Archive"
- mu4e-sent-folder   "/Sent"
- mu4e-drafts-folder "/Drafts"
- mu4e-trash-folder  "/Trash"
- mu4e-update-interval (* 60 5)) ;; nil
+;;  mu4e-maildir       "~/.mail/gmail"   ;; top-level Maildir
+;;  ;; note that these folders below must start with /
+;;  ;; the paths are relative to maildir root
+;;  mu4e-refile-folder "/Archive"
+;;  mu4e-sent-folder   "/Sent"
+;;  mu4e-drafts-folder "/Drafts"
+;;  mu4e-trash-folder  "/Trash"
+;;  mu4e-update-interval (* 60 5)) ;; nil
 
-;; this setting allows to re-sync and re-index mail
-;; by pressing U
-(setq mu4e-get-mail-command  "mbsync -a")
+;; ;; this setting allows to re-sync and re-index mail
+;; ;; by pressing U
+;; (setq mu4e-get-mail-command  "mbsync -a")
 
  
-  ;; 次回のタスクvtermでC-xを送る方法を考える
-;; mu4e-alert
-(use-package mu4e-alert
-  :ensure t
-  :config
-  (mu4e-alert-enable-mode-line-display))
+;;   ;; 次回のタスクvtermでC-xを送る方法を考える
+;; ;; mu4e-alert
+;; (use-package mu4e-alert
+;;   :ensure t
+;;   :config
+;;   (mu4e-alert-enable-mode-line-display))
 
 
-;; SMTP
-;; https://text.baldanders.info/remark/2019/06/send-mail-without-mail-service/
-;; mu4e - msmtp
+;; ;; SMTP
+;; ;; https://text.baldanders.info/remark/2019/06/send-mail-without-mail-service/
+;; ;; mu4e - msmtp
 
-  (setq message-send-mail-function 'message-send-mail-with-sendmail) ;; sendmail-query-once
-  (setq sendmail-program "/usr/bin/msmtp")  ;; /usr/sbin/sendmail
-       ;;(setq message-sendmail-extra-arguments)
-  ;;(setq message-sendmail-f-is-evil t) ;; nil
-  (require 'recentf)
-  (recentf-mode 1)
-  (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail"))
-)
+;;   (setq message-send-mail-function 'message-send-mail-with-sendmail) ;; sendmail-query-once
+;;   (setq sendmail-program "/usr/bin/msmtp")  ;; /usr/sbin/sendmail
+;;        ;;(setq message-sendmail-extra-arguments)
+;;   ;;(setq message-sendmail-f-is-evil t) ;; nil
+;;   (require 'recentf)
+;;   (recentf-mode 1)
+;;   (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail"))
+;;   )
+;; ここまで
 
   ;; ================================================================================
   ;; volatile-hights
@@ -2741,5 +2753,6 @@ middle"
   ;; ブラウザのURLを叩いて飛ぶ用
   (global-set-key (kbd "C-c u")  'eaf-open-browser)
   (global-set-key (kbd "C-c p")  'eaf-open-jupyter) ;jupyterのキーバインド割当
+
   )
 (setq gc-cons-threshold 100000000)
