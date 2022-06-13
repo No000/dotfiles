@@ -802,6 +802,9 @@ properly disable mozc-mode."
   ;; go-mode
   ;; ========================================================================================
 
+;; go get で入れたツールのパスを通す
+(add-to-list 'exec-path (expand-file-name "/home/toto/go/bin/"))
+  
 ;; Golang
 (defun lsp-go-install-save-hooks()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
@@ -870,7 +873,8 @@ properly disable mozc-mode."
 	 (python-mode . lsp)
      (sh-mode . lsp)
      (go-mode . lsp-deferred)
-     (zig-mode . lsp)
+     ;; (zig-mode . lsp)
+     (html-mode . lsp)
      ;; if you want which-key integration
      (lsp-mode . lsp-enable-which-key-integration)
      (lsp-managed-mode . lsp-modeline-diagnostics-mode)
