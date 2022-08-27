@@ -111,8 +111,8 @@ Plug 'andys8/vim-elm-syntax'
 
 " totoの追加Plug
 " air-lineの追加
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
 
 " gitgutter
 Plug 'airblade/vim-gitgutter'
