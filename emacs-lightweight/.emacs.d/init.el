@@ -12,7 +12,6 @@
 
 
   
-  
   (require 'package)  ; package.elを有効化
   (setq package-archives
 		'(("melpa" . "https://melpa.org/packages/")
@@ -95,7 +94,7 @@
   ;; (setq ring-bell-function 'ignore)
 
   ;; barを出るようにする
-  ;; (global-hl-line-mode t)
+  (global-hl-line-mode t)
   (require 'hl-line)
   
 ;;; hl-lineを無効にするメジャーモードを指定する
@@ -114,7 +113,7 @@
 
 
   
-
+  (xterm-mouse-mode t)
   ;; 現状スクロールバーとメニューバーを使っていないため削除する。
   ;; 可能であればyaskrollのようなものに変更を行いたい。
   (tool-bar-mode -1)     ;ツールバーをなくす
@@ -173,21 +172,22 @@
 
   ;; 画面拡大ショートカット割当
   (define-key global-map (kbd "C-<f11>") 'toggle-frame-maximized)
-
   ;; バッテリー情報を表示
   (display-battery-mode 1)
 
-
+  ;; c-mode indent
   (setq-default c-basic-offset 4     ;;基本インデント量4
     			tab-width 4          ;;タブ幅4
     			indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+
+
   (when (equal system-type 'darwin)
-(if (not (string-match "\\(^\\|:\\)/usr/local/bin\\($\\|\\:\\)" (getenv "PATH")))
-    (setenv "PATH" (concat '"/usr/local/bin:" (getenv "PATH"))))
-(if (not (member "/usr/local/bin" exec-path))
-    (setq exec-path (cons "/usr/local/bin" exec-path)))
-(setenv "PATH" (concat '"/usr/local/opt/llvm/bin/:" (getenv "PATH")))
-)
+    (if (not (string-match "\\(^\\|:\\)/usr/local/bin\\($\\|\\:\\)" (getenv "PATH")))
+        (setenv "PATH" (concat '"/usr/local/bin:" (getenv "PATH"))))
+    (if (not (member "/usr/local/bin" exec-path))
+        (setq exec-path (cons "/usr/local/bin" exec-path)))
+    (setenv "PATH" (concat '"/usr/local/opt/llvm/bin/:" (getenv "PATH")))
+    )
   ;; ================================================================================
   ;; async
   ;; ================================================================================
@@ -281,20 +281,20 @@
   ;; ;; CalcadiaCode側をフックするとうまくいかないので、逆で行く
   ;; ;; 合字フォントを使いたくない場合はここに記載
   ;; (add-hook 'emacs-lisp-mode-hook 'ricty-font-change)
-
+(when window-system (progn 
   (set-face-attribute 'default nil
-                    :family "Ricty Diminished Discord"
-                    :height 150)
-(set-fontset-font (frame-parameter nil 'font)
-                  'japanese-jisx0208
-                  (cons "Ricty Diminished Discord" "iso10646-1"))
-(set-fontset-font (frame-parameter nil 'font)
-                  'japanese-jisx0212
-                  (cons "Ricty Diminished Discord" "iso10646-1"))
-(set-fontset-font (frame-parameter nil 'font)
-                  'katakana-jisx0201
-                  (cons "Ricty Diminished Discord" "iso10646-1"))
-
+                      :family "Ricty Diminished Discord"
+                      :height 150)
+  (set-fontset-font (frame-parameter nil 'font)
+                    'japanese-jisx0208
+                    (cons "Ricty Diminished Discord" "iso10646-1"))
+  (set-fontset-font (frame-parameter nil 'font)
+                    'japanese-jisx0212
+                    (cons "Ricty Diminished Discord" "iso10646-1"))
+  (set-fontset-font (frame-parameter nil 'font)
+                    'katakana-jisx0201
+                    (cons "Ricty Diminished Discord" "iso10646-1"))
+  ))
 
   ;; ================================================================================
   ;; インデントの設定
@@ -510,6 +510,10 @@ properly disable mozc-mode."
     ;; (doom-modeline-mu4e t)
     (doom-modeline-indent-info t)
     (doom-modeline-display-default-persp-name t)
+    (doom-modeline-time-icon nil)
+
+
+
     :init (doom-modeline-mode 1)
 	:config
 	(line-number-mode 0)
@@ -689,6 +693,7 @@ properly disable mozc-mode."
   (global-set-key (kbd "C-c C-<SPC>") 'counsel-linux-app)
   
   ;; (global-set-key (kbd "C-c b") 'counsel-switch-buffer)
+
 
 
   ;; -------------------------------------------------------------------------------swipperの設定
@@ -1044,6 +1049,40 @@ properly disable mozc-mode."
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
   (setq lsp-completion-provider :capf)
 
+  ;; tramp先への接続法
+  ;; ubuntu20.04のみの対応
+  ;; docker-trampも可能
+  ;; clangd
+  (with-eval-after-load 'lsp-mode (lsp-register-client
+  (make-lsp-client
+    :new-connection (lsp-tramp-connection "clangd-10")
+    :major-modes '(c-mode c++-mode)
+    :priority 1
+    :remote? t
+    :multi-root t
+    :server-id 'clangd-10)))
+(with-eval-after-load "lsp-rust"
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-tramp-connection "rust-analyzer")
+    :remote? t
+    :priority 1
+    :multi-root t
+    :major-modes '(rust-mode rustic-mode)
+    :initialization-options 'lsp-rust-analyzer--make-init-options
+    :notification-handlers (ht<-alist lsp-rust-notification-handlers)
+    :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+    :library-folders-fn (lambda (_workspace) lsp-rust-analyzer-library-directories)
+    :after-open-fn (lambda ()
+                     (when lsp-rust-analyzer-server-display-inlay-hints
+                       (lsp-rust-analyzer-inlay-hints-mode)))
+    :ignore-messages nil
+    :server-id 'rust-analyzer)))
+
+
+
+
+
   ;; (define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
   ;; ===========================================================================================
   ;; yasnippet
@@ -1201,89 +1240,89 @@ properly disable mozc-mode."
   ;; モダンなタブであるcetaur-tabs
   ;; -------------------------------------------------------------------------------------------------
   ;; https://github.com/ema2159/centaur-tabs
- ;;  (use-package centaur-tabs
- ;;    :ensure t
- ;;    :config
- ;;    (setq centaur-tabs-style "wave"		;どんなタブにするかを選択することができる
- ;;    	  centaur-tabs-height 32
- ;;    	  centaur-tabs-set-icons t
- ;;    	  centaur-tabs-set-modified-marker t
- ;;    	  centaur-tabs-show-navigation-buttons t
- ;;    	  centaur-tabs-set-bar 'under
- ;;    	  x-underline-at-descent-line t)
- ;;    (centaur-tabs-headline-match)
- ;;    ;; (setq centaur-tabs-gray-out-icons 'buffer)
- ;;    ;; (centaur-tabs-enable-buffer-reordering)
- ;;    ;; (setq centaur-tabs-adjust-buffer-order t)
- ;;    (centaur-tabs-mode t)
- ;;    (setq uniquify-separator "/")
- ;;    (setq uniquify-buffer-name-style 'forward)
- ;;    (defun centaur-tabs-buffer-groups ()
- ;;      "`centaur-tabs-buffer-groups' control buffers' group rules.
+  (use-package centaur-tabs
+    :ensure t
+    :config
+    (setq centaur-tabs-style "wave"		;どんなタブにするかを選択することができる
+    	  centaur-tabs-height 32
+    	  centaur-tabs-set-icons t
+    	  centaur-tabs-set-modified-marker t
+    	  centaur-tabs-show-navigation-buttons t
+    	  centaur-tabs-set-bar 'under
+    	  x-underline-at-descent-line t)
+    (centaur-tabs-headline-match)
+    ;; (setq centaur-tabs-gray-out-icons 'buffer)
+    ;; (centaur-tabs-enable-buffer-reordering)
+    ;; (setq centaur-tabs-adjust-buffer-order t)
+    (centaur-tabs-mode t)
+    (setq uniquify-separator "/")
+    (setq uniquify-buffer-name-style 'forward)
+    (defun centaur-tabs-buffer-groups ()
+      "`centaur-tabs-buffer-groups' control buffers' group rules.
 
- ;; Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
- ;; All buffer name start with * will group to \"Emacs\".
- ;; Other buffer group by `centaur-tabs-get-group-name' with project name."
- ;;      (list
- ;;       (cond
- ;;    	;; ((not (eq (file-remote-p (buffer-file-name)) nil))
- ;;    	;; "Remote")
- ;;    	((or (string-equal "*" (substring (buffer-name) 0 1))
- ;;    		 (memq major-mode '(magit-process-mode
- ;;    							magit-status-mode
- ;;    							magit-diff-mode
- ;;    							magit-log-mode
- ;;    							magit-file-mode
- ;;    							magit-blob-mode
- ;;    							magit-blame-mode
- ;;    							)))
- ;;    	 "Emacs")
- ;;    	((derived-mode-p 'prog-mode)
- ;;    	 "Editing")
- ;;    	((derived-mode-p 'dired-mode)
- ;;    	 "Dired")
- ;;    	((memq major-mode '(helpful-mode
- ;;    						help-mode))
- ;;    	 "Help")
- ;;    	((memq major-mode '(org-mode
- ;;    						org-agenda-clockreport-mode
- ;;    						org-src-mode
- ;;    						org-agenda-mode
- ;;    						org-beamer-mode
- ;;    						org-indent-mode
- ;;    						;; org-bullets-mode
- ;;                            org-modern-mode
- ;;    						org-cdlatex-mode
- ;;    						org-agenda-log-mode
- ;;    						diary-mode))
- ;;    	 "OrgMode")
- ;;    	(t
- ;;    	 (centaur-tabs-get-group-name (current-buffer))))))
- ;;    :hook
- ;;    (dashboard-mode . centaur-tabs-local-mode)
- ;;    (term-mode . centaur-tabs-local-mode)
- ;;    (calendar-mode . centaur-tabs-local-mode)
- ;;    (org-agenda-mode . centaur-tabs-local-mode)
- ;;    (helpful-mode . centaur-tabs-local-mode)
- ;;    (vterm-mode . centaur-tabs-local-mode)
- ;;    (eshell-mode . centaur-tabs-local-mode)
- ;;    (sublimity-mode . centaur-tabs-local-mode)
- ;;    (imenu-list-minor-mode . centaur-tabs-local-mode)
- ;;    (treemacs-mode . centaur-tabs-local-mode)
- ;;    ;; (mozc-mode . centaur-tabs-local-mode)
-
-    
+ Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+ All buffer name start with * will group to \"Emacs\".
+ Other buffer group by `centaur-tabs-get-group-name' with project name."
+      (list
+       (cond
+    	;; ((not (eq (file-remote-p (buffer-file-name)) nil))
+    	;; "Remote")
+    	((or (string-equal "*" (substring (buffer-name) 0 1))
+    		 (memq major-mode '(magit-process-mode
+    							magit-status-mode
+    							magit-diff-mode
+    							magit-log-mode
+    							magit-file-mode
+    							magit-blob-mode
+    							magit-blame-mode
+    							)))
+    	 "Emacs")
+    	((derived-mode-p 'prog-mode)
+    	 "Editing")
+    	((derived-mode-p 'dired-mode)
+    	 "Dired")
+    	((memq major-mode '(helpful-mode
+    						help-mode))
+    	 "Help")
+    	((memq major-mode '(org-mode
+    						org-agenda-clockreport-mode
+    						org-src-mode
+    						org-agenda-mode
+    						org-beamer-mode
+    						org-indent-mode
+    						;; org-bullets-mode
+                            org-modern-mode
+    						org-cdlatex-mode
+    						org-agenda-log-mode
+    						diary-mode))
+    	 "OrgMode")
+    	(t
+    	 (centaur-tabs-get-group-name (current-buffer))))))
+    :hook
+    (dashboard-mode . centaur-tabs-local-mode)
+    (term-mode . centaur-tabs-local-mode)
+    (calendar-mode . centaur-tabs-local-mode)
+    (org-agenda-mode . centaur-tabs-local-mode)
+    (helpful-mode . centaur-tabs-local-mode)
+    (vterm-mode . centaur-tabs-local-mode)
+    (eshell-mode . centaur-tabs-local-mode)
+    (sublimity-mode . centaur-tabs-local-mode)
+    (imenu-list-minor-mode . centaur-tabs-local-mode)
+    (treemacs-mode . centaur-tabs-local-mode)
+    ;; (mozc-mode . centaur-tabs-local-mode)
 
     
+
     
- ;;    :bind
- ;;    ("C-<iso-lefttab>" . centaur-tabs-backward)
- ;;    ("C-<tab>" . centaur-tabs-forward)
- ;;    ;; つかってないでしょ〜〜〜
- ;;    ;; ("C-c t s" . centaur-tabs-counsel-switch-group)
- ;;    ;; ("C-c t p" . centaur-tabs-group-by-projectile-project)
- ;;    ;; ("C-c t g" . centaur-tabs-group-buffer-groups)
- ;;    )
+    
+    :bind
+    ("C-<iso-lefttab>" . centaur-tabs-backward)
+    ("C-<tab>" . centaur-tabs-forward)
+    ;; つかってないでしょ〜〜〜
+    ;; ("C-c t s" . centaur-tabs-counsel-switch-group)
+    ;; ("C-c t p" . centaur-tabs-group-by-projectile-project)
+    ;; ("C-c t g" . centaur-tabs-group-buffer-groups)
+    )
 
 
 
@@ -1351,7 +1390,7 @@ properly disable mozc-mode."
   (setq org-startup-with-inline-images t)
 
   ;; 見出しの余分な*を消す
-  (setq org-hide-leading-stars t)
+  ;; (setq org-hide-leading-stars t)
 
   ;; LOGBOOK drawerに時間を格納する
   (setq org-clock-into-drawer t)
@@ -1365,17 +1404,17 @@ properly disable mozc-mode."
 
 
 										; ファイルの場所
-  (setq org-directory "~/Documents/Org")
+  ;; (setq org-directory "~/Documents/org")
   ;; org-directory内のファイルすべてからagendaを作成する
-  (setq my-org-agenda-dir "~/Documents/Org/agenda/")
-  (setq org-agenda-files (list my-org-agenda-dir))
+  (setq org-agenda-files (list "~/Documents/org"))
 
   ;; TODO状態
   (setq org-todo-keywords
-		'((sequence "TODO(t)" "WAIT(w)" "NOTE(n)"  "|" "DONE(d)" "SOMEDAY(s)" "CANCEL(c)")))
+    	'((sequence "TODO(t)"  "TASK(m)"  "|" "DONE(d)" "PENDING(p)" "CANCEL(c)")))
+
 
   ;; DONEの時刻を記録
-  (setq org-log-done 'time)
+  ;; (setq org-log-done 'time)
 
   ;; ショートカットキー
   ;; (global-set-key "\C-cl" 'org-store-link)
@@ -1390,28 +1429,32 @@ properly disable mozc-mode."
   ;; ここにorg-capureですぐ書きたいやつを追加する
   (setq org-capture-templates
 		'(
-		  ("n" "Note" entry (file+headline "~/Documents/Org/notes.org" "Notes")"* %?\nEntered on %U\n %i\n %a")
-		  ("t" "ToDo" entry (file+headline "~/Documents/Org/agenda/todo11.org" "TOP")"* REMIND %? (wrote on %U)")
-		  )
-		)
+		  ;; ("n" "Note" entry (file+headline "~/Documents/org/NOTE.org" "Notes")"* %?\nEntered on %U\n %i\n %a")
+          ("m" "TASK" entry (file+headline "~/Documents/org/TASK.org" "Inbox")"*** TASK %?\n")
+          ("t" "TODO" entry (file+headline "~/Documents/org/TODO.org" "Inbox")"*** TODO %?\n")
+		  ))
+
+
+  (setq org-agenda-custom-commands
+      '(
+        ("o" . "Original agenda view") ; description for "o" prefix
+        ("ot" todo "TODO")
+        ("om" todo "TASK")
+        ))
 
 										; メモをC-M-^一発で見るための設定
 										; https://qiita.com/takaxp/items/0b717ad1d0488b74429d から拝借
-  (defun show-org-buffer (file)
-	"Show an org-file FILE on the current buffer."
-	(interactive)
-	(if (get-buffer file)
-		(let ((buffer (get-buffer file)))
-          (switch-to-buffer buffer)
-          (message "%s" file))
-      (find-file (concat "~/Documents/Org/" file))))
-  (global-set-key (kbd "C-M-^") '(lambda () (interactive)
-                                   (show-org-buffer "notes.org")))
-  ;; org-modeを見やすくするためのパッケージ
-  ;; https://github.com/sabof/org-bullets
-  ;; (use-package org-bullets
-  ;;   :ensure t
-  ;;   :hook (org-mode . org-bullets-mode))
+  ;; (defun show-org-buffer (file)
+  ;;   "Show an org-file FILE on the current buffer."
+  ;;   (interactive)
+  ;;   (if (get-buffer file)
+  ;;   	(let ((buffer (get-buffer file)))
+  ;;         (switch-to-buffer buffer)
+  ;;         (message "%s" file))
+  ;;     (find-file (concat "~/Documents/org/" file))))
+  ;; (global-set-key (kbd "C-M-^") '(lambda () (interactive)
+  ;;                                  (show-org-buffer "NOTE.org")))
+
 
   (setq org-src-preserve-indentation t)		;ソースブロックでインデントの有効化
 
@@ -1473,6 +1516,9 @@ properly disable mozc-mode."
   (require 'docker-tramp-compat)
   (set-variable 'docker-tramp-use-names t) ; コンテナの補完をIDではなくNAMESでしてほしい場合
 
+;; https://github.com/emacs-pe/docker-tramp.el#:~:text=%E3%83%88%E3%83%A9%E3%83%B3%E3%83%97%E3%81%AF%E3%83%AA%E3%83%A2%E3%83%BC%E3%83%88%E3%82%92%E5%B0%8A%E9%87%8D%E3%81%97%E3%81%BE%E3%81%9B%E3%82%93PATH
+  (require 'tramp)
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;; --------------------------------------------------------------------------------
   ;; gdbの設定
   ;; --------------------------------------------------------------------------------
@@ -2563,41 +2609,6 @@ middle"
 	)
 
 
-  ;; ================================================================================
-  ;; ytel
-  ;; ================================================================================
-  ;; (use-package ytel
-  ;;   :ensure t)
-
-  ;; (defun ytel-watch ()
-  ;;   "Stream video at point in mpv."
-  ;;   (interactive)
-  ;;   (let* ((video (ytel-get-current-video))
-  ;;    	   (id    (ytel-video-id video)))
-  ;;     (start-process "ytel mpv" nil
-  ;;   	     "mpv"                      ; 公式リポジトリからmpvをインストール
-  ;;   	     (concat "https://www.youtube.com/watch?v=" id))
-  ;;   	     "--ytdl-format=bestvideo[height<=?720]+bestaudio/best")
-  ;;     (message "Starting streaming..."))
-
-
-  ;; (define-key ytel-mode-map "y" #'ytel-watch)
-
-
-  ;; ================================================================================
-  ;; soundcloud.el
-  ;; ================================================================================
-
-  ;; (use-package emms
-  ;;   :ensure t)
-
-  ;; (require 'emms-setup)
-  ;; (emms-standard)
-  ;; (emms-default-players)
-
-  ;; (use-package soundcloud
-  ;;   :ensure t)
-
 
   ;; org-slide
 
@@ -2636,8 +2647,8 @@ middle"
     :ensure t)
 
 ;; Option 1: Per buffer
-(add-hook 'org-mode-hook #'org-modern-mode)
-(add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
+;; (add-hook 'org-mode-hook #'org-modern-mode)
+;; (add-hook 'org-agenda-finalize-hook #'org-modern-agenda)
 
 ;; Option 2: Globally
 (global-org-modern-mode)
@@ -2701,6 +2712,11 @@ middle"
 	("<f9>" . vterm-toggle)
 	)
 
+  ;; ================================================================================
+  ;; multi-vterm
+  ;; ================================================================================
+  (use-package multi-vterm :ensure t)
+
 
   ;; ================================================================================
   ;; vterm-toggle
@@ -2762,7 +2778,7 @@ middle"
   ;; ================================================================================
   ;; emacs-application-framework
   ;; ================================================================================
-
+(when window-system (progn
   (use-package eaf
   :load-path "~/.emacs.d/public_repos/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
   :custom
@@ -2797,6 +2813,21 @@ middle"
   ;; ブラウザのURLを叩いて飛ぶ用
   (global-set-key (kbd "C-c u")  'eaf-open-browser)
   (global-set-key (kbd "C-c p")  'eaf-open-jupyter) ;jupyterのキーバインド割当
+  ))
 
+(when (not window-system)(progn
+                           ;; ブラウザ検索のショートカット
+                           (global-set-key (kbd "C-c w")  'eww-search-words)
+                           ;; ブラウザ履歴の閲覧
+                           ;; (global-set-key (kbd "C-c W")  ')
+                           ))
+
+
+
+
+
+
+
+  
   )
 (setq gc-cons-threshold 100000000)
