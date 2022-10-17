@@ -980,6 +980,7 @@ properly disable mozc-mode."
 			(lsp-ui-doc--hide-frame))
 		(lsp-ui-doc-mode 1)))
 	:bind
+    ("C-c l s" . lsp-ui-sideline-toggle-symbols-info)
     ("C-c <f10>" . lsp-ui-imenu)
 	("C-c r" . lsp-ui-peek-find-references)
 	("C-<f6>"   . ladicle/toggle-lsp-ui-doc)
@@ -2671,7 +2672,74 @@ middle"
 
 
 
+  ;; ================================================================================
+  ;; line-reminder
+  ;; ================================================================================
+  (use-package line-reminder
+    :ensure t
+    :hook
+    (
+    (prog-mode . line-reminder-mode)
+    (org-mode . line-reminder-mode))
+    )
 
+  (setq line-reminder-show-option 'indicators)  ; Or set to 'indicators
+  (setq line-reminder-fringe-placed 'right-fringe)
+  (setq line-reminder-bitmap 'filled-rectangle)
+
+ ;; ================================================================================
+  ;; line-reminder
+  ;; ================================================================================
+  (use-package line-reminder
+    :ensure t
+    :hook
+    (
+    (prog-mode . line-reminder-mode)
+    (org-mode . line-reminder-mode))
+    )
+
+  (setq line-reminder-show-option 'indicators)  ; Or set to 'indicators
+  (setq line-reminder-fringe-placed 'right-fringe)
+  (setq line-reminder-bitmap 'filled-rectangle)
+
+  (echo-bar-mode t)
+
+  ;; import https://github.com/qaiviq/.emacs.d/blob/e49680c6950d21ef7d3d5a444fc66d99ff9f2fdc/modules/echobar.el#L30
+  (setq echo-bar-function 'cus/echo-bar-function)
+(setq echo-bar-update-interval 1)
+(setq echo-bar-right-padding 4)
+(setq cus/echo-bar-height 1.2)
+
+
+(defun cus/echo-bar-function ()
+  (propertize
+   (format "%s%s %s%s%s  │  %s%s"
+           (propertize " " 'display `(height ,cus/echo-bar-height))
+           (or (ignore-errors (cus/activity-string)) "")
+           (or (ignore-errors (cus/battery-format)) "")
+           ""
+           (format-time-string "  %b %d")
+           ""
+           (format-time-string "  %H:%M:%S"))))
+
+(require 'battery)
+(defun cus/battery-format ()
+  (when-let* ((func battery-status-function)
+              (status (funcall func))
+              (percent (round (string-to-number (battery-format "%p" status))))
+              (power-method (battery-format "%L" status)))
+    (format "%s %s   %s%%   |  "
+            (if (string= power-method "AC") "⚡" "")
+            (cond ((>= percent 95) "")
+                  ((>= percent 70) "")
+                  ((>= percent 50) "")
+                  ((>= percent 15) "")
+                  (t ""))
+            percent)))
+
+(use-package why-this
+  :ensure t)
+(global-why-this-mode)
 
 
 
