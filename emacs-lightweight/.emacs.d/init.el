@@ -1062,23 +1062,23 @@ properly disable mozc-mode."
     :remote? t
     :multi-root t
     :server-id 'clangd-10)))
-(with-eval-after-load "lsp-rust"
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-tramp-connection "rust-analyzer")
-    :remote? t
-    :priority 1
-    :multi-root t
-    :major-modes '(rust-mode rustic-mode)
-    :initialization-options 'lsp-rust-analyzer--make-init-options
-    :notification-handlers (ht<-alist lsp-rust-notification-handlers)
-    :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
-    :library-folders-fn (lambda (_workspace) lsp-rust-analyzer-library-directories)
-    :after-open-fn (lambda ()
-                     (when lsp-rust-analyzer-server-display-inlay-hints
-                       (lsp-rust-analyzer-inlay-hints-mode)))
-    :ignore-messages nil
-    :server-id 'rust-analyzer)))
+;; (with-eval-after-load "lsp-rust"
+;;   (lsp-register-client
+;;    (make-lsp-client
+;;     :new-connection (lsp-tramp-connection "rust-analyzer")
+;;     :remote? t
+;;     :priority 1
+;;     :multi-root t
+;;     :major-modes '(rust-mode rustic-mode)
+;;     :initialization-options 'lsp-rust-analyzer--make-init-options
+;;     :notification-handlers (ht<-alist lsp-rust-notification-handlers)
+;;     :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+;;     :library-folders-fn (lambda (_workspace) lsp-rust-analyzer-library-directories)
+;;     :after-open-fn (lambda ()
+;;                      (when lsp-rust-analyzer-server-display-inlay-hints
+;;                        (lsp-rust-analyzer-inlay-hints-mode)))
+;;     :ignore-messages nil
+;;     :server-id 'rust-analyzer)))
 
 
 
@@ -1385,7 +1385,7 @@ properly disable mozc-mode."
   ;;------------------------------------------------------------------------------------------------
 
   ;; 折り返すようにする
-  (setq org-startup-truncated nil)
+  ;; (setq org-startup-truncated nil)
   
   ;; 画像をインラインで表示
   (setq org-startup-with-inline-images t)
@@ -1407,11 +1407,11 @@ properly disable mozc-mode."
 										; ファイルの場所
   ;; (setq org-directory "~/Documents/org")
   ;; org-directory内のファイルすべてからagendaを作成する
-  (setq org-agenda-files (list "~/Documents/org"))
+  (setq org-agenda-files (list "~/Dropbox/Org"))
 
   ;; TODO状態
   (setq org-todo-keywords
-    	'((sequence "TODO(t)"  "TASK(m)"  "|" "DONE(d)" "PENDING(p)" "CANCEL(c)")))
+    	'((sequence "TODO(t)"  "TASK(m)" "PENDING(p)" "|" "DONE(d)" "CANCEL(c)")))
 
 
   ;; DONEの時刻を記録
@@ -1431,8 +1431,9 @@ properly disable mozc-mode."
   (setq org-capture-templates
 		'(
 		  ;; ("n" "Note" entry (file+headline "~/Documents/org/NOTE.org" "Notes")"* %?\nEntered on %U\n %i\n %a")
-          ("m" "TASK" entry (file+headline "~/Documents/org/TASK.org" "Inbox")"*** TASK %?\n")
-          ("t" "TODO" entry (file+headline "~/Documents/org/TODO.org" "Inbox")"*** TODO %?\n")
+          ("m" "TASK" entry (file+headline "~/Dropbox/Org/TASK.org" "Inbox")"*** TASK %?\n")
+          ("t" "TODO" entry (file+headline "~/Dropbox/Org/TODO.org" "Inbox")"*** TODO %?\n")
+          ("p" "PENDING" entry (file+headline "~/Dropbox/Org/TASK.org" "Inbox")"*** PENDING %?\n")
 		  ))
 
 
@@ -1441,7 +1442,12 @@ properly disable mozc-mode."
         ("o" . "Original agenda view") ; description for "o" prefix
         ("ot" todo "TODO")
         ("om" todo "TASK")
-        ))
+        (" " "予定表"
+         ((agenda "" ((org-agenda-span 1)))
+         (todo "PENDING"
+               ((org-agenda-overriding-header "スケジューリング待ち")
+                (org-tags-match-list-sublevels nil)))
+        ))))
 
 										; メモをC-M-^一発で見るための設定
 										; https://qiita.com/takaxp/items/0b717ad1d0488b74429d から拝借
@@ -2670,6 +2676,14 @@ middle"
   ;; ;; SLIMEからの入力をUTF-8に設定
   ;; (setq slime-net-coding-system 'utf-8-unix)
 
+  ;; ================================================================================
+  ;; mlscroll
+  ;; ================================================================================
+(use-package mlscroll
+  :ensure t
+  :config
+  (setq mlscroll-shortfun-min-width 11) ;truncate which-func, for default mode-line-format's
+  (mlscroll-mode 1))
 
 
   ;; ================================================================================
@@ -2710,16 +2724,17 @@ middle"
 (setq echo-bar-right-padding 4)
 (setq cus/echo-bar-height 1.2)
 
-
 (defun cus/echo-bar-function ()
   (propertize
    (format "%s%s %s%s%s  │  %s%s"
            (propertize " " 'display `(height ,cus/echo-bar-height))
            (or (ignore-errors (cus/activity-string)) "")
            (or (ignore-errors (cus/battery-format)) "")
-           ""
+           ;; ""
+           "Cal:"
            (format-time-string "  %b %d")
-           ""
+           ;; ""
+           "Time:"
            (format-time-string "  %H:%M:%S"))))
 
 (require 'battery)
@@ -2739,8 +2754,8 @@ middle"
 
 (use-package why-this
   :ensure t)
-(global-why-this-mode)
-
+;; (global-why-this-mode)
+;; Dockerで問題を起こす可能性があるため
 
 
   ;;=================================================================================
