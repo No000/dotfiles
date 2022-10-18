@@ -162,18 +162,18 @@
           load
           (if mail " Mail" "")))
   ;; 時刻表示の左隣に日付を追加。
-  (setq display-time-kawakami-form t)
+  ;; (setq display-time-kawakami-form t)
   ;; 24時間制
-  (setq display-time-24hr-format t)
+  ;; (setq display-time-24hr-format t)
 
   ;; 時間を表示
-  (display-time)
+  ;; (display-time)
 
 
   ;; 画面拡大ショートカット割当
   (define-key global-map (kbd "C-<f11>") 'toggle-frame-maximized)
   ;; バッテリー情報を表示
-  (display-battery-mode 1)
+  ;; (display-battery-mode 1)
 
   ;; c-mode indent
   (setq-default c-basic-offset 4     ;;基本インデント量4
