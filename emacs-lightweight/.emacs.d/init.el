@@ -70,6 +70,7 @@
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'nov-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'lsp-ui-imenu-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
   ;; ================================================================================
@@ -554,12 +555,12 @@ properly disable mozc-mode."
 					   (projects . 5)
 					   (bookmarks . 5)
                        (agenda . 5)))
-	:hook
-	(after-init . dashboard-setup-startup-hook)
+	;; :hook
+	;; (after-init . dashboard-setup-startup-hook)
 	:config
     ;; (dashboard-page-separator . "\n")
     ;; (dashboard-page-separator . "\n\f\n")
-
+    (dashboard-setup-startup-hook)
 
 	;; ;; (add-to-list 'dashboard-items '(agenda) t)
     ;; (setq dashboard-center-content t)
@@ -592,6 +593,9 @@ properly disable mozc-mode."
 			   (bound-and-true-p winner-mode))
       (winner-undo)
       (setq dashboard-recover-layout-p nil)))
+
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+
   
   ;; ================================================================================
   ;; multi-term
@@ -1030,6 +1034,9 @@ properly disable mozc-mode."
     (require 'dap-hydra) ; hydraでDAPの操作を楽にするもの(Optional)
     (require 'dap-python)
     (require 'dap-cpptools)
+    ;; (require 'dap-lldb)
+    ;; (require 'dap-codelldb)
+    (require 'dap-gdb-lldb)
     :bind
     ("C-c l d" . dap-hydra))
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
@@ -1465,7 +1472,7 @@ properly disable mozc-mode."
           ("ot" todo "TODO")
           ("om" todo "TASK")
           (" " "予定表"
-           ((agenda "" ((org-agenda-span 1)))
+           ((agenda "" ((org-agenda-span 7)))
             (todo "PENDING"
                   ((org-agenda-overriding-header "スケジューリング待ち")
                    (org-tags-match-list-sublevels nil)))
@@ -1920,7 +1927,7 @@ properly disable mozc-mode."
 				   (setq transparency_level 0)))
 		)))
 
-  (define-key global-map (kbd "C-c q") 'my:change_transparency)
+  (define-key global-map (kbd "C-c t") 'my:change_transparency)
   ;; ================================================================================
   ;; window-resize
   ;; ================================================================================
@@ -2737,6 +2744,45 @@ middle"
     :ensure t
     :config
     (editorconfig-mode 1))
+
+  ;; https://github.com/10sr/editorconfig-generate-el/tree/47a31f928f46d2a0188db8e2cffa5d6354a81573
+  (use-package editorconfig-generate
+    :ensure t)
+
+  (use-package editorconfig-custom-majormode
+    :ensure t
+    :hook
+    (editorconfig-custom-hooks . editorconfig-custom-majormode))
+
+
+  (winner-mode)
+  (global-set-key (kbd "C-c <prior>") 'winner-undo)
+  (global-set-key (kbd "C-c q") 'winner-undo)
+  (global-set-key (kbd "C-c <next>") 'winner-redo)
+
+
+  (use-package separedit
+    :ensure t
+    ;; :config
+    )
+
+      ;; Key binding for modes you want edit
+  ;; or simply bind ‘global-map’ for all.
+    (define-key global-map        (kbd "C-c '") #'separedit)
+    ;; (define-key prog-mode-map        (kbd "C-c '") #'separedit)
+    ;; (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
+    ;; (define-key help-mode-map        (kbd "C-c '") #'separedit)
+    ;; (define-key helpful-mode-map     (kbd "C-c '") #'separedit)
+
+    ;; Default major-mode for edit buffer
+    ;; can also be other mode e.g. ‘org-mode’.
+    (setq separedit-default-mode 'org-mode)
+    ;; Feature options
+    (setq separedit-preserve-string-indentation t)
+    (setq separedit-continue-fill-column t)
+    (setq separedit-write-file-when-execute-save t)
+    (setq separedit-remove-trailing-spaces-in-comment t)
+
 
 
   ;;=================================================================================
