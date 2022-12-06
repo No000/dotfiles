@@ -24,6 +24,12 @@ stow -v <対象のドットファイルやドットディレクトリー（複�
 ### Emacs  
 初回のインストールときのみ、267行目の(all-the-icons-install-fonts)のコメントアウトを外しておく
 
+#### Emacsのnaitve comp(emacs-application-framework)
+```elisp
+(native-compile-async "/path/to/packages" 'recursively)
+```
+を利用し、手動コンパイルする。
+
 ### 必要なパッケージ
 フォント関連  
 - ttf-cascadia-code  
