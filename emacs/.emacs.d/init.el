@@ -190,6 +190,8 @@
         (setq exec-path (cons "/usr/local/bin" exec-path)))
     (setenv "PATH" (concat '"/usr/local/opt/llvm/bin/:" (getenv "PATH")))
     )
+
+
   ;; ================================================================================
   ;; async
   ;; ================================================================================
@@ -456,51 +458,67 @@ properly disable mozc-mode."
   (advice-add 'mozc-key-event-to-key-and-modifiers :filter-return 'advice:mozc-key-event-with-ctrl-key--with-ctrl)
   ;; (advice-remove 'mozc-key-event-to-key-and-modifiers 'mozc-key-event-with-ctrl-key)
 
+
+(use-package nerd-icons
+  ;; :custom
+  ;; The Nerd Font you want to use in GUI
+  ;; "Symbols Nerd Font Mono" is the default and is recommended
+  ;; but you can use any other Nerd Font if you want
+  ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+  :ensure t
+  )
   ;; ================================================================================
   ;; doom-thema & doom-modeline
   ;; ================================================================================
 
   
-  ;; https://github.com/hlissner/emacs-doom-themes
+  ;;https://github.com/hlissner/emacs-doom-themes
   (use-package doom-themes
-	:custom
-	(doom-themes-enable-italic t)
-	(doom-themes-enable-bold t)
-	(doom-themes-neotree-file-icons t)	;これはアイコンをすべて使うようにするオプション
-	:custom-face
-	(doom-modeline-bar ((t (:background "#6272a4"))))
-	(org-link ((t (:foreground "#ebe087" :underline t))))
-	(org-list-dt ((t (:foreground "#bd93f9"))))
-	(org-special-keyword ((t (:foreground "#6272a4"))))
-	(org-todo ((t (:background "#272934" :foreground "#51fa7b" :weight bold))))
-	(org-document-title ((t (:foreground "#f1fa8c" :weight bold))))
-	(org-done ((t (:background "#373844" :foreground "#216933" :strike-through nil :weight bold))))
-	(org-footnote ((t (:foreground "#76e0f3"))))
-	:config
-	;; ----------------------------------------------------------------------
-	;; ----------------------------------------------------------------------
-	(load-theme 'doom-Iosvkem t)			;ここでテーマの種類を変えることができる。
-	;; (load-theme 'doom-dracula t)
-	;; (load-theme 'doom-horizon t)			;ここでテーマの種類を変えることができる。
-	;; (load-theme 'doom-zenburn t)
-	;; ----------------------------------------------------------------------
-	;; ----------------------------------------------------------------------
-	(doom-themes-neotree-config)
-	(doom-themes-org-config))
+    :custom
+    (doom-themes-enable-italic t)
+    (doom-themes-enable-bold t)
+    (doom-themes-neotree-file-icons t)	;これはアイコンをすべて使うようにするオプション
+    :custom-face
+    (doom-modeline-bar ((t (:background "#6272a4"))))
+    (org-link ((t (:foreground "#ebe087" :underline t))))
+    (org-list-dt ((t (:foreground "#bd93f9"))))
+    (org-special-keyword ((t (:foreground "#6272a4"))))
+    (org-todo ((t (:background "#272934" :foreground "#51fa7b" :weight bold))))
+    (org-document-title ((t (:foreground "#f1fa8c" :weight bold))))
+    (org-done ((t (:background "#373844" :foreground "#216933" :strike-through nil :weight bold))))
+    (org-footnote ((t (:foreground "#76e0f3"))))
+    :config
+    ;; ----------------------------------------------------------------------
+    ;; ----------------------------------------------------------------------
+    (load-theme 'doom-Iosvkem t)			;ここでテーマの種類を変えることができる。
+    ;; (load-theme 'doom-dracula t)
+    ;; (load-theme 'doom-horizon t)			;ここでテーマの種類を変えることができる。
+    ;; (load-theme 'doom-zenburn t)
+    ;; (load-theme 'doom-monokai-classic t)
+    ;; (load-theme 'doom-solarized-light t)
+    
+    ;; ----------------------------------------------------------------------
+    ;; ----------------------------------------------------------------------
+    (doom-themes-neotree-config)
+    (doom-themes-org-config))
+  (setq doom-modeline-height 30)
   (setq org-todo-keyword-faces
-		'(("WAIT" . (:foreground "#6272a4":weight bold))
+    	'(("WAIT" . (:foreground "#6272a4":weight bold))
           ("NEXT"   . (:foreground "#f1fa8c" :weight bold))
           ("CARRY/O" . (:foreground "#6272a4" :background "#373844" :weight bold))))
 
 
   (setq org-todo-keyword-faces
-		'(("WAIT" . (:foreground "#6272a4":weight bold))
+    	'(("WAIT" . (:foreground "#6272a4":weight bold))
           ("NEXT"   . (:foreground "#f1fa8c" :weight bold))
           ("CARRY/O" . (:foreground "#6272a4" :background "#373844" :weight bold))))
+
+
 
   
   ;; https://github.com/seagle0128/doom-modeline
   (use-package doom-modeline
+    :ensure t
 	:custom
     (setq doom-modeline-buffer-file-name-style 'auto)
 	(doom-modeline-buffer-file-name-style 'truncate-with-project)
@@ -546,6 +564,7 @@ properly disable mozc-mode."
 	;; 	   ("<f5>" . quit-dashboard))
 	;; :diminish
 	;; (dashboard-mode page-break-lines-mode)
+    ;; :if (< (length command-line-args) 2) ; コマンドラインから起動したときにdashboardを起動しないようにする。
 	:custom
 	;; (dashboard-startup-banner 3)
     ;; (dashboard-set-navigator t)
@@ -569,6 +588,9 @@ properly disable mozc-mode."
     )
 
   (setq dashboard-set-navigator t)
+
+  (if (< (length command-line-args) 2)
+      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))) ; コマンドラインから起動したときにdashboardを起動しないようにする
 
 
 
@@ -594,7 +616,10 @@ properly disable mozc-mode."
       (winner-undo)
       (setq dashboard-recover-layout-p nil)))
 
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  ;; (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+
+  (if (< (length command-line-args) 2)
+      (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))) ; コマンドラインから起動したときにdashboardを起動しないようにする
 
   
   ;; ================================================================================
@@ -777,10 +802,12 @@ properly disable mozc-mode."
     :ensure t)
   (global-company-mode) ; 全バッファで有効にする
   ;; (setq company-auto-expand nil) ;; 1個目を自動的に補完
-  (setq company-idle-delay 0) ; デフォルトは0.5
+  (setq company-idle-delay 0.5) ; デフォルトは0.5
   (setq company-minimum-prefix-length 2) ; デフォルトは4
   (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
   (setq company-auto-complete nil)
+  (if tramp-mode
+      (setq company-clang-modes nil))
 
 
   ;; https://github.com/company-mode/company-mode/blob/master/NEWS.md
@@ -887,7 +914,7 @@ properly disable mozc-mode."
   (use-package haskell-mode
     :ensure t)
 
-  (require 'lsp)
+  ;; (require 'lsp)
   (use-package lsp-haskell
     :ensure t
     :after lsp-mode
@@ -954,18 +981,18 @@ properly disable mozc-mode."
     ;;                 (lsp-enable-which-key-integration))))
     
     (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-     (c-mode . lsp)
-	 (c++-mode . lsp)
-	 ;;		   (nim-mode . lsp)
-	 (rustic-mode . lsp)
-	 (python-mode . lsp)
-     (sh-mode . lsp)
-     (go-mode . lsp-deferred)
-     (haskell-mode . lsp)
-     (haskell-literate-mode . lsp)
-     (zig-mode . lsp)
-     (html-mode . lsp)
-     (haskell . lsp)
+     ;; (c-mode . lsp)
+	 ;; (c++-mode . lsp)
+	 ;; ;;		   (nim-mode . lsp)
+	 ;; (rustic-mode . lsp)
+	 ;; (python-mode . lsp)
+     ;; (sh-mode . lsp)
+     ;; (go-mode . lsp-deferred)
+     ;; (haskell-mode . lsp)
+     ;; (haskell-literate-mode . lsp)
+     ;; (zig-mode . lsp)
+     ;; (html-mode . lsp)
+     ;; (haskell . lsp)
      ;; if you want which-key integration
      (lsp-mode . lsp-enable-which-key-integration)
      (lsp-managed-mode . lsp-modeline-diagnostics-mode)
@@ -1082,14 +1109,14 @@ properly disable mozc-mode."
   ;; ubuntu20.04のみの対応
   ;; docker-trampも可能
   ;; clangd
-  (with-eval-after-load 'lsp-mode (lsp-register-client
-                                   (make-lsp-client
-                                    :new-connection (lsp-tramp-connection "clangd-10")
-                                    :major-modes '(c-mode c++-mode)
-                                    :priority 1
-                                    :remote? t
-                                    :multi-root t
-                                    :server-id 'clangd-10)))
+  ;; (with-eval-after-load 'lsp-mode (lsp-register-client
+  ;;                                  (make-lsp-client
+  ;;                                   :new-connection (lsp-tramp-connection "clangd")
+  ;;                                   :major-modes '(c-mode c++-mode)
+  ;;                                   :priority 1
+  ;;                                   :remote? t
+  ;;                                   :multi-root t
+  ;;                                   :server-id 'clangd-remote)))
 
   ;; https://github.com/brotzeit/rustic/issues/243
   (with-eval-after-load "lsp-rust"
@@ -1357,9 +1384,7 @@ properly disable mozc-mode."
     (treemacs-mode . centaur-tabs-local-mode)
     ;; (mozc-mode . centaur-tabs-local-mode)
 
-    
 
-    
     
     :bind
     ("C-<iso-lefttab>" . centaur-tabs-backward)
@@ -1371,7 +1396,7 @@ properly disable mozc-mode."
     )
 
 
-
+  (centaur-tabs-mode t) ; configに書くとうまく動作をしなかったため。
 
 
 
@@ -2799,7 +2824,11 @@ middle"
     (setq separedit-write-file-when-execute-save t)
     (setq separedit-remove-trailing-spaces-in-comment t)
 
+(use-package vagrant-tramp
+  :ensure t)
 
+(use-package impatient-mode
+  :ensure t)
 
   ;;=================================================================================
   ;;  _____                              _      __  __           _       _
@@ -2827,65 +2856,65 @@ middle"
 	  ("<f9>" . vterm-toggle)
 	  :config
 	  ;; (setq vterm-keymap-exceptions . '("C-x"))
-	  (setq vterm-shell "/usr/bin/fish")	; vtermで使用するshellを指定
+	  (setq vterm-shell "/usr/bin/bash")	; vtermで使用するshellを指定
 	  (define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
  	  (define-key vterm-mode-map (kbd "C-x") nil)
 	  (setq vterm-max-scrollback 10000)
 	  (setq vterm-buffer-name-string "vterm: %s")
-      ;; (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
-      ;; (setq vterm-keymap-exceptions '("C-c" "C-x"))
-	  :bind
-	  ("<f9>" . vterm-toggle)
+      (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
+      (setq vterm-keymap-exceptions '("C-c" "C-x"))
+      :bind
+      ("<f9>" . vterm-toggle)
 	  )
 
     ;; ================================================================================
     ;; multi-vterm
     ;; ================================================================================
     (use-package multi-vterm :ensure t)
+    ;; parse error check when system type check
 
 
     ;; ================================================================================
     ;; vterm-toggle
     ;; ================================================================================
     ;; https://github.com/jixiuf/vterm-toggle
-    (use-package vterm-toggle
-	  :ensure t
-	  :config
-	  (setq vterm-toggle-scope 'project)
-	  (bind-key "<f9>" 'vterm-toggle)
-	  (bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
-	  ;; https://naokton.hatenablog.com/entry/2020/12/08/150130
-      (add-to-list 'display-buffer-alist
-				   '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
-                     (display-buffer-reuse-window display-buffer-in-direction)
-                     (direction . bottom)
-                     (reusable-frames . visible)
-                     (window-height . 0.4)))
-	  ;; Above display config affects all vterm command, not only vterm-toggle
-	  (defun my/vterm-new-buffer-in-current-window()
-        (interactive)
-        (let ((display-buffer-alist nil))
-          (vterm))))
-    )
+  (use-package vterm-toggle
+     :ensure t
+     :config
+     (setq vterm-toggle-scope 'project)
+     (bind-key "<f9>" 'vterm-toggle)
+     (bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
+     ;; https://naokton.hatenablog.com/entry/2020/12/08/150130
+     (add-to-list 'display-buffer-alist
+   			   '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                    (display-buffer-reuse-window display-buffer-in-direction)
+                    (direction . bottom)
+                    (reusable-frames . visible)
+                    (window-height . 0.4)))
+     ;; Above display config affects all vterm command, not only vterm-toggle
+     (defun my/vterm-new-buffer-in-current-window()
+       (interactive)
+       (let ((display-buffer-alist nil))
+         (vterm))))
 
-  ;; vterm-toggleが下部に最初に表示されない問題を対処
-  (setq vterm-toggle-fullscreen-p nil)
-  (add-to-list 'display-buffer-alist
-               '((lambda (buffer-or-name _)
-                   (let ((buffer (get-buffer buffer-or-name)))
-                     (with-current-buffer buffer
-                       (or (equal major-mode 'vterm-mode)
-                           (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-                 (display-buffer-reuse-window display-buffer-at-bottom)
-                 ;;(display-buffer-reuse-window display-buffer-in-direction)
-                 ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-                 ;;(direction . bottom)
-                 ;;(dedicated . t) ;dedicated is supported in emacs27
-                 (reusable-frames . visible)
-                 (window-height . 0.3)))
-
-
-  ;; ================================================================================
+;; Linux system-type check close
+         )
+ ;; vterm-toggleが下部に最初に表示されない問題を対処
+ (setq vterm-toggle-fullscreen-p nil)
+ (add-to-list 'display-buffer-alist
+              '((lambda (buffer-or-name _)
+                  (let ((buffer (get-buffer buffer-or-name)))
+                    (with-current-buffer buffer
+                      (or (equal major-mode 'vterm-mode)
+                          (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                (display-buffer-reuse-window display-buffer-at-bottom)
+                ;;(display-buffer-reuse-window display-buffer-in-direction)
+                ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                ;;(direction . bottom)
+                ;;(dedicated . t) ;dedicated is supported in emacs27
+                (reusable-frames . visible)
+                (window-height . 0.3)))
+;; ================================================================================
   ;; tree-sitter-mode
   ;; ================================================================================
   ;; 
