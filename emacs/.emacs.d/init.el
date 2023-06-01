@@ -390,7 +390,7 @@
   ;; ================================================================================
   ;; オートセーブ・バックアップ関連
   ;; ================================================================================
-  
+
   ;; オートセーブをファイル作成までの秒間隔
   (setq auto-save-timeout 15)
   ;; オートセーブファイル作成までのタイプ間隔
@@ -471,7 +471,7 @@ properly disable mozc-mode."
   ;; doom-thema & doom-modeline
   ;; ================================================================================
 
-  
+
   ;;https://github.com/hlissner/emacs-doom-themes
   (use-package doom-themes
     :custom
@@ -496,7 +496,7 @@ properly disable mozc-mode."
     ;; (load-theme 'doom-zenburn t)
     ;; (load-theme 'doom-monokai-classic t)
     ;; (load-theme 'doom-solarized-light t)
-    
+
     ;; ----------------------------------------------------------------------
     ;; ----------------------------------------------------------------------
     (doom-themes-neotree-config)
@@ -981,7 +981,7 @@ properly disable mozc-mode."
     ;;                 (lsp-enable-which-key-integration))))
     
     (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-     ;; (c-mode . lsp)
+     (c-mode . lsp)
 	 ;; (c++-mode . lsp)
 	 ;; ;;		   (nim-mode . lsp)
 	 ;; (rustic-mode . lsp)
@@ -2830,6 +2830,12 @@ middle"
 (use-package impatient-mode
   :ensure t)
 
+
+;; Emacs Easy Drawer
+;; https://github.com/misohena/el-easydraw
+  (use-package edraw-org
+    :load-path "~/.emacs.d/public_repos/el-easydraw")
+
   ;;=================================================================================
   ;;  _____                              _      __  __           _       _
   ;; |  __ \                            (_)    |  \/  |         | |     | |
@@ -2928,7 +2934,7 @@ middle"
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-  
+
 
   ;; ================================================================================
   ;; emacs-application-framework
