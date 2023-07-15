@@ -71,6 +71,7 @@
   (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'nov-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'lsp-ui-imenu-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'undo-tree-visualizer-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
   ;; ================================================================================
@@ -119,6 +120,8 @@
   ;; 現状スクロールバーとメニューバーを使っていないため削除する。
   ;; 可能であればyaskrollのようなものに変更を行いたい。
   (tool-bar-mode -1)     ;ツールバーをなくす
+
+
   ;; (menu-bar-mode -1)     ;メニューバーをなくす
 ;;; これはお好みで
   (scroll-bar-mode -1)   ;スクロールバーをなくす
@@ -459,14 +462,14 @@ properly disable mozc-mode."
   ;; (advice-remove 'mozc-key-event-to-key-and-modifiers 'mozc-key-event-with-ctrl-key)
 
 
-(use-package nerd-icons
-  ;; :custom
-  ;; The Nerd Font you want to use in GUI
-  ;; "Symbols Nerd Font Mono" is the default and is recommended
-  ;; but you can use any other Nerd Font if you want
-  ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
-  :ensure t
-  )
+  (use-package nerd-icons
+    ;; :custom
+    ;; The Nerd Font you want to use in GUI
+    ;; "Symbols Nerd Font Mono" is the default and is recommended
+    ;; but you can use any other Nerd Font if you want
+    ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+    :ensure t
+    )
   ;; ================================================================================
   ;; doom-thema & doom-modeline
   ;; ================================================================================
@@ -797,6 +800,159 @@ properly disable mozc-mode."
       (setq tab-width my-tab-width))
     (add-hook 'minibuffer-setup-hook #'my-tab-width-2)
     (add-hook 'minibuffer-exit-hook #'my-tab-width-original))
+
+
+
+
+
+  ;; ----------------------------------------------------------------------------
+  ;; vertico
+  ;; ----------------------------------------------------------------------------
+  (use-package vertico
+    :ensure t
+    :init
+    (vertico-mode)
+
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
+
+  ;; Show more candidates
+  ;; (setq vertico-count 20)
+
+  ;; Grow and shrink the Vertico minibuffer
+  ;; (setq vertico-resize t)
+
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  ;; (setq vertico-cycle t)
+  )
+
+
+  (use-package consult
+    :ensure t
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  ;; :bind (;; C-c bindings in `mode-specific-map'
+         ;; ("C-c M-x" . consult-mode-command)
+         ;; ("C-c h" . consult-history)
+         ;; ("C-c k" . consult-kmacro)
+         ;; ("C-c m" . consult-man)
+         ;; ("C-c i" . consult-info)
+         ;; ([remap Info-search] . consult-info)
+         ;; ;; C-x bindings in `ctl-x-map'
+         ;; ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ;; ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ;; ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ;; ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ;; ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ;; ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; ;; Custom M-# bindings for fast register access
+         ;; ("M-#" . consult-register-load)
+         ;; ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ;; ("C-M-#" . consult-register)
+         ;; ;; Other custom bindings
+         ;; ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; ;; M-g bindings in `goto-map'
+         ;; ("M-g e" . consult-compile-error)
+         ;; ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ;; ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ;; ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ;; ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ;; ("M-g m" . consult-mark)
+         ;; ("M-g k" . consult-global-mark)
+         ;; ("M-g i" . consult-imenu)
+         ;; ("M-g I" . consult-imenu-multi)
+         ;; ;; M-s bindings in `search-map'
+         ;; ("M-s d" . consult-find)
+         ;; ("M-s D" . consult-locate)
+         ;; ("M-s g" . consult-grep)
+         ;; ("M-s G" . consult-git-grep)
+         ;; ("M-s r" . consult-ripgrep)
+         ;; ("M-s l" . consult-line)
+         ;; ("M-s L" . consult-line-multi)
+         ;; ("M-s k" . consult-keep-lines)
+         ;; ("M-s u" . consult-focus-lines)
+         ;; ;; Isearch integration
+         ;; ("M-s e" . consult-isearch-history)
+         ;; :map isearch-mode-map
+         ;; ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ;; ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ;; ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ;; ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; ;; Minibuffer history
+         ;; :map minibuffer-local-map
+         ;; ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ;; ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (setq consult-narrow-key "<") ;; "C-+"
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 3. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  ;;;; 4. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 5. No project support
+  ;; (setq consult-project-function nil)
+)
+  ;; ----------------------------------------------------------------------------
+  ;;consult-lsp
+  ;; ----------------------------------------------------------------------------
+  (use-package consult-lsp
+    :ensure t
+    
+    )
+  
   ;; ------------------------------------------------------------------------company
   (use-package company
     :ensure t)
@@ -929,7 +1085,7 @@ properly disable mozc-mode."
   ;; flycheck
   ;; lsp-ui-sidelineの診断メッセージ表示に必要
   ;; ===========================================================================================
-   (use-package flycheck
+  (use-package flycheck
     :ensure t
     :hook (after-init . global-flycheck-mode)
     ;; :config
@@ -938,12 +1094,27 @@ properly disable mozc-mode."
     ;; chktexが自動で見付からない場合は以下の様に指定する。lacheckについても同様
     ;; (setq flycheck-tex-chktex-executable "/Library/TeX/texbin/chktex")
     :bind (:map flycheck-mode-map
-              ("M-n" . flycheck-next-error)
-              ("M-p" . flycheck-previous-error)))
+                ("M-n" . flycheck-next-error)
+                ("M-p" . flycheck-previous-error)))
+
+  ;; 安定しない
+  ;;  (use-package realgud
+  ;;    :ensure t)
+
+  ;;  ;; ===========================================================================================
+  ;; ;; realgud-lldb
+  ;;  ;; ===========================================================================================
+  ;;  ;; 依存関係にcaskが必要なのでインストールすること。
+  ;;  (use-package realgud-lldb
+  ;;    :ensure t)
+
+
   ;; ===========================================================================================
   ;; lsp-mode
   ;; ===========================================================================================
 
+
+  
   ;; eglotの対応が少ないのが辛いのでlsp-modeに移行する
   ;;set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 
@@ -984,14 +1155,15 @@ properly disable mozc-mode."
      (c-mode . lsp)
 	 ;; (c++-mode . lsp)
 	 ;; ;;		   (nim-mode . lsp)
-	 ;; (rustic-mode . lsp)
+	 (rustic-mode . lsp)
 	 ;; (python-mode . lsp)
      ;; (sh-mode . lsp)
-     ;; (go-mode . lsp-deferred)
+     (go-mode . lsp-deferred)
      ;; (haskell-mode . lsp)
      ;; (haskell-literate-mode . lsp)
      ;; (zig-mode . lsp)
-     ;; (html-mode . lsp)
+     (html-mode . lsp)
+     (css-mode . lsp)
      ;; (haskell . lsp)
      ;; if you want which-key integration
      (lsp-mode . lsp-enable-which-key-integration)
@@ -1021,6 +1193,7 @@ properly disable mozc-mode."
 	(lsp-ui-sideline-enable t)
 	(lsp-ui-doc-use-childframe t)
 	(lsp-ui-doc-use-webkit t)
+    ;; (lsp-ui-doc-show-with-mouse nil)
     ;; (lsp-ui-sideline-show-diagnostics t)
 	:commands lsp-ui-mode
 	:preface
@@ -1067,19 +1240,22 @@ properly disable mozc-mode."
   (use-package dap-mode
     :ensure t
     :after lsp-mode
-    ;; :custom
-    ;; (dap-auto-configure-features '(sessions locals breakpoints expressions repl controls tooltip))
+    :custom
+    (dap-auto-configure-features '(sessions locals breakpoints expressions repl controls tooltip))
     :config
     (setq dap-python-debugger 'debugpy)
     (dap-mode 1)
     (dap-auto-configure-mode 1)
+
+
     
     (require 'dap-hydra) ; hydraでDAPの操作を楽にするもの(Optional)
     (require 'dap-python)
     (require 'dap-cpptools)
     ;; (require 'dap-lldb)
-    ;; (require 'dap-codelldb)
+    (require 'dap-codelldb)
     (require 'dap-gdb-lldb)
+    (require 'dap-dlv-go)
     :bind
     ("C-c l d" . dap-hydra))
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
@@ -1099,7 +1275,7 @@ properly disable mozc-mode."
 		  ))
   
   (defvar lsp-clients-clangd-args '("-header-insertion=never")) ;; if change clangd arguments here. see clangd --help
-
+  
   ;; lsp-modeのパフォーマンスを上げるための調整
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024)) ;; 1mb
@@ -1153,7 +1329,21 @@ properly disable mozc-mode."
   ;;   :server-id 'rust-analyzer)))
 
 
+  
+  ;; ===========================================================================================
+  ;; gdb
+  ;; ===========================================================================================
+;;; GDB 関連
+;;; 有用なバッファを開くモード
+  (setq gdb-many-windows t)
 
+;;; 変数の上にマウスカーソルを置くと値を表示
+  (add-hook 'gdb-mode-hook '(lambda () (gud-tooltip-mode t)))
+
+;;; I/O バッファを表示
+  (setq gdb-use-separate-io-buffer t)
+
+;;; t にすると mini buffer に値が表示される
 
 
   ;; (define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
@@ -1382,6 +1572,18 @@ properly disable mozc-mode."
     (sublimity-mode . centaur-tabs-local-mode)
     (imenu-list-minor-mode . centaur-tabs-local-mode)
     (treemacs-mode . centaur-tabs-local-mode)
+    (gdb-inferior-io-mode . centaur-tabs-local-mode)
+    (gdb-script-mode . centaur-tabs-local-mode)
+    (gdb-threads-mode . centaur-tabs-local-mode)
+    (gdb-breakpoints-mode . centaur-tabs-local-mode)
+    (gdb-disassembly-mode . centaur-tabs-local-mode)
+    (gdb-frames-mode . centaur-tabs-local-mode)
+    (gdb-breakpoints-mode . centaur-tabs-local-mode)
+    (gdb-locals-mode . centaur-tabs-local-mode)
+    (gdb-memory-mode . centaur-tabs-local-mode)
+    (gdb-parent-mode . centaur-tabs-local-mode)
+    (gdb-registers-mode . centaur-tabs-local-mode)
+    (gdb-rules-buffer-mode . centaur-tabs-local-mode)
     ;; (mozc-mode . centaur-tabs-local-mode)
 
 
@@ -1655,13 +1857,13 @@ properly disable mozc-mode."
 	(global-fish-completion-mode))
 
 
-  (use-package eshell-syntax-highlighting
-	:ensure t
-	:after esh-mode
-	:demand t ;; Install if not already installed.
-	:config
-	;; Enable in all Eshell buffers.
-	(eshell-syntax-highlighting-global-mode +1))
+  ;; (use-package eshell-syntax-highlighting
+  ;;   :ensure t
+  ;;   :after esh-mode
+  ;;   :demand t ;; Install if not already installed.
+  ;;   :config
+  ;;   ;; Enable in all Eshell buffers.
+  ;;   (eshell-syntax-highlighting-global-mode +1))
 
 
 
@@ -1968,7 +2170,7 @@ properly disable mozc-mode."
 				   (setq transparency_level 0)))
 		)))
 
-  (define-key global-map (kbd "C-c t") 'my:change_transparency)
+  ;; (define-key global-map (kbd "C-c t") 'my:change_transparency)
   ;; ================================================================================
   ;; window-resize
   ;; ================================================================================
@@ -2757,7 +2959,7 @@ middle"
   (use-package mlscroll
     :ensure t
     :config
-    ; (setq mlscroll-shortfun-min-width 11) ;truncate which-func, for default mode-line-format's
+                                        ; (setq mlscroll-shortfun-min-width 11) ;truncate which-func, for default mode-line-format's
     (mlscroll-mode 1))
 
 
@@ -2807,35 +3009,47 @@ middle"
     ;; :config
     )
 
-      ;; Key binding for modes you want edit
+  ;; Key binding for modes you want edit
   ;; or simply bind ‘global-map’ for all.
-    (define-key global-map        (kbd "C-c '") #'separedit)
-    ;; (define-key prog-mode-map        (kbd "C-c '") #'separedit)
-    ;; (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
-    ;; (define-key help-mode-map        (kbd "C-c '") #'separedit)
-    ;; (define-key helpful-mode-map     (kbd "C-c '") #'separedit)
+  (define-key global-map        (kbd "C-c '") #'separedit)
+  ;; (define-key prog-mode-map        (kbd "C-c '") #'separedit)
+  ;; (define-key minibuffer-local-map (kbd "C-c '") #'separedit)
+  ;; (define-key help-mode-map        (kbd "C-c '") #'separedit)
+  ;; (define-key helpful-mode-map     (kbd "C-c '") #'separedit)
 
-    ;; Default major-mode for edit buffer
-    ;; can also be other mode e.g. ‘org-mode’.
-    (setq separedit-default-mode 'org-mode)
-    ;; Feature options
-    (setq separedit-preserve-string-indentation t)
-    (setq separedit-continue-fill-column t)
-    (setq separedit-write-file-when-execute-save t)
-    (setq separedit-remove-trailing-spaces-in-comment t)
+  ;; Default major-mode for edit buffer
+  ;; can also be other mode e.g. ‘org-mode’.
+  (setq separedit-default-mode 'org-mode)
+  ;; Feature options
+  (setq separedit-preserve-string-indentation t)
+  (setq separedit-continue-fill-column t)
+  (setq separedit-write-file-when-execute-save t)
+  (setq separedit-remove-trailing-spaces-in-comment t)
 
-(use-package vagrant-tramp
-  :ensure t)
+  (use-package vagrant-tramp
+    :ensure t)
 
-(use-package impatient-mode
-  :ensure t)
+  (use-package impatient-mode
+    :ensure t)
 
 
-;; Emacs Easy Drawer
-;; https://github.com/misohena/el-easydraw
-  (use-package edraw-org
-    :load-path "~/.emacs.d/public_repos/el-easydraw")
+  ;; Emacs Easy Drawer
+  ;; https://github.com/misohena/el-easydraw
 
+  (with-eval-after-load 'org
+    (use-package edraw-org
+      :load-path "~/.emacs.d/public_repos/el-easydraw")
+    (edraw-org-setup-default))
+  (add-to-list 'auto-mode-alist '("\\.edraw\\.svg$" . edraw-mode))
+
+
+  (use-package sr-speedbar
+    :ensure t
+    :bind
+    ("C-c t" . sr-speedbar-toggle)
+    )
+
+  ;; no dynami module settings
   ;;=================================================================================
   ;;  _____                              _      __  __           _       _
   ;; |  __ \                            (_)    |  \/  |         | |     | |
@@ -2884,43 +3098,43 @@ middle"
     ;; vterm-toggle
     ;; ================================================================================
     ;; https://github.com/jixiuf/vterm-toggle
-  (use-package vterm-toggle
-     :ensure t
-     :config
-     (setq vterm-toggle-scope 'project)
-     (bind-key "<f9>" 'vterm-toggle)
-     (bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
-     ;; https://naokton.hatenablog.com/entry/2020/12/08/150130
-     (add-to-list 'display-buffer-alist
-   			   '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
-                    (display-buffer-reuse-window display-buffer-in-direction)
-                    (direction . bottom)
-                    (reusable-frames . visible)
-                    (window-height . 0.4)))
-     ;; Above display config affects all vterm command, not only vterm-toggle
-     (defun my/vterm-new-buffer-in-current-window()
-       (interactive)
-       (let ((display-buffer-alist nil))
-         (vterm))))
+    (use-package vterm-toggle
+      :ensure t
+      :config
+      (setq vterm-toggle-scope 'project)
+      (bind-key "<f9>" 'vterm-toggle)
+      (bind-key "C-c <f9>" 'my/vterm-new-buffer-in-current-window)
+      ;; https://naokton.hatenablog.com/entry/2020/12/08/150130
+      (add-to-list 'display-buffer-alist
+   			       '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                     (display-buffer-reuse-window display-buffer-in-direction)
+                     (direction . bottom)
+                     (reusable-frames . visible)
+                     (window-height . 0.4)))
+      ;; Above display config affects all vterm command, not only vterm-toggle
+      (defun my/vterm-new-buffer-in-current-window()
+        (interactive)
+        (let ((display-buffer-alist nil))
+          (vterm))))
 
-;; Linux system-type check close
-         )
- ;; vterm-toggleが下部に最初に表示されない問題を対処
- (setq vterm-toggle-fullscreen-p nil)
- (add-to-list 'display-buffer-alist
-              '((lambda (buffer-or-name _)
-                  (let ((buffer (get-buffer buffer-or-name)))
-                    (with-current-buffer buffer
-                      (or (equal major-mode 'vterm-mode)
-                          (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-                (display-buffer-reuse-window display-buffer-at-bottom)
-                ;;(display-buffer-reuse-window display-buffer-in-direction)
-                ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-                ;;(direction . bottom)
-                ;;(dedicated . t) ;dedicated is supported in emacs27
-                (reusable-frames . visible)
-                (window-height . 0.3)))
-;; ================================================================================
+    ;; Linux system-type check close
+    )
+  ;; vterm-toggleが下部に最初に表示されない問題を対処
+  (setq vterm-toggle-fullscreen-p nil)
+  (add-to-list 'display-buffer-alist
+               '((lambda (buffer-or-name _)
+                   (let ((buffer (get-buffer buffer-or-name)))
+                     (with-current-buffer buffer
+                       (or (equal major-mode 'vterm-mode)
+                           (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                 (display-buffer-reuse-window display-buffer-at-bottom)
+                 ;;(display-buffer-reuse-window display-buffer-in-direction)
+                 ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                 ;;(direction . bottom)
+                 ;;(dedicated . t) ;dedicated is supported in emacs27
+                 (reusable-frames . visible)
+                 (window-height . 0.3)))
+  ;; ================================================================================
   ;; tree-sitter-mode
   ;; ================================================================================
   ;; 
@@ -2952,7 +3166,7 @@ middle"
 
                         (require 'eaf-all-the-icons)
                         (require 'eaf-browser)
-                        ; (require 'eaf-pdf-viewer)
+                                        ; (require 'eaf-pdf-viewer)
                         (require 'eaf-jupyter)
 
                         ;; カスタムしろと変更されたので古いコードで再定義(後日アドバイスに変更すること))
