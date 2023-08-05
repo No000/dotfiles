@@ -1,4 +1,4 @@
 {
-    "rust-analyzer.serverPath": "/usr/bin/rust-analyzer",
+    "rust-analyzer.serverPath": "~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rust-analyzer",
     "clangd.arguments": ["-header-insertion=never"]
 }

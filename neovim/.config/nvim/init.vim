@@ -35,7 +35,7 @@ call plug#begin('~/.config/nvim/plugins')
 	" https://anekos.hatenablog.com/entry/20130523/1369306555 
 	"Plug 'anekos/felis-cat-igirisu-toast-express'
 	" https://github.com/vim-scripts/fcitx.vim
-	Plug 'vim-scripts/fcitx.vim'
+	"Plug 'vim-scripts/fcitx.vim'
 	" Emacsのモード的なやつ
 	Plug 'sheerun/vim-polyglot'
 	" 範囲コメントアウト
@@ -341,10 +341,11 @@ let g:EasyMotion_use_migemo = 1
 " nvim-treesitterの設定
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {
     enable = true,
     disable = {},
   },
 }
 EOF
+

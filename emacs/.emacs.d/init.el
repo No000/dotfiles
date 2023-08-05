@@ -973,7 +973,7 @@ properly disable mozc-mode."
   (if tramp-mode
       (setq company-clang-modes nil))
 
-
+  (add-hook 'gdb-mode-hook (lambda () (company-mode -1)))
   ;; https://github.com/company-mode/company-mode/blob/master/NEWS.md
   ;; (with-eval-after-load 'company
   ;;   (dolist (map (list company-active-map company-search-map))
@@ -1222,6 +1222,8 @@ properly disable mozc-mode."
 	)
   ;; if you are helm user
 
+  (add-hook 'gdb-mode-hook (lambda () (lsp-ui-doc-mode -1)))
+  
   ;; if you are ivy user
   (use-package lsp-ivy
 	:ensure t
@@ -1348,11 +1350,21 @@ properly disable mozc-mode."
 ;;; 変数の上にマウスカーソルを置くと値を表示
   (add-hook 'gdb-mode-hook '(lambda () (gud-tooltip-mode t)))
 
+
 ;;; I/O バッファを表示
   (setq gdb-use-separate-io-buffer t)
-
 ;;; t にすると mini buffer に値が表示される
+(defun my-gdbmi-bnf-target-stream-output (c-string)
+  "Change behavior for GDB/MI targe the target-stream-output so that it is displayed to the console."
+  (gdb-console c-string))
 
+
+
+
+(advice-add 'gdb-display-memory-buffer :around 'gdb-display-memory-buffer-custom)
+
+
+(advice-add 'gdbmi-bnf-target-stream-output :override 'my-gdbmi-bnf-target-stream-output)
 
   ;; (define-key lsp-mode-map (kbd "<f6>") 'lsp-ui-peek-find-definition)
   ;; ===========================================================================================
