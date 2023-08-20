@@ -583,8 +583,7 @@ properly disable mozc-mode."
     (dashboard-center-content t)
 	(dashboard-items '((recents . 10)
 					   (projects . 5)
-					   (bookmarks . 5)
-                       (agenda . 5)))
+					   (bookmarks . 5)))
 	;; :hook
 	;; (after-init . dashboard-setup-startup-hook)
 	:config
@@ -1295,14 +1294,14 @@ properly disable mozc-mode."
   ;; ubuntu20.04のみの対応
   ;; docker-trampも可能
   ;; clangd
-  ;; (with-eval-after-load 'lsp-mode (lsp-register-client
-  ;;                                  (make-lsp-client
-  ;;                                   :new-connection (lsp-tramp-connection "clangd")
-  ;;                                   :major-modes '(c-mode c++-mode)
-  ;;                                   :priority 1
-  ;;                                   :remote? t
-  ;;                                   :multi-root t
-  ;;                                   :server-id 'clangd-remote)))
+  (with-eval-after-load 'lsp-mode (lsp-register-client
+                                   (make-lsp-client
+                                    :new-connection (lsp-tramp-connection "clangd-10")
+                                    :major-modes '(c-mode c++-mode)
+                                    :priority 1
+                                    :remote? t
+                                    :multi-root t
+                                    :server-id 'clangd-remote)))
 
   ;; https://github.com/brotzeit/rustic/issues/243
   (with-eval-after-load "lsp-rust"
@@ -1815,14 +1814,16 @@ properly disable mozc-mode."
   (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 
   ;; docker-tramp
-  (use-package docker-tramp
-	:ensure t)
-  (require 'docker-tramp-compat)
-  (set-variable 'docker-tramp-use-names t) ; コンテナの補完をIDではなくNAMESでしてほしい場合
+  ;; (use-package docker-tramp
+  ;;   :ensure t)
+  ;; (require 'docker-tramp-compat)
+  ;; (set-variable 'docker-tramp-use-names t) ; コンテナの補完をIDではなくNAMESでしてほしい場合
+
+  (require 'docker-container)
 
   ;; https://github.com/emacs-pe/docker-tramp.el#:~:text=%E3%83%88%E3%83%A9%E3%83%B3%E3%83%97%E3%81%AF%E3%83%AA%E3%83%A2%E3%83%BC%E3%83%88%E3%82%92%E5%B0%8A%E9%87%8D%E3%81%97%E3%81%BE%E3%81%9B%E3%82%93PATH
   (require 'tramp)
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  ;; (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;; --------------------------------------------------------------------------------
   ;; gdbの設定
   ;; --------------------------------------------------------------------------------
@@ -2520,38 +2521,38 @@ middle"
     :ensure t)
 
 
-  (defun hydra-title(title) (propertize title 'face `(:inherit font-lock-warning-face :weight bold)))
-  (defun command-name(title) (propertize title 'face `(:foreground "#f8f8f2")))
-  (defun spacer() (propertize "." 'face `(:foreground "#282a36")))
-  (bind-key "C-c <SPC>" 'hydra-pinky/body)
-  (key-chord-define-global
-   "::"
-   (defhydra hydra-pinky (:color red :hint nil)
+;;   (defun hydra-title(title) (propertize title 'face `(:inherit font-lock-warning-face :weight bold)))
+;;   (defun command-name(title) (propertize title 'face `(:foreground "#f8f8f2")))
+;;   (defun spacer() (propertize "." 'face `(:foreground "#282a36")))
+;;   (bind-key "C-c <SPC>" 'hydra-pinky/body)
+;;   (key-chord-define-global
+;;    "::"
+;;    (defhydra hydra-pinky (:color red :hint nil)
      ;;   "
      ;; ：_0_._1_._2_._3_._o_._S_._x_   ：_j_._k_._h_._l_._c_._a_._e_._b_._SPC_._m_._w_._s_._/_   ：_n_._p_._u_._t_   ：-_:_-   ：_q_uit"
      
      ;;    "
      ;; ：_j_._k_._h_._l_ ：_q_uit"
-     (format
-      (format "%s" (propertize 
-                    "
-     ((%s))^^^^^^^^
-^^^^^^ ──────────────────────────────────────────────────────────────────────
-        ^_k_^          \t|%s
-        ^^↑^^         \t|
-    _h_ ←   → _l_    \t|
-        ^^↓^^         \t|
-        ^_j_^          \t|
-^^^^^^ ──────────────────────────────────────────────────────────────────────
-                           [_q_uit]"'face `(:inherit font-lock-doc-face)))
-      (hydra-title "key-move")
+;;      (format
+;;       (format "%s" (propertize
+;;                     "
+;;      ((%s))^^^^^^^^
+;; ^^^^^^ ──────────────────────────────────────────────────────────────────────
+;;         ^_k_^          \t|%s
+;;         ^^↑^^         \t|
+;;     _h_ ←   → _l_    \t|
+;;         ^^↓^^         \t|
+;;         ^_j_^          \t|
+;; ^^^^^^ ──────────────────────────────────────────────────────────────────────
+;;                            [_q_uit]"'face `(:inherit font-lock-doc-face)))
+;;       (hydra-title "key-move")
       ;; (hydra-title "Zoom")
       ;; (hydra-title "Split")
       ;; (hydra-title "Window")
       ;; (hydra-title "Buffer")
       ;; (hydra-title "Misc")
       ;; (all-the-icons-material "zoom_in" :height .85 :face 'font-lock-doc-face)
-      (command-name "_dd_")
+;;       (command-name "_dd_")
       ;; (command-name "_<<_")
       ;; (command-name "__>>__")
       ;; (command-name "wap")
@@ -2566,7 +2567,7 @@ middle"
       ;; (command-name "del_O_thers")
       ;; (command-name "quit")
       ;; (command-name "rotate")
-      )
+;;       )
      ;; window
      ;; ("0" delete-window)
      ;; ("1" delete-other-windows)
@@ -2578,11 +2579,11 @@ middle"
      ;; page
      ;; ("a" seq-home)
      ;; ("e" seq-end)
-     ("j" next-line)
-     ("k" previous-line)
-     ("l" forward-char)
-     ("h" backward-char)
-     ("dd" kill-whole-line)
+;;      ("j" next-line)
+;;      ("k" previous-line)
+;;      ("l" forward-char)
+;;      ("h" backward-char)
+;;      ("dd" kill-whole-line)
      ;; ("<<" )
      ;; ("c" recenter-top-bottom)
      ;; ("<down>" next-line)
@@ -2609,7 +2610,7 @@ middle"
      ;; ("<" iflipb-previous-buffer)
      ;; (">" iflipb-next-buffer)
      ;; quit
-     ("q" nil)))
+;;      ("q" nil)))
 
   ;; sequential-command
   ;; (use-package sequential-command-config
