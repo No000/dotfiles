@@ -48,6 +48,11 @@
            exec-path)))
 
 
+  ;; pythonロード
+  ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Python-Virtual-Environment
+  (setq eaf-python-command "/usr/bin/python3")
+
+
   ;; ================================================================================
   ;; 文字コードの設定
   ;; ================================================================================
