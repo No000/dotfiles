@@ -1093,6 +1093,18 @@ properly disable mozc-mode."
   ;; (add-hook 'haskell-mode-hook #'lsp)
   ;; (add-hook 'haskell-literate-mode-hook #'lsp)
 
+
+  ;; ================================================================================
+  ;; pyright-mode
+  ;; ================================================================================
+(use-package lsp-pyright
+  :ensure t
+  :config
+  (setq lsp-pyright-use-library-code-for-types t) ;; set this to nil if getting too many false positive type errors
+  (setq lsp-pyright-stub-path (concat (getenv "~/.emacs.d") "/python-stub-microsoft/python-type-stubs")) ;; example
+  )
+
+  
   ;; ===========================================================================================
   ;; flycheck
   ;; lsp-ui-sidelineの診断メッセージ表示に必要
@@ -1168,7 +1180,7 @@ properly disable mozc-mode."
 	 ;; (c++-mode . lsp)
 	 ;; ;;		   (nim-mode . lsp)
 	 (rustic-mode . lsp)
-	 ;; (python-mode . lsp)
+	 (python-mode . lsp)
      ;; (sh-mode . lsp)
      (go-mode . lsp-deferred)
      ;; (haskell-mode . lsp)
@@ -1176,6 +1188,7 @@ properly disable mozc-mode."
      ;; (zig-mode . lsp)
      (html-mode . lsp)
      (css-mode . lsp)
+     (javascript-mode . lsp)
      ;; (haskell . lsp)
      ;; if you want which-key integration
      (lsp-mode . lsp-enable-which-key-integration)
@@ -1767,6 +1780,14 @@ properly disable mozc-mode."
     (add-hook 'dired-mode-hook 'org-download-enable))
 
   ;; ---------------------------------------------------------------
+  ;; magit-todos
+  ;; ---------------------------------------------------------------
+  (use-package magit-todos
+    :ensure t)
+
+
+  
+  ;; ---------------------------------------------------------------
   ;; Magitの設定
   ;; ---------------------------------------------------------------
   ;; C-x g でmagitが起動
@@ -1777,7 +1798,9 @@ properly disable mozc-mode."
            ("C-x M-g" . magit-dispatch-pop))
 	:init
 	:config
+    (magit-todos-mode)
 	)
+
 
   ;; ---------------------------------------------------------------
   ;; git関連のモード追加
@@ -3073,6 +3096,15 @@ middle"
     :ensure t
     :bind
     ("C-c t" . sr-speedbar-toggle)
+    )
+
+
+  (use-package plantuml-mode
+    :ensure t
+    :config
+    (setq plantuml-executable-path "/usr/bin/plantuml")
+    (setq plantuml-default-exec-mode 'executable)
+    (setq plantuml-output-type "png")
     )
 
   ;; no dynami module settings
