@@ -29,7 +29,8 @@
   (add-to-list 'load-path "~/.emacs.d/elpa/")
   (require 'use-package)
   (use-package bind-key)
-  (use-package diminish)
+  (use-package diminish
+    :ensure t)
   (setq package-native-compile t)
 
 
@@ -490,6 +491,7 @@ properly disable mozc-mode."
 
   ;;https://github.com/hlissner/emacs-doom-themes
   (use-package doom-themes
+    :ensure t
     :custom
     (doom-themes-enable-italic t)
     (doom-themes-enable-bold t)
@@ -575,6 +577,7 @@ properly disable mozc-mode."
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map) ;jupyterを使うために退避
   ;; これはタイトルをオシャンティーにするやつ
   (use-package dashboard
+    :ensure t
 	;; :bind (("<f5>" . open-dashboard)
 	;; 	   :map dashboard-mode-map
 	;; 	   ("<f5>" . quit-dashboard))
@@ -642,7 +645,8 @@ properly disable mozc-mode."
   ;; ================================================================================
 
   
-  (use-package multi-term)
+  (use-package multi-term
+    :ensure t)
   (when (require 'multi-term nil t)
 	;;使用するシェルを指定
 	(setq multi-term-program "/usr/bin/fish"))
@@ -653,7 +657,8 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; undotree
   ;; ================================================================================
-  (use-package undo-tree)
+  (use-package undo-tree
+    :ensure t)
   (setq undo-tree-auto-save-history nil) ; 勝手に保存するファイルを無効化する
   (when (require 'undo-tree nil t)
 	(global-undo-tree-mode))
@@ -1452,6 +1457,7 @@ properly disable mozc-mode."
   ;; -------------------------------------------------------------------------------------------------
   ;; モダンな補完機能
   (use-package company-box
+    :ensure t
 	:hook (company-mode . company-box-mode))
   ;; -------------------------------------------------------------------------------------------------
   ;; company-quickhel
@@ -1532,6 +1538,7 @@ properly disable mozc-mode."
   ;; キーマップのチートシート
   ;; which-key-show-mapで表示することができる。
   (use-package which-key
+    :ensure t
 	:diminish which-key-mode
 	:hook (after-init . which-key-mode))
 
@@ -1644,6 +1651,7 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; https://github.com/DarthFennec/highlight-indent-guides
   (use-package highlight-indent-guides
+    :ensure t
 	:diminish
 	:hook
 	((prog-mode yaml-mode) . highlight-indent-guides-mode)
@@ -1987,6 +1995,7 @@ properly disable mozc-mode."
   ;; git diffコマンドを活用した変更箇所の可視化
 
   (use-package git-gutter
+    :ensure t
 	:custom
 	(git-gutter:modified-sign "~")
 	(git-gutter:added-sign    "+")
@@ -2096,22 +2105,22 @@ properly disable mozc-mode."
   ;; ================================================================================
 
 
-  (use-package migemo
-	:ensure t)
+  ;; (use-package migemo
+  ;;   :ensure t)
 
   ;; cmigemo(default)
-  (setq migemo-command "cmigemo")
-  (setq migemo-options '("-q" "--emacs"))
+  ;;(setq migemo-command "cmigemo")
+  ;;(setq migemo-options '("-q" "--emacs"))
 
   ;; Set your installed path
-  (setq migemo-dictionary "/usr/share/migemo/utf-8/migemo-dict")
+  ;;(setq migemo-dictionary "/usr/share/migemo/utf-8/migemo-dict")
 
 
 
-  (setq migemo-user-dictionary nil)
-  (setq migemo-regex-dictionary nil)
-  (setq migemo-coding-system 'utf-8-unix)
-  (migemo-init)
+  ;;(setq migemo-user-dictionary nil)
+  ;;(setq migemo-regex-dictionary nil)
+  ;;(setq migemo-coding-system 'utf-8-unix)
+  ;;(migemo-init)
 
 
   ;; ================================================================================
@@ -2158,23 +2167,23 @@ properly disable mozc-mode."
   ;; eaf-historyやswipperでmozcが使えない問題を解消
   ;; ================================================================================
   ;; migemoを利用している
-  (defun ytn-ivy-migemo-re-builder (str)
-    (let* ((sep " \\|\\^\\|\\.\\|\\*")
-           (splitted (--map (s-join "" it)
-    						(--partition-by (s-matches-p " \\|\\^\\|\\.\\|\\*" it)
-    										(s-split "" str t)))))
-      (s-join "" (--map (cond ((s-equals? it " ") ".*?")
-                              ((s-matches? sep it) it)
-                              (t (migemo-get-pattern it)))
-    					splitted))))
-
-  ;; swipperにmigemoがうまく動いていなかったので修正
-  (setq ivy-re-builders-alist '((t . ivy--regex-plus)
-    							(eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)
-    							(swiper . ytn-ivy-migemo-re-builder)
-    						    (ivy-switch-buffer . ytn-ivy-migemo-re-builder)
-                                (counsel-ibuffer . ytn-ivy-migemo-re-builder)))
-
+  ;;(defun ytn-ivy-migemo-re-builder (str)
+  ;;  (let* ((sep " \\|\\^\\|\\.\\|\\*")
+  ;;         (splitted (--map (s-join "" it)
+  ;;  						(--partition-by (s-matches-p " \\|\\^\\|\\.\\|\\*" it)
+  ;;  										(s-split "" str t)))))
+  ;;    (s-join "" (--map (cond ((s-equals? it " ") ".*?")
+  ;;                            ((s-matches? sep it) it)
+  ;;                            (t (migemo-get-pattern it)))
+  ;;  					splitted))))
+;;
+;;  ;; swipperにmigemoがうまく動いていなかったので修正
+;;  (setq ivy-re-builders-alist '((t . ivy--regex-plus)
+;;    							(eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)
+;;    							(swiper . ytn-ivy-migemo-re-builder)
+;;    						    (ivy-switch-buffer . ytn-ivy-migemo-re-builder)
+;;                                (counsel-ibuffer . ytn-ivy-migemo-re-builder)))
+;;
 
 
   (use-package vimrc-mode
@@ -3085,11 +3094,11 @@ middle"
   ;; Emacs Easy Drawer
   ;; https://github.com/misohena/el-easydraw
 
-  (with-eval-after-load 'org
-    (use-package edraw-org
-      :load-path "~/.emacs.d/public_repos/el-easydraw")
-    (edraw-org-setup-default))
-  (add-to-list 'auto-mode-alist '("\\.edraw\\.svg$" . edraw-mode))
+  ;;(with-eval-after-load 'org
+  ;;  (use-package edraw-org
+  ;;    :load-path "~/.emacs.d/public_repos/el-easydraw")
+  ;;  (edraw-org-setup-default))
+  ;;(add-to-list 'auto-mode-alist '("\\.edraw\\.svg$" . edraw-mode))
 
 
   (use-package sr-speedbar
@@ -3225,7 +3234,7 @@ middle"
                         (require 'eaf-all-the-icons)
                         (require 'eaf-browser)
                                         ; (require 'eaf-pdf-viewer)
-                        (require 'eaf-jupyter)
+                        ;; (require 'eaf-jupyter)
 
                         ;; カスタムしろと変更されたので古いコードで再定義(後日アドバイスに変更すること))
                         ;; (defun eaf-all-the-icons-update-icon()
