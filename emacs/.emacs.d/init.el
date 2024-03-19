@@ -3267,8 +3267,8 @@ middle"
 
 
 
-
-
+  ;; https://stackoverflow.com/questions/74870934/how-to-resolve-file-missing-error-when-autoloading-in-emacs
+(defvar chidori-cache-dir (expand-file-name "cache/" user-emacs-directory))
 
   
   )
