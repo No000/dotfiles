@@ -571,7 +571,8 @@ properly disable mozc-mode."
   ;;    (page-break-lines-mode t))
 
   ;; プロジェクト管理パッケージ
-  (use-package projectile)
+  (use-package projectile
+    :ensure t)
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map) ;jupyterを使うために退避
@@ -3267,8 +3268,6 @@ middle"
 
 
 
-  ;; https://stackoverflow.com/questions/74870934/how-to-resolve-file-missing-error-when-autoloading-in-emacs
-(defvar chidori-cache-dir (expand-file-name "cache/" user-emacs-directory))
 
   
   )
