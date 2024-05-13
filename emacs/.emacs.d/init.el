@@ -71,7 +71,7 @@
   (global-display-line-numbers-mode)
 
   ;; 相対表示する
-  (setq display-line-numbers-type 'relative)
+  ;; (setq display-line-numbers-type 'relative)
   
   (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'imenu-list-major-mode-hook (lambda () (display-line-numbers-mode -1)))
@@ -1164,6 +1164,7 @@ properly disable mozc-mode."
     (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 	:custom
 	(lsp-headerline-breadcrumb-mode t)
+    (lsp-inlay-hint-enable t)
 
     ;;  rust
     (lsp-rust-analyzer-server-display-inlay-hints t)
@@ -1206,10 +1207,10 @@ properly disable mozc-mode."
 
   
 
-  (setq-default rustic-format-trigger nil) ; 勝手にフォーマットされるのが辛いので
+  (setq-default rustic-format-trigger t) ; 勝手にフォーマットされるのが辛いので
   (setq rustic-lsp-server 'rust-analyzer)
-  (global-set-key (kbd "C-c <f5>") 'lsp-rust-analyzer-inlay-hints-mode)
-  (define-key rustic-mode-map (kbd "C-c C-c e") 'lsp-rust-analyzer-inlay-hints-mode)
+  ;; (global-set-key (kbd "C-c <f5>") 'lsp-rust-analyzer-inlay-hints-mode)
+  ;; (define-key rustic-mode-map (kbd "C-c C-c e") 'lsp-rust-analyzer-inlay-hints-mode)
   ;; (setq lsp-rust-analyzer-inlay-hints-mode t)
   ;; (setq lsp-rust-analyzer-server-display-inlay-hints t) ; rust analyzer hint enable
 
@@ -1840,6 +1841,8 @@ properly disable mozc-mode."
   ;; https://github.com/Silex/docker.el
   (use-package docker
 	:ensure t
+    ;; :custom
+    ;; (docker-run-as-root t) ;; うまく動かないため、追加の設定が必要な可能性あり
 	:bind ("C-c d" . docker))
   (setq docker-container-shell-file-name "/bin/bash")
 
