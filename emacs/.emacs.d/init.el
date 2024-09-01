@@ -1196,6 +1196,7 @@ properly disable mozc-mode."
      (html-mode . lsp)
      (css-mode . lsp)
      (javascript-mode . lsp)
+     (verilog-mode . lsp)
      ;; (haskell . lsp)
      ;; if you want which-key integration
      (lsp-mode . lsp-enable-which-key-integration)
@@ -1792,8 +1793,8 @@ properly disable mozc-mode."
   ;; ---------------------------------------------------------------
   ;; magit-todos
   ;; ---------------------------------------------------------------
-  (use-package magit-todos
-    :ensure t)
+  ;; (use-package magit-todos
+  ;;   :ensure t)
 
 
   
