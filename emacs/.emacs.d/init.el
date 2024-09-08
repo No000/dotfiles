@@ -1809,7 +1809,7 @@ properly disable mozc-mode."
            ("C-x M-g" . magit-dispatch-pop))
 	:init
 	:config
-    (magit-todos-mode)
+    ;; (magit-todos-mode)
 	)
 
 
