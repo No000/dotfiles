@@ -888,36 +888,33 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; https://github.com/akermu/emacs-libvterm
 
-  (when (equal system-type 'gnu/linux)
-    (use-package vterm
-      :ensure t
-	  :bind
-	  ("<f9>" . vterm-toggle)
-	  :config
-	  ;; (setq vterm-keymap-exceptions . '("C-x"))
-	  (setq vterm-shell "/usr/bin/bash")	; vtermで使用するshellを指定
-	  (define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
- 	  (define-key vterm-mode-map (kbd "C-x") nil)
-	  (setq vterm-max-scrollback 10000)
-	  (setq vterm-buffer-name-string "vterm: %s")
-      (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
-      (setq vterm-keymap-exceptions '("C-c" "C-x"))
-      :bind
-      ("<f9>" . vterm-toggle)
-	  )
+  (use-package vterm
+    :ensure t
+	:bind
+	("<f9>" . vterm-toggle)
+	:config
+	;; (setq vterm-keymap-exceptions . '("C-x"))
+	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
+	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
+ 	(define-key vterm-mode-map (kbd "C-x") nil)
+	(setq vterm-max-scrollback 10000)
+	(setq vterm-buffer-name-string "vterm: %s")
+    (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
+    (setq vterm-keymap-exceptions '("C-c" "C-x"))
+    :bind
+    ("<f9>" . vterm-toggle)
+	)
 
-    ;; ================================================================================
-    ;; tree-sitter-mode
-    ;; ================================================================================
-    (use-package tree-sitter
-      :ensure t)
+  ;; ================================================================================
+  ;; tree-sitter-mode
+  ;; ================================================================================
+  (use-package tree-sitter
+    :ensure t)
 
-    (use-package tree-sitter-langs
-      :ensure t)
+  (use-package tree-sitter-langs
+    :ensure t)
 
-    (global-tree-sitter-mode)
-    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-
-    )
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 (setq gc-cons-threshold 100000000)
