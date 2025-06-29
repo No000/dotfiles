@@ -529,8 +529,10 @@ properly disable mozc-mode."
   (add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
   (use-package rustic
 	:ensure t
+    :config
+    (setq rustic-lsp-client 'eglot)
     )
-
+  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   ;; 本当にwithout switchしているわけではなく前のウィンドウにフォーカスを戻すだけ
   (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
 	(pop-to-buffer buffer-or-name action norecord)
@@ -544,13 +546,12 @@ properly disable mozc-mode."
     :ensure t
     :hook
     (c-mode . eglot-ensure)
+    (rustic-mode . eglot-ensure)
     (c++-mode . eglot-ensure)
-    (cmake-mode . eglot-ensure)
-    (bitbake-mode . eglot-ensure)
     :bind (("M-t" . xref-find-definitions)
            ("M-r" . xref-find-references)
            ("C-t" . xref-go-back)))
-  
+
   ;; ===========================================================================================
   ;; gdb
   ;; ===========================================================================================
