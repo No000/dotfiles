@@ -1,5 +1,3 @@
-
-
 ;; Ubuntuでも実行可能を目指す
 ;; よってvtermはコメントアウト
 
@@ -878,9 +876,9 @@ properly disable mozc-mode."
   ;; all-the-icons-dired
   ;; ================================================================================
   ;; https://github.com/jtbm37/all-the-icons-dired
-  ;; (use-package all-the-icons-dired
-  ;;   :ensure t)
-  ;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  (use-package all-the-icons-dired
+    :ensure t)
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
   
   ;; ================================================================================
