@@ -889,6 +889,8 @@ properly disable mozc-mode."
     :ensure t)
 
   (global-tree-sitter-mode)
+
+  
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 (setq gc-cons-threshold 100000000)
