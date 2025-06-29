@@ -81,8 +81,6 @@
   (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'treemacs-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'twittering-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'nov-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'lsp-ui-imenu-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'undo-tree-visualizer-mode-hook (lambda () (display-line-numbers-mode -1)))
@@ -113,20 +111,6 @@
   ;; barを出るようにする
   (global-hl-line-mode t)
   (require 'hl-line)
-  
-;;; hl-lineを無効にするメジャーモードを指定する
-  ;; (defvar global-hl-line-timer-exclude-modes '(todotxt-mode))
-  
-  ;; 行更新を際に遅延
-  ;; (defvar global-hl-line-timer-exclude-modes nil)
-  ;; (defun global-hl-line-timer-function ()
-  ;;   (unless (memq major-mode global-hl-line-timer-exclude-modes)
-  ;;     (global-hl-line-unhighlight-all)
-  ;;     (let ((global-hl-line-mode t))
-  ;;       (global-hl-line-highlight))))
-  ;; (setq global-hl-line-timer
-  ;;       (run-with-idle-timer 0.03 t 'global-hl-line-timer-function))
-  ;; (cancel-timer global-hl-line-timer)
 
 
   
@@ -221,101 +205,23 @@
   (async-bytecomp-package-mode 1)			;非同期でパッケージのコンパイルを行う
 
 
-  ;; ================================================================================
-  ;; 合字フォントを実現するための処理.
-  ;; ================================================================================
-  ;; (use-package composite
-  ;;   :ensure nil
-  ;;   :defer t
-  ;;   :init
-  ;;   (defvar composition-ligature-table (make-char-table nil))
-  ;;   :hook
-  ;;   (((prog-mode conf-mode nxml-mode markdown-mode help-mode) ;ここでフックするモードを決めている。ここでフックしていないモードは合字の表記が行われない。
-  ;;     . (lambda () (setq-local composition-function-table composition-ligature-table))))
-  ;;   :config
-  ;;   ;; support ligatures, some toned down to prevent hang
-  ;;   (when (version<= "27.0" emacs-version)
-  ;;     (let ((alist
-  ;;   		 '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
-  ;;              (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
-  ;;              (36 . ".\\(?:\\(>\\)>?\\)")
-  ;;              (37 . ".\\(?:\\(%\\)%?\\)")
-  ;;              (38 . ".\\(?:\\(&\\)&?\\)")
-  ;;              (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
-  ;;              ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
-  ;;              (43 . ".\\(?:\\([>]\\)>?\\)")
-  ;;              ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
-  ;;              (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
-  ;;              ;; (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
-  ;;              (46 . ".\\(?:\\(\\.<\\|[-=]\\)[-<=]?\\)")
-  ;;              (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
-  ;;              ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
-  ;;              (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
-  ;;              (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
-  ;;              (59 . ".\\(?:\\(;\\);?\\)")
-  ;;              (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
-  ;;              (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
-  ;;              (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
-  ;;              (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
-  ;;              (91 . ".\\(?:\\(|\\)[]|]?\\)")
-  ;;              ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
-  ;;              (94 . ".\\(?:\\(=\\)=?\\)")
-  ;;              (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
-  ;;              (119 . ".\\(?:\\(ww\\)w?\\)")
-  ;;              (123 . ".\\(?:\\(|\\)[|}]?\\)")
-  ;;              (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
-  ;;              (126 . ".\\(?:\\(~>\\|[-=>@~]\\)[-=>@~]?\\)"))))
-  ;;   	(dolist (char-regexp alist)
-  ;;         (set-char-table-range composition-ligature-table (car char-regexp)
-  ;;   							`([,(cdr char-regexp) 0 font-shape-gstring]))))
-  ;;     (set-char-table-parent composition-ligature-table composition-function-table))
-  ;;   )
-
-
-  ;; (when (member "Cascadia Code" (font-family-list))
-  ;;   (add-to-list 'default-frame-alist '(font . "Cascadia Code 11")))
-
-  ;; ;; 絵文字
-  
-  ;; ;; (use-package emojify :ensure t
-  ;; ;;   :if (display-graphic-p)
-  ;; ;;   :hook (after-init . global-emojify-mode)
-  ;; ;;   :bind
-  ;; ;;   ("C-c E" . 'emojify-insert-emoji)
-  ;; ;;   :config
-  ;; ;;   (add-hook 'prog-mode-hook (lambda () (emojify-mode -1)))
-  ;; ;;   )
-
-
-  ;; ;; Use variable width font faces in current buffer
-  ;; (defun ricty-font-change ()
-  ;;   "Set font to a variable width (proportional) fonts in current buffer"
-  ;;   (interactive)
-  ;;   (setq buffer-face-mode-face '(:family "Ricty Diminished"))
-  ;;   (buffer-face-mode))
-
-  ;; ;; 日本語フォントの設定
-  ;; ;; https://qiita.com/Maizu/items/fee34328f559c7dc59d8
-  ;; (set-fontset-font t 'japanese-jisx0208 "Ricty Diminished")
-
-
   ;; ;; CalcadiaCode側をフックするとうまくいかないので、逆で行く
   ;; ;; 合字フォントを使いたくない場合はここに記載
   ;; (add-hook 'emacs-lisp-mode-hook 'ricty-font-change)
-  (when window-system (progn 
-                        (set-face-attribute 'default nil
-                                            :family "Ricty Diminished Discord"
-                                            :height 150)
-                        (set-fontset-font (frame-parameter nil 'font)
-                                          'japanese-jisx0208
-                                          (cons "Ricty Diminished Discord" "iso10646-1"))
-                        (set-fontset-font (frame-parameter nil 'font)
-                                          'japanese-jisx0212
-                                          (cons "Ricty Diminished Discord" "iso10646-1"))
-                        (set-fontset-font (frame-parameter nil 'font)
-                                          'katakana-jisx0201
-                                          (cons "Ricty Diminished Discord" "iso10646-1"))
-                        ))
+  ;; (when window-system (progn 
+  ;;                       (set-face-attribute 'default nil
+  ;;                                           :family "Ricty Diminished Discord"
+  ;;                                           :height 150)
+  ;;                       (set-fontset-font (frame-parameter nil 'font)
+  ;;                                         'japanese-jisx0208
+  ;;                                         (cons "Ricty Diminished Discord" "iso10646-1"))
+  ;;                       (set-fontset-font (frame-parameter nil 'font)
+  ;;                                         'japanese-jisx0212
+  ;;                                         (cons "Ricty Diminished Discord" "iso10646-1"))
+  ;;                       (set-fontset-font (frame-parameter nil 'font)
+  ;;                                         'katakana-jisx0201
+  ;;                                         (cons "Ricty Diminished Discord" "iso10646-1"))
+  ;;                       ))
 
   ;; ================================================================================
   ;; インデントの設定
@@ -396,11 +302,11 @@
     :init (all-the-icons-ibuffer-mode 1))
 
   ;; all-the-iconsを追加する
-  (setq all-the-icons-mode-icon-alist
-        `(,@all-the-icons-mode-icon-alist
+  ;; (setq all-the-icons-mode-icon-alist
+  ;;       `(,@all-the-icons-mode-icon-alist
 
-    	  (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
-          ))
+  ;;   	  (twittering-mode all-the-icons-faicon "twitter" :v-adjust 0.0 :face all-the-icons-blue)
+  ;;         ))
 
 
 
@@ -640,21 +546,6 @@ properly disable mozc-mode."
   (if (< (length command-line-args) 2)
       (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))) ; コマンドラインから起動したときにdashboardを起動しないようにする
 
-  
-  ;; ================================================================================
-  ;; multi-term
-  ;; ================================================================================
-
-  
-  (use-package multi-term
-    :ensure t)
-  (when (require 'multi-term nil t)
-	;;使用するシェルを指定
-	(setq multi-term-program "/usr/bin/fish"))
-
-  
-  (require 'wgrep nil t)
-
   ;; ================================================================================
   ;; undotree
   ;; ================================================================================
@@ -663,24 +554,8 @@ properly disable mozc-mode."
   (setq undo-tree-auto-save-history nil) ; 勝手に保存するファイルを無効化する
   (when (require 'undo-tree nil t)
 	(global-undo-tree-mode))
-
   
-  ;; ================================================================================
-  ;; neotree
-  ;; ================================================================================
 
-
-  ;; (use-package neotree)
-  ;; ;; F8でnetreee-windowが開くようにする
-  ;; (global-set-key [f7] 'neotree-toggle)
-  ;; ;; neotreeでファイルを新規作成した場合のそのファイルを開く
-  ;; (setq neo-create-file-auto-open t)
-  ;; ;; delete-other-window で neotree ウィンドウを消さない
-  ;; (setq neo-persist-show t)
-  ;; (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
-  ;; (setq neo-show-hidden-files t) ;隠しファイルを表示
-  ;; (setq neo-window-fixed-size nil)		;固定されていたウィンドウサイズを変更かのうへ
-  ;; (setq neo-window-width 30)				;20から40に変更
 
   ;; ================================================================================
   ;; paradox
@@ -819,30 +694,6 @@ properly disable mozc-mode."
     (add-hook 'minibuffer-setup-hook #'my-tab-width-2)
     (add-hook 'minibuffer-exit-hook #'my-tab-width-original))
 
-
-
-
-
-  ;; ----------------------------------------------------------------------------
-  ;; vertico
-  ;; ----------------------------------------------------------------------------
-  (use-package vertico
-    :ensure t
-    :init
-    (vertico-mode)
-
-    ;; Different scroll margin
-    ;; (setq vertico-scroll-margin 0)
-
-    ;; Show more candidates
-    ;; (setq vertico-count 20)
-
-    ;; Grow and shrink the Vertico minibuffer
-    ;; (setq vertico-resize t)
-
-    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-    ;; (setq vertico-cycle t)
-    )
 
 
   (use-package consult
@@ -1075,12 +926,6 @@ properly disable mozc-mode."
   ;; Start LSP Mode and YASnippet mode
   (add-hook 'go-mode-hook #'lsp-deferred)
   (add-hook 'go-mode-hook #'yas-minor-mode)
-  ;; ================================================================================
-  ;; zig-mode
-  ;; ================================================================================
-
-  (use-package zig-mode
-    :ensure t)
 
   ;; ================================================================================
   ;; haskell-mode
@@ -1126,17 +971,6 @@ properly disable mozc-mode."
     :bind (:map flycheck-mode-map
                 ("M-n" . flycheck-next-error)
                 ("M-p" . flycheck-previous-error)))
-
-  ;; 安定しない
-  ;;  (use-package realgud
-  ;;    :ensure t)
-
-  ;;  ;; ===========================================================================================
-  ;; ;; realgud-lldb
-  ;;  ;; ===========================================================================================
-  ;;  ;; 依存関係にcaskが必要なのでインストールすること。
-  ;;  (use-package realgud-lldb
-  ;;    :ensure t)
 
 
   ;; ===========================================================================================
@@ -1193,7 +1027,6 @@ properly disable mozc-mode."
      (go-mode . lsp-deferred)
      ;; (haskell-mode . lsp)
      ;; (haskell-literate-mode . lsp)
-     ;; (zig-mode . lsp)
      (html-mode . lsp)
      (css-mode . lsp)
      (javascript-mode . lsp)
@@ -1345,26 +1178,7 @@ properly disable mozc-mode."
                        (when lsp-rust-analyzer-server-display-inlay-hints
                          (lsp-rust-analyzer-inlay-hints-mode)))
       :ignore-messages nil
-      :server-id 'rust-analyzer-remote)))  
-  ;; (with-eval-after-load 'lsp-mode
-  ;;   (lsp-register-client
-  ;;  (make-lsp-client
-  ;;   :new-connection (lsp-tramp-connection "rust-analyzer")
-  ;;   :remote? t
-  ;;   :priority 1
-  ;;   :multi-root t
-  ;;   :major-modes '(rust-mode rustic-mode)
-  ;;   :initialization-options 'lsp-rust-analyzer--make-init-options
-  ;;   ;; :notification-handlers (ht<-alist lsp-rust-notification-handlers)
-  ;;   :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
-  ;;   :library-folders-fn (lambda (_workspace) lsp-rust-analyzer-library-directories)
-  ;;   :after-open-fn (lambda ()
-  ;;                    (when lsp-rust-analyzer-server-display-inlay-hints
-  ;;                      (lsp-rust-analyzer-inlay-hints-mode)))
-  ;;   :ignore-messages nil
-  ;;   :server-id 'rust-analyzer)))
-
-
+      :server-id 'rust-analyzer-remote)))
   
   ;; ===========================================================================================
   ;; gdb
@@ -1547,109 +1361,6 @@ properly disable mozc-mode."
 	:hook (after-init . which-key-mode))
 
 
-  ;; -------------------------------------------------------------------------------------------------
-  ;; モダンなタブであるcetaur-tabs
-  ;; -------------------------------------------------------------------------------------------------
-  ;; https://github.com/ema2159/centaur-tabs
- ;;  (use-package centaur-tabs
- ;;    :ensure t
- ;;    :config
- ;;    (setq centaur-tabs-style "wave"		;どんなタブにするかを選択することができる
- ;;    	  centaur-tabs-height 32
- ;;    	  centaur-tabs-set-icons t
- ;;    	  centaur-tabs-set-modified-marker t
- ;;    	  centaur-tabs-show-navigation-buttons t
- ;;    	  centaur-tabs-set-bar 'under
- ;;    	  x-underline-at-descent-line t)
- ;;    (centaur-tabs-headline-match)
- ;;    ;; (setq centaur-tabs-gray-out-icons 'buffer)
- ;;    ;; (centaur-tabs-enable-buffer-reordering)
- ;;    ;; (setq centaur-tabs-adjust-buffer-order t)
- ;;    (centaur-tabs-mode t)
- ;;    (setq uniquify-separator "/")
- ;;    (setq uniquify-buffer-name-style 'forward)
- ;;    (defun centaur-tabs-buffer-groups ()
- ;;      "`centaur-tabs-buffer-groups' control buffers' group rules.
-
- ;; Group centaur-tabs with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
- ;; All buffer name start with * will group to \"Emacs\".
- ;; Other buffer group by `centaur-tabs-get-group-name' with project name."
- ;;      (list
- ;;       (cond
- ;;    	;; ((not (eq (file-remote-p (buffer-file-name)) nil))
- ;;    	;; "Remote")
- ;;    	((or (string-equal "*" (substring (buffer-name) 0 1))
- ;;    		 (memq major-mode '(magit-process-mode
- ;;    							magit-status-mode
- ;;    							magit-diff-mode
- ;;    							magit-log-mode
- ;;    							magit-file-mode
- ;;    							magit-blob-mode
- ;;    							magit-blame-mode
- ;;    							)))
- ;;    	 "Emacs")
- ;;    	((derived-mode-p 'prog-mode)
- ;;    	 "Editing")
- ;;    	((derived-mode-p 'dired-mode)
- ;;    	 "Dired")
- ;;    	((memq major-mode '(helpful-mode
- ;;    						help-mode))
- ;;    	 "Help")
- ;;    	((memq major-mode '(org-mode
- ;;    						org-agenda-clockreport-mode
- ;;    						org-src-mode
- ;;    						org-agenda-mode
- ;;    						org-beamer-mode
- ;;    						org-indent-mode
- ;;    						;; org-bullets-mode
- ;;                            org-modern-mode
- ;;    						org-cdlatex-mode
- ;;    						org-agenda-log-mode
- ;;    						diary-mode))
- ;;    	 "OrgMode")
- ;;    	(t
- ;;    	 (centaur-tabs-get-group-name (current-buffer))))))
- ;;    :hook
- ;;    (dashboard-mode . centaur-tabs-local-mode)
- ;;    (term-mode . centaur-tabs-local-mode)
- ;;    (calendar-mode . centaur-tabs-local-mode)
- ;;    (org-agenda-mode . centaur-tabs-local-mode)
- ;;    (helpful-mode . centaur-tabs-local-mode)
- ;;    (vterm-mode . centaur-tabs-local-mode)
- ;;    (eshell-mode . centaur-tabs-local-mode)
- ;;    (sublimity-mode . centaur-tabs-local-mode)
- ;;    (imenu-list-minor-mode . centaur-tabs-local-mode)
- ;;    (treemacs-mode . centaur-tabs-local-mode)
- ;;    (gdb-inferior-io-mode . centaur-tabs-local-mode)
- ;;    (gdb-script-mode . centaur-tabs-local-mode)
- ;;    (gdb-threads-mode . centaur-tabs-local-mode)
- ;;    (gdb-breakpoints-mode . centaur-tabs-local-mode)
- ;;    (gdb-disassembly-mode . centaur-tabs-local-mode)
- ;;    (gdb-frames-mode . centaur-tabs-local-mode)
- ;;    (gdb-breakpoints-mode . centaur-tabs-local-mode)
- ;;    (gdb-locals-mode . centaur-tabs-local-mode)
- ;;    (gdb-memory-mode . centaur-tabs-local-mode)
- ;;    (gdb-parent-mode . centaur-tabs-local-mode)
- ;;    (gdb-registers-mode . centaur-tabs-local-mode)
- ;;    (gdb-rules-buffer-mode . centaur-tabs-local-mode)
- ;;    ;; (mozc-mode . centaur-tabs-local-mode)
-
-
-    
- ;;    :bind
- ;;    ("C-<iso-lefttab>" . centaur-tabs-backward)
- ;;    ("C-<tab>" . centaur-tabs-forward)
- ;;    ;; つかってないでしょ〜〜〜
- ;;    ;; ("C-c t s" . centaur-tabs-counsel-switch-group)
- ;;    ;; ("C-c t p" . centaur-tabs-group-by-projectile-project)
- ;;    ;; ("C-c t g" . centaur-tabs-group-buffer-groups)
- ;;    )
-
-
-  ;; (centaur-tabs-mode t) ; configに書くとうまく動作をしなかったため。
-
-
-
   ;; ================================================================================
   ;; highlight-indent-guides
   ;; ================================================================================
@@ -1790,14 +1501,6 @@ properly disable mozc-mode."
     :ensure t
     :config
     (add-hook 'dired-mode-hook 'org-download-enable))
-
-  ;; ---------------------------------------------------------------
-  ;; magit-todos
-  ;; ---------------------------------------------------------------
-  ;; (use-package magit-todos
-  ;;   :ensure t)
-
-
   
   ;; ---------------------------------------------------------------
   ;; Magitの設定
@@ -1815,28 +1518,6 @@ properly disable mozc-mode."
 	)
 
 
-  ;; ---------------------------------------------------------------
-  ;; git関連のモード追加
-  ;; ---------------------------------------------------------------
-  ;; 
-  ;; (use-package gitignore-mode
-  ;;   :ensure t)
-
-  ;; (add-to-list 'auto-mode-alist
-  ;;              (cons "/.gitignore\\'" 'gitignore-mode))
-  
-  ;; (use-package gitattributes-mode
-  ;;   :ensure t)
-
-  ;; (add-to-list 'auto-mode-alist
-  ;;              (cons "/.gitattributes\\'" 'gitignore-mode))
-
-  ;; (use-package gitconfig-mode
-  ;;   :ensure t)
-  
-  ;; (add-to-list 'auto-mode-alist
-  ;;              (cons "/..gitconfig\\'" 'gitignore-mode))
-  
   ;; --------------------------------------------------------------
   ;; Docker関連の設定
   ;; --------------------------------------------------------------
@@ -1898,8 +1579,6 @@ properly disable mozc-mode."
 
 
 
-
-
   (use-package eshell-prompt-extras
 	:ensure t)
 
@@ -1919,19 +1598,6 @@ properly disable mozc-mode."
   (when (and (executable-find "fish")
 			 (require 'fish-completion nil t))
 	(global-fish-completion-mode))
-
-
-  ;; (use-package eshell-syntax-highlighting
-  ;;   :ensure t
-  ;;   :after esh-mode
-  ;;   :demand t ;; Install if not already installed.
-  ;;   :config
-  ;;   ;; Enable in all Eshell buffers.
-  ;;   (eshell-syntax-highlighting-global-mode +1))
-
-
-
-
 
   (setq comint-prompt-read-only t)		;これでshellとtermのプロンプトが消されることはなくなる
   
@@ -2016,63 +1682,6 @@ properly disable mozc-mode."
 	:config
 	(global-git-gutter-mode +1))
   
-
-  ;; ================================================================================
-  ;; google-translate
-  ;; ================================================================================
-
-
-  ;; popwin
-  ;; https://github.com/emacsorphanage/popwin
-  (use-package popwin
-	:ensure t)
-  (popwin-mode 1)
-
-  ;; google翻訳
-  ;; https://github.com/atykhonov/google-translate
-  (use-package google-translate
-	:ensure t)
-  (require 'google-translate-smooth-ui)
-
-  ;; 以下コードは以下のサイトより引用
-  ;; https://blog.shibayu36.org/entry/2016/05/29/123342
-
-  (defvar google-translate-english-chars "[:ascii:]"
-	"これらの文字が含まれているときは英語とみなす")
-  (defun google-translate-enja-or-jaen (&optional string)
-	"regionか現在位置の単語を翻訳する。C-u付きでquery指定も可能"
-	(interactive)
-	(setq string
-          (cond ((stringp string) string)
-				(current-prefix-arg
-				 (read-string "Google Translate: "))
-				((use-region-p)
-				 (buffer-substring (region-beginning) (region-end)))
-				(t
-				 (thing-at-point 'word))))
-	(let* ((asciip (string-match
-					(format "\\`[%s]+\\'" google-translate-english-chars)
-					string)))
-      (run-at-time 0.1 nil 'deactivate-mark)
-      (google-translate-translate
-       (if asciip "en" "ja")
-       (if asciip "ja" "en")
-       string)))
-
-
-  (setq popwin:popup-window-position 'bottom)
-  (push '("\*Google Translate\*") popwin:special-display-config)
-
-  (global-set-key (kbd "C-c e") 'google-translate-enja-or-jaen)
-
-
-
-  ;; 現状におけるバグなのか以下の記載がないと動かない
-  ;; https://github.com/atykhonov/google-translate/issues/137#issuecomment-723938431
-  (defun google-translate--search-tkk ()
-	"Search TKK."
-	(list 430675 2721866130))
-
   ;; ================================================================================
   ;; real-auto-save
   ;; ================================================================================
@@ -2105,115 +1714,13 @@ properly disable mozc-mode."
 
   (global-set-key [remap goto-line] 'goto-line-preview)
 
-
-
-  ;; ================================================================================
-  ;; migemo
-  ;; ================================================================================
-
-
-  ;; (use-package migemo
-  ;;   :ensure t)
-
-  ;; cmigemo(default)
-  ;;(setq migemo-command "cmigemo")
-  ;;(setq migemo-options '("-q" "--emacs"))
-
-  ;; Set your installed path
-  ;;(setq migemo-dictionary "/usr/share/migemo/utf-8/migemo-dict")
-
-
-
-  ;;(setq migemo-user-dictionary nil)
-  ;;(setq migemo-regex-dictionary nil)
-  ;;(setq migemo-coding-system 'utf-8-unix)
-  ;;(migemo-init)
-
-
-  ;; ================================================================================
-  ;; avy-migemo
-  ;; ================================================================================
-
-  ;; (use-package avy
-  ;;   :ensure t)
-  ;; (use-package avy-migemo
-  ;;   :ensure t)
-  ;; ;; `avy-migemo-mode' overrides avy's predefined functions using `advice-add'.
-  ;; ;; (avy-migemo-mode 1)
-  ;; (global-set-key (kbd "M-g m m") 'avy-migemo-mode)
-  ;; (setq avy-timeout-seconds nil)
-  ;; (global-set-key (kbd "C-M-;") 'avy-migemo-goto-char-timer)
-
-  ;; (use-package avy
-  ;; 	:ensure t)
-
-  ;; avy-goto-word-0を１行に限定する関数
-  ;; https://twitter.com/conao_3/status/1355069656466288643?s=20
-  ;; (defun avy-goto-word-0-back (arg)
-  ;;   (interactive "P")
-  ;;   (avy-with avy-goto-word-0
-  ;;     (avy-goto-word-0 arg (point) (line-end-position))))
-
-  ;; (defun avy-goto-word-0-forward (arg)
-  ;;   (interactive "P")
-  ;;   (avy-with avy-goto-word-0
-  ;;     (avy-goto-word-0 arg (line-beginning-position) (point))))
-
-
-  ;; (global-set-key (kbd "<henkan>") 'avy-goto-word-0-back)
-  ;; (global-set-key (kbd "C-<henkan>") 'avy-goto-word-1)
-  ;; (global-set-key (kbd "<muhenkan>") 'avy-goto-word-0-forward)
-
-  ;; avyで行移動のショートカットを追加（C-c j）
-  ;; (global-set-key (kbd "<hiragana-katakana>") 'avy-goto-line)
-
-
-
-
-  ;; ================================================================================
-  ;; eaf-historyやswipperでmozcが使えない問題を解消
-  ;; ================================================================================
-  ;; migemoを利用している
-  ;;(defun ytn-ivy-migemo-re-builder (str)
-  ;;  (let* ((sep " \\|\\^\\|\\.\\|\\*")
-  ;;         (splitted (--map (s-join "" it)
-  ;;  						(--partition-by (s-matches-p " \\|\\^\\|\\.\\|\\*" it)
-  ;;  										(s-split "" str t)))))
-  ;;    (s-join "" (--map (cond ((s-equals? it " ") ".*?")
-  ;;                            ((s-matches? sep it) it)
-  ;;                            (t (migemo-get-pattern it)))
-  ;;  					splitted))))
-;;
-;;  ;; swipperにmigemoがうまく動いていなかったので修正
-;;  (setq ivy-re-builders-alist '((t . ivy--regex-plus)
-;;    							(eaf-open-browser-with-history . ytn-ivy-migemo-re-builder)
-;;    							(swiper . ytn-ivy-migemo-re-builder)
-;;    						    (ivy-switch-buffer . ytn-ivy-migemo-re-builder)
-;;                                (counsel-ibuffer . ytn-ivy-migemo-re-builder)))
-;;
-
-
   (use-package vimrc-mode
 	:ensure t)
   (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode))
 
-  ;; ================================================================================
-  ;; quick-run
-  ;; ================================================================================
-  ;; (use-package quickrun
-  ;;   :ensure t)
-
-  ;; (global-set-key (kbd "<f5>") 'quickrun)
-  ;; (global-set-key (kbd "C-<f5>") 'quickrun-with-arg)
-  ;; (global-set-key (kbd "M-<f5>") 'quickrun-compile-only)
-
-
   (use-package nasm-mode
 	:ensure t)
   (add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
-
-
-
 
   ;; ================================================================================
   ;; transparency
@@ -2336,25 +1843,6 @@ middle"
 
   (use-package nhexl-mode
     :ensure t)
-
-  ;; ================================================================================
-  ;; deepl
-  ;; ================================================================================
-  ;;
-
-  (defun my/trans-deepl (beg end)
-    (interactive "r")
-    (let ((str (buffer-substring beg end)))
-      (browse-url
-       (concat "https://www.deepl.com/translator#en/ja/" (url-hexify-string str)))))
-
-  ;; begとendを外したらエラーになる理由を調べる
-  (defun my/trans-deepl-killring ()
-    (interactive)
-    (let ((str (current-kill 0 t)))
-      (browse-url
-       (concat "https://www.deepl.com/translator#en/ja/" (url-hexify-string str)))))
-
 
   ;; ================================================================================
   ;; package-utils
@@ -2488,66 +1976,6 @@ middle"
   (when (require 'exec-path-from-shell nil t)
     (exec-path-from-shell-initialize))
 
-
-  ;; ================================================================================
-  ;; mu4e
-  ;; ================================================================================
-  ;;
-
-  ;; muの初期設定
-  ;; mu init --maildir=~/.mail/gmail
-  ;; mu index --maildir=~/.mail/gmail
-  ;; ここからコメントアウト
-  ;; (when (equal system-type 'gnu/linux)
-  ;; (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-  ;; (require 'mu4e)
-  
-  ;; (setq
-  ;;  mue4e-headers-skip-duplicates  t
-  ;;  mu4e-view-show-images t
-  ;;  mu4e-view-show-addresses t
-  ;;  mu4e-compose-format-flowed nil
-  ;;  mu4e-date-format "%y/%m/%d"
-  ;;  mu4e-headers-date-format "%Y/%m/%d"
-  ;;  mu4e-change-filenames-when-moving t
-  ;;  mu4e-attachments-dir "~/Downloads"
-
-  ;;  mu4e-maildir       "~/.mail/gmail"   ;; top-level Maildir
-  ;;  ;; note that these folders below must start with /
-  ;;  ;; the paths are relative to maildir root
-  ;;  mu4e-refile-folder "/Archive"
-  ;;  mu4e-sent-folder   "/Sent"
-  ;;  mu4e-drafts-folder "/Drafts"
-  ;;  mu4e-trash-folder  "/Trash"
-  ;;  mu4e-update-interval (* 60 5)) ;; nil
-
-  ;; ;; this setting allows to re-sync and re-index mail
-  ;; ;; by pressing U
-  ;; (setq mu4e-get-mail-command  "mbsync -a")
-
-  
-  ;;   ;; 次回のタスクvtermでC-xを送る方法を考える
-  ;; ;; mu4e-alert
-  ;; (use-package mu4e-alert
-  ;;   :ensure t
-  ;;   :config
-  ;;   (mu4e-alert-enable-mode-line-display))
-
-
-  ;; ;; SMTP
-  ;; ;; https://text.baldanders.info/remark/2019/06/send-mail-without-mail-service/
-  ;; ;; mu4e - msmtp
-
-  ;;   (setq message-send-mail-function 'message-send-mail-with-sendmail) ;; sendmail-query-once
-  ;;   (setq sendmail-program "/usr/bin/msmtp")  ;; /usr/sbin/sendmail
-  ;;        ;;(setq message-sendmail-extra-arguments)
-  ;;   ;;(setq message-sendmail-f-is-evil t) ;; nil
-  ;;   (require 'recentf)
-  ;;   (recentf-mode 1)
-  ;;   (add-to-list 'recentf-exclude (expand-file-name "~/.mail/gmail"))
-  ;;   )
-  ;; ここまで
-
   ;; ================================================================================
   ;; volatile-hights
   ;; ================================================================================
@@ -2564,240 +1992,13 @@ middle"
   (use-package key-chord
     :ensure t)
 
-
-;;   (defun hydra-title(title) (propertize title 'face `(:inherit font-lock-warning-face :weight bold)))
-;;   (defun command-name(title) (propertize title 'face `(:foreground "#f8f8f2")))
-;;   (defun spacer() (propertize "." 'face `(:foreground "#282a36")))
-;;   (bind-key "C-c <SPC>" 'hydra-pinky/body)
-;;   (key-chord-define-global
-;;    "::"
-;;    (defhydra hydra-pinky (:color red :hint nil)
-     ;;   "
-     ;; ：_0_._1_._2_._3_._o_._S_._x_   ：_j_._k_._h_._l_._c_._a_._e_._b_._SPC_._m_._w_._s_._/_   ：_n_._p_._u_._t_   ：-_:_-   ：_q_uit"
-     
-     ;;    "
-     ;; ：_j_._k_._h_._l_ ：_q_uit"
-;;      (format
-;;       (format "%s" (propertize
-;;                     "
-;;      ((%s))^^^^^^^^
-;; ^^^^^^ ──────────────────────────────────────────────────────────────────────
-;;         ^_k_^          \t|%s
-;;         ^^↑^^         \t|
-;;     _h_ ←   → _l_    \t|
-;;         ^^↓^^         \t|
-;;         ^_j_^          \t|
-;; ^^^^^^ ──────────────────────────────────────────────────────────────────────
-;;                            [_q_uit]"'face `(:inherit font-lock-doc-face)))
-;;       (hydra-title "key-move")
-      ;; (hydra-title "Zoom")
-      ;; (hydra-title "Split")
-      ;; (hydra-title "Window")
-      ;; (hydra-title "Buffer")
-      ;; (hydra-title "Misc")
-      ;; (all-the-icons-material "zoom_in" :height .85 :face 'font-lock-doc-face)
-;;       (command-name "_dd_")
-      ;; (command-name "_<<_")
-      ;; (command-name "__>>__")
-      ;; (command-name "wap")
-      ;; (all-the-icons-faicon "slideshare" :height .85 :face 'font-lock-doc-face)
-      ;; (command-name "mode")
-      ;; (command-name "w_i_ndow")
-      ;; (command-name "_m_aximize")
-      ;; (command-name "_s_witch")
-      ;; (command-name "_d_elete")
-      ;; (command-name "_D_elete")
-      ;; (all-the-icons-material "zoom_out" :height .85 :face 'font-lock-doc-face)
-      ;; (command-name "del_O_thers")
-      ;; (command-name "quit")
-      ;; (command-name "rotate")
-;;       )
-     ;; window
-     ;; ("0" delete-window)
-     ;; ("1" delete-other-windows)
-     ;; ("2" split-window-below)
-     ;; ("3" split-window-right)
-     ;; ("o" other-window-or-split)
-     ;; ("S" window-swap-states)
-     ;; ("x" window-toggle-division)
-     ;; page
-     ;; ("a" seq-home)
-     ;; ("e" seq-end)
-;;      ("j" next-line)
-;;      ("k" previous-line)
-;;      ("l" forward-char)
-;;      ("h" backward-char)
-;;      ("dd" kill-whole-line)
-     ;; ("<<" )
-     ;; ("c" recenter-top-bottom)
-     ;; ("<down>" next-line)
-     ;; ("<up>" previous-line)
-     ;; ("<right>" forward-char)
-     ;; ("<left>" backward-char)
-     ;; ("<C-up>" backward-paragraph)
-     ;; ("<C-down>" forward-paragraph)
-     ;; ("<C-left>" left-word)
-     ;; ("<C-right>" right-word)
-     ;; ("b" scroll-down-command)
-     ;; ("SPC" scroll-up-command)
-     ;; ("m" set-mark-command)
-     ;; ("w" avy-goto-word-1)
-     ;; ("s" swiper-isearch-region)
-     ;; git
-     ;; ("n" git-gutter:next-hunk)
-     ;; ("p" git-gutter:previous-hunk)
-     ;; ("u" git-gutter:popup-hunk)
-     ;; ("t" git-gutter:toggle-popup-hunk)
-     ;; buffer
-     ;; ("/" kill-buffer)
-     ;; (":" counsel-switch-buffer)
-     ;; ("<" iflipb-previous-buffer)
-     ;; (">" iflipb-next-buffer)
-     ;; quit
-;;      ("q" nil)))
-
-  ;; sequential-command
-  ;; (use-package sequential-command-config
-  ;;   :commands sequential-command-setup-keys
-  ;;   :hook (after-init . sequential-command-setup-keys))
-
-  ;; other-window-or-split
-  ;; (bind-key
-  ;;  "C-q"
-  ;;  (defun other-window-or-split ()
-  ;;    "If there is one window, open split window.
-  ;; If there are two or more windows, it will go to another window."
-  ;;    (interactive)
-  ;;    (when (one-window-p)
-  ;;      (split-window-horizontally))
-  ;;    (other-window 1)))
-
-  ;; ;; window-toggle-division
-  ;; (defun window-toggle-division ()
-  ;;   "Replace vertical <-> horizontal when divided into two."
-  ;;   (interactive)
-  ;;   (unless (= (count-windows 1) 2)
-  ;;     (error "Not divided into two!"))
-  ;;   (let ((before-height)
-  ;;         (other-buf (window-buffer (next-window))))
-  ;;     (setq before-height (window-height))
-  ;;     (delete-other-windows)
-  ;;     (if (= (window-height) before-height)
-  ;;         (split-window-vertically)
-  ;;       (split-window-horizontally))
-  ;;     (other-window 1)
-  ;;     (switch-to-buffer other-buf)
-  ;;     (other-window -1)))
-
-  ;; ;; iflipb
-  ;; (setq iflipb-wrap-around t)
-  ;; (setq iflipb-ignore-buffers (list "^[*]" "^magit" "dir]$"))
-  ;; sequential-command
-  ;; (use-package sequential-command-config
-  ;;   :ensure t
-  ;;   :commands sequential-command-setup-keys
-  ;;   :hook (after-init . sequential-command-setup-keys))
-
-
-
-
-
-
-
-
-
-  ;;  (use-package ace-window
-  ;;     :functions hydra-frame-window/body
-  ;;     :bind
-  ;;     ("C-M-o" . hydra-frame-window/body)
-  ;;     ;; ("M-t m" . ladicle/toggle-window-maximize)
-  ;;     :custom
-  ;;     (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
-  ;;     :custom-face
-  ;;     (aw-leading-char-face ((t (:height 4.0 :foreground "#f1fa8c"))))
-  ;;     :preface
-  ;;     (defvar is-window-maximized nil)
-  ;;     (defun hydra-title(title) (propertize title 'face `(:inherit font-lock-warning-face :weight bold)))
-  ;;     (defun command-name(title) (propertize title 'face `(:foreground "#f8f8f2")))
-  ;;     (defun spacer() (propertize "." 'face `(:foreground "#282a36")))
-  ;;     :config
-  ;;     (with-eval-after-load 'hydra
-  ;;         (defhydra hydra-frame-window (:color blue :hint nil)
-  ;;         (format
-  ;;          (format "%s" (propertize "                                                                       ╔════════╗
-  ;;     ((%s))^^^^^^^^   ((%s))^^^^  ((%s))^^  ((%s))^^  ((%s))^^^^^^  ((%s))^   ║ Window ║
-  ;; ^^^^^^ ──────────────────────────────────────────────────────────────────────╨────────╜
-  ;;         ^_k_^        %s_+_         _-_       %s     _,_ ← %s → _._^  %s
-  ;;         ^^↑^^          ^↑^         ^↑^       %s
-  ;;     _h_ ←   → _l_   ^^%s%s^^^^^    ^%s    ^^^%s^^^^     %s
-  ;;         ^^↓^^          ^↓^         ^↓^       %s^^       %s
-  ;;         ^_j_^        %s_=_         _/_       %s
-  ;; ^^^^^^ ┌──────────────────────────────────────────────────────────────────────────────┘
-  ;;                            [_q_]: %s, [_<SPC>_]: %s" 'face `(:inherit font-lock-doc-face)))
-  ;;                            (hydra-title "key-move")
-  ;;                            (hydra-title "Zoom")
-  ;;                            (hydra-title "Split")
-  ;;                            (hydra-title "Window")
-  ;;                            (hydra-title "Buffer")
-  ;;                            (hydra-title "Misc")
-  ;;                            (all-the-icons-material "zoom_in" :height .85 :face 'font-lock-doc-face)
-  ;;                            (command-name "_o_ther")
-  ;;                            (command-name "page")
-  ;;                            (command-name "_r_centf")
-  ;;                            (command-name "_s_wap")
-  ;;                            (all-the-icons-faicon "slideshare" :height .85 :face 'font-lock-doc-face)
-  ;;                            (command-name "_p_mode")
-  ;;                            (command-name "w_i_ndow")
-  ;;                            (command-name "_m_aximize")
-  ;;                            (command-name "_s_witch")
-  ;;                            (command-name "_d_elete")
-  ;;                            (command-name "_D_elete")
-  ;;                            (all-the-icons-material "zoom_out" :height .85 :face 'font-lock-doc-face)
-  ;;                            (command-name "del_O_thers")
-  ;;                            (command-name "quit")
-  ;;                            (command-name "rotate")
-  ;;                            )
-
-  ;;           ("K" kill-current-buffer :exit t)
-  ;;           ("D" kill-buffer-and-window :exit t)
-  ;;           ("O" delete-other-windows  :exit t)
-  ;;           ("F" toggle-frame-fullscreen)
-  ;;           ("i" ace-window)
-  ;;           ("s" ace-swap-window :exit t)
-  ;;           ("d" ace-delete-window)
-  ;;           ("m" ladicle/toggle-window-maximize :exit t)
-  ;;           ("=" text-scale-decrease)
-  ;;           ("+" text-scale-increase)
-  ;;           ("-" split-window-vertically)
-  ;;           ("/" split-window-horizontally)
-
-  
-  ;;           ("h" backward-char :exit t)
-  ;;           ("k" shrink-window)
-  ;;           ("j" enlarge-window)
-  ;;           ("l" enlarge-window-horizontally)
-  ;;           ("," previous-buffer)
-  ;;           ("." next-buffer)
-  ;;           ("o" other-window)
-  ;;           ("p" presentation-mode)
-  ;;           ("r" counsel-recentf :exit t)
-  ;;           ("s" switch-to-buffer :exit t)
-  ;;           ("D" kill-buffer-and-window)
-  ;;           ("<SPC>" rotate-layout)
-  ;;           ("q" nil)))
-  ;;           )
-
-
-
   (use-package elf-mode
     :ensure t)
-
 
   (use-package evil
     :ensure t
     :bind
     ("C-c v" . evil-mode))
-
 
   (use-package treemacs
     :ensure t
@@ -2895,68 +2096,6 @@ middle"
     :after (treemacs persp-mode) ;;or perspective vs. persp-mode
     :ensure t
     :config (treemacs-set-scope-type 'Perspectives))
-
-  ;; ================================================================================
-  ;; twittering-mode
-  ;; ================================================================================
-  ;; https://github.com/hayamiz/twittering-mode
-  ;; GnuPGが必要になる。
-
-
-  ;; Clear existing twit buffers
-  (defun my/reload-twit ()
-	(mapcar
-	 (lambda (buffer)
-       (twittering-deactivate-buffer buffer)
-       (kill-buffer buffer))
-	 (twittering-get-buffer-list))
-	(twittering-unregister-killed-buffer)
-	;; Clear variables
-	(setq twittering-private-info-file-loaded nil)
-	(setq twittering-account-authorization nil)
-	(setq twittering-oauth-access-token-alist nil)
-	(setq twittering-buffer-info-list nil)
-	(setq twittering-timeline-data-table (make-hash-table :test 'equal))
-	(twit))
-
-  (defun my-twitter-account-1 ()
-	(interactive)
-	(setq twittering-private-info-file 
-          (expand-file-name "~/.emacs.d//twitter/twittering-mode.gpg"))
-	;; timeline to read on startup
-	(setq twittering-initial-timeline-spec-string '(":home" "Wagahaiha_toto/vrchat")) ;ここに初期表示するタイムラインを表示できる
-	(my/reload-twit))
-
-  (defun my-twitter-account-2 ()
-	(interactive)
-	(setq twittering-private-info-file 
-          (expand-file-name "~/.emacs.d//twitter/twittering-mode2.gpg"))
-	;; timeline to read on startup
-	(setq twittering-initial-timeline-spec-string '(":home")) ;ここに初期表示するタイムラインを指定できる
-	(my/reload-twit))
-
-  ;; Twitterring-mode settings
-  
-
-  ;; エラー対策
-  (defalias 'epa--decode-coding-string 'decode-coding-string)
-
-  (use-package twittering-mode
-	:ensure t
-	:init
-	(add-hook 'twittering-mode-hook #'emojify-mode)
-	:config
-	;; 簡単ログインの設定
-	(setq twittering-allow-insecure-server-cert t)
-	(setq twittering-use-master-password t)
-	(setq twittering-private-info-file "~/.emacs.d//twitter/twittering-mode.gpg")
-	(setq twittering-icon-mode t)
-	(setq twittering-initial-timeline-spec-string '(":home" "Wagahaiha_toto/vrchat"))
-	(setq twittering-status-format "%i @%s %S %p: \n\n%T\n[%@]%r %R %f%L\n%FACE[font-lock-warning-face]{%FIELD-IF-NONZERO[↺%d]{retweet_count}} %FACE[font-lock-warning-face]{%FIELD-IF-NONZERO[✶%d]{favorite_count}}\n ------------------------------------------------------------------------" )
-	(define-key twittering-mode-map (kbd "C-c F") 'twittering-favorite)
-	(define-key twittering-mode-map (kbd "C-c U") 'twittering-unfavorite)
-	)
-
 
 
   ;; org-slide
@@ -3096,17 +2235,6 @@ middle"
 
   (use-package impatient-mode
     :ensure t)
-
-
-  ;; Emacs Easy Drawer
-  ;; https://github.com/misohena/el-easydraw
-
-  ;;(with-eval-after-load 'org
-  ;;  (use-package edraw-org
-  ;;    :load-path "~/.emacs.d/public_repos/el-easydraw")
-  ;;  (edraw-org-setup-default))
-  ;;(add-to-list 'auto-mode-alist '("\\.edraw\\.svg$" . edraw-mode))
-
 
   (use-package sr-speedbar
     :ensure t
@@ -3270,11 +2398,6 @@ middle"
                              ;; ブラウザ履歴の閲覧
                              ;; (global-set-key (kbd "C-c W")  ')
                              ))
-
-
-
-
-
   
   )
 (setq gc-cons-threshold 100000000)
