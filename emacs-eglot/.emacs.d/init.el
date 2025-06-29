@@ -364,12 +364,7 @@ properly disable mozc-mode."
     :config
     ;; ----------------------------------------------------------------------
     ;; ----------------------------------------------------------------------
-    (load-theme 'doom-Iosvkem t)			;ここでテーマの種類を変えることができる。
-    ;; (load-theme 'doom-dracula t)
-    ;; (load-theme 'doom-horizon t)			;ここでテーマの種類を変えることができる。
-    ;; (load-theme 'doom-zenburn t)
-    ;; (load-theme 'doom-monokai-classic t)
-    ;; (load-theme 'doom-solarized-light t)
+    (load-theme 'doom-Iosvkem t)
 
     ;; ----------------------------------------------------------------------
     ;; ----------------------------------------------------------------------
@@ -388,8 +383,6 @@ properly disable mozc-mode."
           ("CARRY/O" . (:foreground "#6272a4" :background "#373844" :weight bold))))
 
 
-
-  
   ;; https://github.com/seagle0128/doom-modeline
   (use-package doom-modeline
     :ensure t
@@ -418,46 +411,23 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; dashboard
   ;; ================================================================================
-
-
-  
-  ;; (use-package page-break-lines
-  ;;    :ensure t
-  ;;    :init
-  ;;    (page-break-lines-mode t))
-
   ;; プロジェクト管理パッケージ
   (use-package projectile
     :ensure t)
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map) ;jupyterを使うために退避
-  ;; これはタイトルをオシャンティーにするやつ
+
   (use-package dashboard
     :ensure t
-	;; :bind (("<f5>" . open-dashboard)
-	;; 	   :map dashboard-mode-map
-	;; 	   ("<f5>" . quit-dashboard))
-	;; :diminish
-	;; (dashboard-mode page-break-lines-mode)
-    ;; :if (< (length command-line-args) 2) ; コマンドラインから起動したときにdashboardを起動しないようにする。
 	:custom
-	;; (dashboard-startup-banner 3)
-    ;; (dashboard-set-navigator t)
     (dashboard-page-separator "\n\n\n")
     (dashboard-center-content t)
 	(dashboard-items '((recents . 10)
 					   (projects . 5)
 					   (bookmarks . 5)))
-	;; :hook
-	;; (after-init . dashboard-setup-startup-hook)
 	:config
-    ;; (dashboard-page-separator . "\n")
-    ;; (dashboard-page-separator . "\n\f\n")
     (dashboard-setup-startup-hook)
-
-	;; ;; (add-to-list 'dashboard-items '(agenda) t)
-    ;; (setq dashboard-center-content t)
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
     )
@@ -490,8 +460,6 @@ properly disable mozc-mode."
 			   (bound-and-true-p winner-mode))
       (winner-undo)
       (setq dashboard-recover-layout-p nil)))
-
-  ;; (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 
   (if (< (length command-line-args) 2)
       (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))) ; コマンドラインから起動したときにdashboardを起動しないようにする
@@ -554,20 +522,6 @@ properly disable mozc-mode."
       (setq company-clang-modes nil))
 
   (add-hook 'gdb-mode-hook (lambda () (company-mode -1)))
-  ;; https://github.com/company-mode/company-mode/blob/master/NEWS.md
-  ;; (with-eval-after-load 'company
-  ;;   (dolist (map (list company-active-map company-search-map))
-  ;;     (define-key map (kbd "C-n") nil)
-  ;;     (define-key map (kbd "C-p") nil)
-  ;;     (define-key map (kbd "M-n") #'company-select-next)
-  ;;     (define-key map (kbd "M-p") #'company-select-previous)))
-
-  
-
-  ;; もしM-nで起動させたい場合
-  ;; (global-set-key (kbd "M-n") 'company-complete)
-  ;; (global-set-key (kbd "M-p") 'company-complete)
-  ;; (global-set-key (kbd "M-/") 'company-complete)
   (global-set-key (kbd "M-/") 'company-capf)
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
@@ -576,18 +530,6 @@ properly disable mozc-mode."
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
-
-  (define-key company-active-map (kbd "C-s") 'counsel-company) ; c-modeでspaceが入れ込まれる挙動がある
-
-
-  
-  ;; (defun complete-or-indent ()
-  ;;   (interactive)
-  ;;   (if (company-manual-begin)
-  ;;       (company-complete-common)
-  ;;     (indent-according-to-mode)))
-
-  ;; (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 
   
   ;; ================================================================================
@@ -608,24 +550,7 @@ properly disable mozc-mode."
 	(pop-to-buffer buffer-or-name action norecord)
 	(other-window -1)
 	)
-
-  ;; ===========================================================================================
-  ;; flycheck
-  ;; ===========================================================================================
-  ;; eglotがflymakeをバックエンドにするため修正
-  ;; (use-package flycheck
-  ;;   :ensure t
-  ;;   :hook (after-init . global-flycheck-mode)
-  ;;   ;; :config
-  ;;   ;; (flycheck-add-mode 'tex-chktex 'yatex-mode)
-  ;;   ;; (flycheck-add-mode 'tex-lacheck 'yatex-mode)
-  ;;   ;; chktexが自動で見付からない場合は以下の様に指定する。lacheckについても同様
-  ;;   ;; (setq flycheck-tex-chktex-executable "/Library/TeX/texbin/chktex")
-  ;;   :bind (:map flycheck-mode-map
-  ;;               ("M-n" . flycheck-next-error)
-  ;;               ("M-p" . flycheck-previous-error)))
-
-
+  
   ;; ===========================================================================================
   ;; eglot
   ;; ===========================================================================================
@@ -663,10 +588,6 @@ properly disable mozc-mode."
   ;; ===========================================================================================
   ;; yasnippet
   ;; ===========================================================================================
-  ;; yasnippetは他の方からもらってきた
-  ;; http://ayageman.blogspot.com/2019/02/emacsyasnippet.html
-
-  ;; yasnippetはtabで出てきます。
 
   (use-package yasnippet :ensure t
 	:diminish
@@ -685,16 +606,12 @@ properly disable mozc-mode."
 	(yas-reload-all) ;;[201904]
 	(yas-minor-mode) ;;[201904]
     )
-  ;; (setq yas-snippet-dirs '("~/.emacs.d/mysnippets")) ;;[201907]
-  ;;  Original value ("/home/hogehoge/.emacs.d/snippets")
-  ;;  に戻す。別ディレクトだと、うまくいかない。
   ;; -------------------------------------------------------------------------------------------------
   ;; yasnippet-snippets
   ;; -------------------------------------------------------------------------------------------------
   ;; yasnippetの例がいっぱい入っているやつ
   (use-package yasnippet-snippets :ensure t) ;; mainのdirsは自動設定
 
-  
   ;; -------------------------------------------------------------------------------------------------
   ;; モダンな補完機能
   (use-package company-box
@@ -708,7 +625,6 @@ properly disable mozc-mode."
 	:ensure t
 	:defer t
 	:init (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
-
 
   ;; -------------------------------------------------------------------------------------------------
   ;; whichkey
