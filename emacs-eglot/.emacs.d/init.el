@@ -47,11 +47,6 @@
            exec-path)))
 
 
-  ;; pythonロード
-  ;; https://github.com/emacs-eaf/emacs-application-framework/wiki/Python-Virtual-Environment
-  (setq eaf-python-command "/usr/bin/python3")
-
-
   ;; ================================================================================
   ;; 文字コードの設定
   ;; ================================================================================
@@ -71,16 +66,8 @@
   ;; 相対表示する
   ;; (setq display-line-numbers-type 'relative)
   
-  (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'imenu-list-major-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'shell-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'eshell-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'neotree-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'treemacs-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'nov-mode-hook (lambda () (display-line-numbers-mode -1)))
-  (add-hook 'lsp-ui-imenu-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'undo-tree-visualizer-mode-hook (lambda () (display-line-numbers-mode -1)))
 
 
@@ -94,7 +81,6 @@
 
   
   ;; カラム番号を表示
-  ;;(line-number-mode t)
   (column-number-mode t)
 
   ;; 警告音の代わりに画面フラッシュ
@@ -686,13 +672,13 @@ properly disable mozc-mode."
 
   ;; 発動
   (global-whitespace-mode 1)
-  
+
   ;; ---------------------------------------------------------------
   ;; Magitの設定
   ;; ---------------------------------------------------------------
   ;; C-x g でmagitが起動
   ;; C-x M-gでmagitのヘルプメニューが起動
-  
+
   (use-package magit
 	:ensure t
 	:bind (("C-x g" . magit-status)
@@ -721,15 +707,6 @@ properly disable mozc-mode."
 	:config
 	;; type over a region
 	(pending-delete-mode t))
-
-
-  ;; ;; ================================================================================
-  ;; ;; xterm-256color
-  ;; ;; ================================================================================
-  ;; ;; https://github.com/atomontage/xterm-color
-
-  ;; (use-package xterm-color
-  ;;   :ensure t)
 
   ;; ================================================================================
   ;; git-gutter
@@ -796,7 +773,6 @@ properly disable mozc-mode."
     :ensure t)
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 
-  
   ;; ================================================================================
   ;; git-timemachine
   ;; ================================================================================
@@ -861,8 +837,6 @@ properly disable mozc-mode."
   (global-set-key (kbd "C-c <prior>") 'winner-undo)
   (global-set-key (kbd "C-c q") 'winner-undo)
   (global-set-key (kbd "C-c <next>") 'winner-redo)
-
-  
 
   (use-package sr-speedbar
     :ensure t
