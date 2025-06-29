@@ -1,4 +1,5 @@
 emacs/.emacs.d/*
+emacs-eglot/.emacs.d/*
 emacs-lightweight/.emacs.d/*
 !emacs/.emacs.d/auto-save-list
 !emacs/.emacs.d/backup/
@@ -13,6 +14,19 @@ emacs-lightweight/.emacs.d/*
 !emacs/.emacs.d/transient/
 !emacs/.emacs.d/url/
 !emacs/.emacs.d/init.el
+!emacs-eglot/.emacs.d/auto-save-list
+!emacs-eglot/.emacs.d/backup/
+!emacs-eglot/.emacs.d/conf/
+!emacs-eglot/.emacs.d/eaf/
+!emacs-eglot/.emacs.d/elisp/
+!emacs-eglot/.emacs.d/elpa/
+!emacs-eglot/.emacs.d/games/
+!emacs-eglot/.emacs.d/mysnippets/
+!emacs-eglot/.emacs.d/public_repos/
+!emacs-eglot/.emacs.d/snippets/
+!emacs-eglot/.emacs.d/transient/
+!emacs-eglot/.emacs.d/url/
+!emacs-eglot/.emacs.d/init.el
 !emacs-lightweight/.emacs.d/auto-save-list
 !emacs-lightweight/.emacs.d/backup/
 !emacs-lightweight/.emacs.d/conf/
