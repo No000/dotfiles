@@ -494,13 +494,15 @@ properly disable mozc-mode."
     (minibuffer-prompt-properties
      '(read-only t cursor-intangible t face minibuffer-prompt)))
 
-
+  ;; ================================================================================
+  ;; orderless
+  ;; ================================================================================
   (use-package orderless
     :ensure t
       :custom
       (completion-styles '(orderless basic))
       (completion-category-overrides '((file (styles basic partial-completion)))))
-  
+
   ;; ------------------------------------------------------------------------company
   (use-package company
     :ensure t)
