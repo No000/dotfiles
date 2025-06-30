@@ -494,6 +494,12 @@ properly disable mozc-mode."
     (minibuffer-prompt-properties
      '(read-only t cursor-intangible t face minibuffer-prompt)))
 
+
+  (use-package orderless
+    :ensure t
+      :custom
+      (completion-styles '(orderless basic))
+      (completion-category-overrides '((file (styles basic partial-completion)))))
   
   ;; ------------------------------------------------------------------------company
   (use-package company
@@ -760,13 +766,6 @@ properly disable mozc-mode."
   (add-to-list 'auto-mode-alist '("\\.asm\\'" . nasm-mode))
 
   ;; ================================================================================
-  ;; restart-emacs
-  ;; ================================================================================
-  ;; https://github.com/iqbalansari/restart-emacs
-  (use-package restart-emacs
-	:ensure t)
-
-  ;; ================================================================================
   ;; all-the-icons-dired
   ;; ================================================================================
   ;; https://github.com/jtbm37/all-the-icons-dired
@@ -782,13 +781,6 @@ properly disable mozc-mode."
 	:ensure t
 	:config
 	(bind-key "C-c g" 'git-timemachine-toggle))
-
-
-  ;; ================================================================================
-  ;; nhexl-mode
-  ;; ================================================================================
-  (use-package nhexl-mode
-    :ensure t)
 
   ;; なぜあるか不明
   ;; PATHを拾う
