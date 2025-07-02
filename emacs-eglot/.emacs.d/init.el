@@ -126,6 +126,9 @@
   ;; 右クリックで選択領域をコピー
   (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
 
+  ;; ripgrep
+  (setq grep-command "rg -nS --no-heading "
+      grep-use-null-device nil)
 
   ;; C-v M-vでスクロールした場合に残す量
   (setq next-screen-context-lines 10)
