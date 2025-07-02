@@ -278,6 +278,7 @@
   ;; ================================================================================
 
   (use-package mozc
+    :ensure t
 	:config
 	(setq default-input-method "japanese-mozc")
 
@@ -559,6 +560,21 @@ properly disable mozc-mode."
     :bind (("M-t" . xref-find-definitions)
            ("M-r" . xref-find-references)
            ("C-t" . xref-go-back)))
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((c-mode c++-mode cc-mode)
+                   . ("clangd"
+                      "-j=8"
+                      "--log=error"
+                      "--malloc-trim"
+                      "--background-index"
+                      "--clang-tidy"
+                      "--cross-file-rename"
+                      "--completion-style=detailed"
+                      "--pch-storage=memory"
+                      "--header-insertion=never"
+                      "--header-insertion-decorators=0"))))
 
   ;; ===========================================================================================
   ;; gdb
