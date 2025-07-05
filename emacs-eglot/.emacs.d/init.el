@@ -76,6 +76,8 @@
   ;; ================================================================================
 
 
+  
+
   ;; 右クリックで選択領域をコピー
   (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
 
@@ -169,6 +171,8 @@
     (setenv "PATH" (concat '"/usr/local/opt/llvm/bin/:" (getenv "PATH")))
     )
 
+
+  (tab-bar-mode t)
 
   ;; ================================================================================
   ;; async
@@ -883,15 +887,14 @@ properly disable mozc-mode."
 	:config
 	;; (setq vterm-keymap-exceptions . '("C-x"))
 	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
-	(define-key vterm-mode-map (kbd "<f9>") #'vterm-toggle)
  	(define-key vterm-mode-map (kbd "C-x") nil)
 	(setq vterm-max-scrollback 10000)
 	(setq vterm-buffer-name-string "vterm: %s")
     (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
     (setq vterm-keymap-exceptions '("C-c" "C-x"))
-    :bind
-    ("<f9>" . vterm-toggle)
 	)
+
+  (use-package multi-vterm :ensure t)
 
   ;; ================================================================================
   ;; tree-sitter-mode
