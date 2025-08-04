@@ -35,13 +35,13 @@
   ;; .zshrc のPATHロード
   (let ((path (shell-command-to-string ". ~/.zshrc; echo -n $PATH")))
     (setenv "PATH" path)
-    (setq exec-path 
+    (setq exec-path
           (append
            (split-string-and-unquote path ":")
            exec-path)))
   (let ((path (shell-command-to-string ". ~/.bashrc; echo -n $PATH")))
     (setenv "PATH" path)
-    (setq exec-path 
+    (setq exec-path
           (append
            (split-string-and-unquote path ":")
            exec-path)))
@@ -158,9 +158,25 @@
   ;; (display-battery-mode 1)
 
   ;; c-mode indent
-  (setq-default c-basic-offset 4     ;;基本インデント量4
-    			tab-width 4          ;;タブ幅4
-    			indent-tabs-mode nil)  ;;インデントをタブでするかスペースでするか
+  (setq-default c-basic-offset 8     ;;基本インデント量4
+    			tab-width 8          ;;タブ幅4
+                )
+
+
+  (defun my-bsd () (interactive)
+         (c-set-style "bsd")
+         (setq indent-tabs-mode t)
+         (c-set-offset 'defun-block-intro 8)
+         (c-set-offset 'statement-block-intro 8)
+         (c-set-offset 'statement-case-intro 8)
+         (c-set-offset 'substatement-open 4)
+         (c-set-offset 'substatement 8)
+         (c-set-offset 'arglist-cont-nonempty 4)
+         (c-set-offset 'inclass 8)
+         (c-set-offset 'knr-argdecl-intro 8)
+         )
+
+  (add-hook 'c-mode-common-hook 'my-bsd)
 
 
   (when (equal system-type 'darwin)
@@ -184,12 +200,6 @@
   (dired-async-mode 1)
 
   (async-bytecomp-package-mode 1)			;非同期でパッケージのコンパイルを行う
-
-  ;; ================================================================================
-  ;; インデントの設定
-  ;; ================================================================================
-  ;; TABの表示幅。初期値は8
-  (setq-default tab-width 4)
 
   ;; -----------------------------------------------------------------------------load パス関連
   ;; load-pathを追加する関数を定義
@@ -548,7 +558,7 @@ properly disable mozc-mode."
     :config
     (setq rustic-lsp-client 'eglot)
     )
-  (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
+  ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   ;; 本当にwithout switchしているわけではなく前のウィンドウにフォーカスを戻すだけ
   (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
 	(pop-to-buffer buffer-or-name action norecord)
@@ -870,6 +880,11 @@ properly disable mozc-mode."
     (setq plantuml-default-exec-mode 'executable)
     (setq plantuml-output-type "png")
     )
+
+  (use-package breadcrumb
+    :ensure t
+    :custom
+    (breadcrumb-mode t))
 
   ;;================================================================================
   ;; dynamic module settings at following
