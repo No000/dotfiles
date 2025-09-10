@@ -16,7 +16,8 @@
   (setq package-archives
 		'(("melpa" . "https://melpa.org/packages/")
           ("org" . "https://orgmode.org/elpa/")
-          ("gnu" . "https://elpa.gnu.org/packages/")))
+          ("gnu" . "https://elpa.gnu.org/packages/")
+	  ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
   (package-initialize) ; インストール済みElispを読み込む
 
   (when (not (package-installed-p 'use-package))
@@ -69,7 +70,8 @@
   (add-hook 'dired-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'vterm-mode-hook (lambda () (display-line-numbers-mode -1)))
   (add-hook 'undo-tree-visualizer-mode-hook (lambda () (display-line-numbers-mode -1)))
-
+  (add-hook 'eat-mode-hook (lambda () (display-line-numbers-mode -1)))
+  (add-hook 'xwidget-webkit-mode-hook (lambda () (display-line-numbers-mode -1)))
 
   ;; ================================================================================
   ;; 細かい設定
@@ -344,6 +346,16 @@ properly disable mozc-mode."
   (use-package nerd-icons
     :ensure t
     )
+
+
+  (use-package eat
+    :ensure t)
+  ;; For `eat-eshell-mode'.
+  (add-hook 'eshell-load-hook #'eat-eshell-mode)
+
+  ;; For `eat-eshell-visual-command-mode'.
+  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
+  
   ;; ================================================================================
   ;; doom-thema & doom-modeline
   ;; ================================================================================
@@ -388,29 +400,29 @@ properly disable mozc-mode."
 
 
   ;; https://github.com/seagle0128/doom-modeline
-  (use-package doom-modeline
-    :ensure t
-	:custom
-    (setq doom-modeline-buffer-file-name-style 'auto)
-	(doom-modeline-buffer-file-name-style 'truncate-with-project)
-	;; (doom-modeline-icon t)
-    (doom-modeline-icon (display-graphic-p)) ;GUIかの変数から拾わせる
-	(doom-modeline-major-mode-icon t)
-    (doom-modeline-major-mode-color-icon t)
-    (doom-modeline-unicode-fallback t)
-	(doom-modeline-minor-modes nil)     ;うっとおしい
-    ;; (doom-modeline-mu4e t)
-    (doom-modeline-indent-info t)
-    (doom-modeline-display-default-persp-name t)
-    (doom-modeline-time-icon nil)
+  ;; (use-package doom-modeline
+  ;;   :ensure t
+  ;; 	:custom
+  ;;   (setq doom-modeline-buffer-file-name-style 'auto)
+  ;; 	(doom-modeline-buffer-file-name-style 'truncate-with-project)
+  ;; 	;; (doom-modeline-icon t)
+  ;;   (doom-modeline-icon (display-graphic-p)) ;GUIかの変数から拾わせる
+  ;; 	(doom-modeline-major-mode-icon t)
+  ;;   (doom-modeline-major-mode-color-icon t)
+  ;;   (doom-modeline-unicode-fallback t)
+  ;; 	(doom-modeline-minor-modes nil)     ;うっとおしい
+  ;;   ;; (doom-modeline-mu4e t)
+  ;;   (doom-modeline-indent-info t)
+  ;;   (doom-modeline-display-default-persp-name t)
+  ;;   (doom-modeline-time-icon nil)
 
 
 
-    :init (doom-modeline-mode 1)
-	:config
-	(line-number-mode 0)
-	(column-number-mode 0)
-	)
+  ;;   :init (doom-modeline-mode 1)
+  ;; 	:config
+  ;; 	(line-number-mode 0)
+  ;; 	(column-number-mode 0)
+  ;; 	)
 
   ;; ================================================================================
   ;; dashboard
@@ -881,10 +893,10 @@ properly disable mozc-mode."
     (setq plantuml-output-type "png")
     )
 
-  (use-package breadcrumb
-    :ensure t
-    :custom
-    (breadcrumb-mode t))
+  ;; (use-package breadcrumb
+  ;;   :ensure t
+  ;;   :custom
+  ;;   (breadcrumb-mode t))
 
   ;;================================================================================
   ;; dynamic module settings at following
@@ -914,6 +926,29 @@ properly disable mozc-mode."
   ;; ================================================================================
   ;; tree-sitter-mode
   ;; ================================================================================
+  ;; (setq treesit-language-source-alist
+  ;;  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+  ;;    (cmake "https://github.com/uyha/tree-sitter-cmake")
+  ;;    (css "https://github.com/tree-sitter/tree-sitter-css")
+  ;;    (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+  ;;    (go "https://github.com/tree-sitter/tree-sitter-go")
+  ;;    (html "https://github.com/tree-sitter/tree-sitter-html")
+  ;;    (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+  ;;    (json "https://github.com/tree-sitter/tree-sitter-json")
+  ;;    (make "https://github.com/alemuller/tree-sitter-make")
+  ;;    (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+  ;;    (python "https://github.com/tree-sitter/tree-sitter-python")
+  ;;    (toml "https://github.com/tree-sitter/tree-sitter-toml")
+  ;;    (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+  ;;    (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+  ;;    (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+  ;; (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+
+  ;; (use-package treesit
+  ;;   :config
+  ;;   (setq treesit-font-lock-level 4))
+  
   (use-package tree-sitter
     :ensure t)
 
