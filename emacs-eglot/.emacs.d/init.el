@@ -100,8 +100,13 @@
   (global-hl-line-mode t)
   (require 'hl-line)
 
+  ;; 矢印キーでウィンドウ移動をできるようにする
+  (windmove-default-keybindings)
+  (global-set-key (kbd "M-<left>")  'windmove-left)
+  (global-set-key (kbd "M-<right>") 'windmove-right)
+  (global-set-key (kbd "M-<up>")    'windmove-up)
+  (global-set-key (kbd "M-<down>")  'windmove-down)
 
-  
   (xterm-mouse-mode t)
   ;; 現状スクロールバーとメニューバーを使っていないため削除する。
   ;; 可能であればyaskrollのようなものに変更を行いたい。
@@ -118,6 +123,8 @@
   ;; 別のキーバイドにヘルプを割り当てる
   (define-key global-map (kbd "C-x ?") 'help-command)
 
+  ;; list-buffers -> ibuffer
+  (global-set-key [remap list-buffers] 'ibuffer)
 
   ;; "C-x j"でウィンドウを切り替える
   (define-key global-map (kbd "C-x j") 'other-window)
@@ -567,9 +574,11 @@ properly disable mozc-mode."
   (add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
   (use-package rustic
 	:ensure t
-    :config
-    (setq rustic-lsp-client 'eglot)
-    )
+	:config
+	(setq rustic-lsp-client 'eglot)
+	:custom
+	  (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+	  )
   ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   ;; 本当にwithout switchしているわけではなく前のウィンドウにフォーカスを戻すだけ
   (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
