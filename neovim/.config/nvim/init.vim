@@ -31,11 +31,6 @@ call plug#begin('~/.config/nvim/plugins')
 	Plug 'tpope/vim-speeddating'
 	" cleaver-vim
 	Plug 'rhysd/clever-f.vim'
-	" fcitxをEscキーを押すとOFFにするプラグイン
-	" https://anekos.hatenablog.com/entry/20130523/1369306555 
-	"Plug 'anekos/felis-cat-igirisu-toast-express'
-	" https://github.com/vim-scripts/fcitx.vim
-	"Plug 'vim-scripts/fcitx.vim'
 	" Emacsのモード的なやつ
 	Plug 'sheerun/vim-polyglot'
 	" 範囲コメントアウト
@@ -68,23 +63,6 @@ call plug#begin('~/.config/nvim/plugins')
     Plug 'junegunn/fzf.vim'
 		Plug 'junegunn/fzf'
 	" vimのファイラ
-	if has('nvim')
-  	Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-	else
-  	Plug 'Shougo/defx.nvim'
-  	Plug 'roxma/nvim-yarp'
-  	Plug 'roxma/vim-hug-neovim-rpc'
-	endif
-    Plug 'kristijanhusak/defx-icons'
-    Plug 'ryanoasis/vim-devicons'
-
-    if has('nvim')
-		Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-	else
-		Plug 'Shougo/denite.nvim'
-		Plug 'roxma/nvim-yarp'
-		Plug 'roxma/vim-hug-neovim-rpc'
-    endif	
 
     " nerdtreeの近代実装
     Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}

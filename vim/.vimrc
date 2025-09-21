@@ -126,11 +126,6 @@ Plug 'tpope/vim-speeddating'
 
 " cleaver-vim
 Plug 'rhysd/clever-f.vim'
-" fcitxをEscキーを押すとOFFにするプラグイン
-" https://anekos.hatenablog.com/entry/20130523/1369306555 
-"Plug 'anekos/felis-cat-igirisu-toast-express'
-" https://github.com/vim-scripts/fcitx.vim
-Plug 'vim-scripts/fcitx.vim'
 " tagを見るための拡張（lsp)
 Plug 'liuchengxu/vista.vim'
 
@@ -625,6 +620,9 @@ set clipboard&
 set clipboard^=unnamedplus
 " 検索をかけた際にハイライトが残るのがうっとおしいので修正
 nnoremap <ESC><ESC> :nohl<CR>
+inoremap jk <Esc>
+inoremap kj <Esc>
+
 " 困った点
 " cleaverの設定
 let g:clever_f_use_migemo = 1
