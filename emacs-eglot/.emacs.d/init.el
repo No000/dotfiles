@@ -171,6 +171,39 @@
     			tab-width 8          ;;タブ幅4
                 )
 
+  ;; (defun bsd ()
+  ;;        (c-set-style "bsd")
+  ;;        (setq indent-tabs-mode t)
+  ;;        ;; Use C-c C-s at points of source code so see which
+  ;;        ;; c-set-offset is in effect for this situation
+  ;;        (c-set-offset 'defun-block-intro 8)
+  ;;        (c-set-offset 'statement-block-intro 8)
+  ;;        (c-set-offset 'statement-case-intro 8)
+  ;;        (c-set-offset 'substatement-open 4)
+  ;;        (c-set-offset 'substatement 8)
+  ;;        (c-set-offset 'arglist-cont-nonempty 4)
+  ;;        (c-set-offset 'inclass 8)
+  ;;        (c-set-offset 'knr-argdecl-intro 8)
+  ;;        )
+
+  (use-package clang-format
+    :ensure t)
+
+  (add-hook 'c-mode-common-hook (lambda ()
+                                  (c-set-style "bsd")
+                                  (setq indent-tabs-mode t)
+                                  ;; Use C-c C-s at points of source code so see which
+                                  ;; c-set-offset is in effect for this situation
+                                  (c-set-offset 'defun-block-intro 8)
+                                  (c-set-offset 'statement-block-intro 8)
+                                  (c-set-offset 'statement-case-intro 8)
+                                  (c-set-offset 'substatement-open 4)
+                                  (c-set-offset 'substatement 8)
+                                  (c-set-offset 'arglist-cont-nonempty 4)
+                                  (c-set-offset 'inclass 8)
+                                  (c-set-offset 'knr-argdecl-intro 8)))
+  ;; (add-hook 'c-mode-common-hook 'bsd)
+  ;; (add-hook 'c++-mode-common-hook 'bsd)
 
   (defun my-bsd () (interactive)
          (c-set-style "bsd")
