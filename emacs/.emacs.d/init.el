@@ -2251,6 +2251,17 @@ middle"
     (setq plantuml-output-type "png")
     )
 
+  (use-package magit-file-icons
+    :ensure t
+    :after magit
+    :init
+    (magit-file-icons-mode 1)
+    :custom
+    ;; These are the default values:
+    (magit-file-icons-enable-diff-file-section-icons t)
+    (magit-file-icons-enable-untracked-icons t)
+    (magit-file-icons-enable-diffstat-icons t))
+
   ;; no dynami module settings
   ;;=================================================================================
   ;;  _____                              _      __  __           _       _
