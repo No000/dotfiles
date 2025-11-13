@@ -497,25 +497,32 @@ properly disable mozc-mode."
   ;; 	(column-number-mode 0)
   ;; 	)
 
+
+  (use-package rg
+    :ensure t)
+
   ;; ================================================================================
   ;; dashboard
   ;; ================================================================================
   ;; プロジェクト管理パッケージ
+
+
   (use-package projectile
-    :ensure t)
+    :ensure t
+    )
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map) ;jupyterを使うために退避
 
   (use-package dashboard
     :ensure t
-	:custom
+    :custom
     (dashboard-page-separator "\n\n\n")
     (dashboard-center-content t)
-	(dashboard-items '((recents . 10)
-					   (projects . 5)
-					   (bookmarks . 5)))
-	:config
+    (dashboard-items '((recents . 10)
+		       (projects . 5)
+		       (bookmarks . 5)))
+    :config
     (dashboard-setup-startup-hook)
     (setq dashboard-set-heading-icons t)
     (setq dashboard-set-file-icons t)
@@ -628,8 +635,21 @@ properly disable mozc-mode."
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-h") nil)
 
-  
   ;; ================================================================================
+  ;; cmake-mode
+  ;; ================================================================================
+
+  (use-package cmake-mode
+    :ensure t
+    :config
+    (setq auto-mode-alist
+	  (append
+	   '(("CMakeLists\\.txt\\'" . cmake-mode))
+	   '(("\\.cmake\\'" . cmake-mode))
+	   auto-mode-alist))
+    )
+
+    ;; ================================================================================
   ;; rustic
   ;; ================================================================================
 
@@ -671,7 +691,7 @@ properly disable mozc-mode."
                    . ("clangd"
                       "-j=8"
                       "--log=error"
-                      "--malloc-trim"
+                      ;; "--malloc-trim"
                       "--background-index"
                       "--clang-tidy"
                       "--cross-file-rename"
@@ -814,6 +834,7 @@ properly disable mozc-mode."
            ("C-x M-g" . magit-dispatch-pop))
 	:init
 	:config
+	;; (setq magit-git-executable "/mnt/c/Program Files/Git/bin/git.exe")
     ;; (magit-todos-mode)
 	)
 
@@ -859,6 +880,16 @@ properly disable mozc-mode."
 	:config
 	(global-git-gutter-mode +1))
 
+  ;; ================================================================================
+  ;; diff-hl
+  ;; ================================================================================
+
+  ;; (use-package diff-hl
+  ;;   :ensure t
+  ;;   :config
+  ;;   (global-diff-hl-mode))
+
+  
   ;; ================================================================================
   ;; real-auto-save
   ;; ================================================================================
