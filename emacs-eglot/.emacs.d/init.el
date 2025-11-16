@@ -700,6 +700,17 @@ properly disable mozc-mode."
                       "--header-insertion=never"
                       "--header-insertion-decorators=0"))))
 
+  ;; (with-eval-after-load 'eglot
+  ;;   (add-to-list 'eglot-server-programs
+  ;; 		 '(rust-mode . ("rust-analyzer" :json
+  ;; 				(:initializationOptions
+  ;; 				 (:settings
+  ;; 				  ("rust-analyzer"
+  ;; 				   (:completion
+  ;;                                   (:autoimport
+  ;;                                    (:enable :json-false))))))))))
+  
+
   ;; ===========================================================================================
   ;; gdb
   ;; ===========================================================================================
@@ -1015,19 +1026,21 @@ properly disable mozc-mode."
 
   (use-package vterm
     :ensure t
-	:bind
-	("<f9>" . vterm-toggle)
-	:config
-	;; (setq vterm-keymap-exceptions . '("C-x"))
-	(setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
- 	(define-key vterm-mode-map (kbd "C-x") nil)
-	(setq vterm-max-scrollback 10000)
-	(setq vterm-buffer-name-string "vterm: %s")
+    :config
+    ;; (setq vterm-keymap-exceptions . '("C-x"))
+    (setq vterm-shell "/usr/bin/zsh")	; vtermで使用するshellを指定
+    (define-key vterm-mode-map (kbd "C-x") nil)
+    (setq vterm-max-scrollback 10000)
+    (setq vterm-buffer-name-string "vt %s")
     (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
     (setq vterm-keymap-exceptions '("C-c" "C-x"))
-	)
+    )
 
-  (use-package multi-vterm :ensure t)
+  (use-package multi-vterm
+    :ensure t
+    :bind
+    ("C-c C-p v R" . multi-vterm-rename-buffer)
+    )
 
   ;; ================================================================================
   ;; tree-sitter-mode
