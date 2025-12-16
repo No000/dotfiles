@@ -1,6 +1,7 @@
 ;; Ubuntuでも実行可能を目指す
 ;; よってvtermはコメントアウト
-
+(defconst my/saved-file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
 
 (run-with-idle-timer 60.0 t #'garbage-collect)
 
@@ -31,6 +32,8 @@
   (use-package diminish
     :ensure t)
   (setq package-native-compile t)
+  (with-eval-after-load 'comp (setq native-comp-async-jobs-number 8) (setq native-comp-speed 3))
+  
 
 
   ;; .zshrc のPATHロード
@@ -1080,3 +1083,4 @@ properly disable mozc-mode."
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   )
 (setq gc-cons-threshold 100000000)
+(setq file-name-handler-alist my/saved-file-name-handler-alist)
