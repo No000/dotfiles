@@ -93,8 +93,10 @@
 
   ;; 右クリックで選択領域をコピー
   (global-set-key (kbd "<mouse-3>") 'copy-region-as-kill)
+  (global-set-key (kbd "M-n") 'next-line)
+  (global-set-key (kbd "M-p") 'previous-line)
 
-  
+
   ;; カラム番号を表示
   ;;(line-number-mode t)
   (column-number-mode t)
