@@ -515,7 +515,7 @@ properly disable mozc-mode."
     )
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map) ;jupyterを使うために退避
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map) ;jupyterを使うために退避
 
   (use-package dashboard
     :ensure t
@@ -636,7 +636,7 @@ properly disable mozc-mode."
   (define-key company-active-map (kbd "C-p") nil)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
-  (define-key company-active-map (kbd "C-h") nil)
+  ;; (define-key company-active-map (kbd "C-h") nil)
 
   ;; ================================================================================
   ;; cmake-mode
@@ -712,8 +712,35 @@ properly disable mozc-mode."
   ;; 				   (:completion
   ;;                                   (:autoimport
   ;;                                    (:enable :json-false))))))))))
+
+  ;; ===========================================================================================
+  ;; eglot-booster
+  ;; ===========================================================================================
+  ;; cargo install emacs-lsp-booster
+  (use-package eglot-booster
+    :vc (:url "https://github.com/jdtsmith/eglot-booster.git" :rev :newest)
+    :ensure t
+    :after eglot
+    :config	(eglot-booster-mode))
+
+  
+    (use-package flycheck
+    :ensure t
+    :config
+    (add-hook 'after-init-hook #'global-flycheck-mode))
+
+  (use-package consult-eglot
+    :ensure t)
+
+  (use-package flycheck-eglot
+  :ensure t
+  :after (flycheck eglot)
+  :config
+  (global-flycheck-eglot-mode 1))
   
 
+
+  
   ;; ===========================================================================================
   ;; gdb
   ;; ===========================================================================================
