@@ -222,6 +222,7 @@
          )
 
   (add-hook 'c-mode-common-hook 'my-bsd)
+  (add-hook 'c-ts-mode-common-hook 'my-bsd)
 
   ;; (defun bsd ()
   ;;        (c-set-style "bsd")
@@ -504,6 +505,12 @@ properly disable mozc-mode."
   (use-package rg
     :ensure t)
 
+  (use-package consult
+    :ensure t
+    :bind
+    (("C-c f" . consult-fd)
+     ("C-c g" . cousult-rg)))
+
   ;; ================================================================================
   ;; dashboard
   ;; ================================================================================
@@ -516,6 +523,7 @@ properly disable mozc-mode."
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map) ;jupyterを使うために退避
+  (define-key projectile-mode-map (kbd "C-c p i") 'projectile-ibuffer)
 
   (use-package dashboard
     :ensure t
@@ -682,8 +690,10 @@ properly disable mozc-mode."
     :ensure t
     :hook
     (c-mode . eglot-ensure)
+    (c-ts-mode . eglot-ensure)
     (rustic-mode . eglot-ensure)
     (c++-mode . eglot-ensure)
+    (c++-ts-mode . eglot-ensure)
     :bind (("M-t" . xref-find-definitions)
            ("M-r" . xref-find-references)
            ("C-t" . xref-go-back)))
@@ -808,7 +818,7 @@ properly disable mozc-mode."
   ;; キーマップのチートシート
   ;; which-key-show-mapで表示することができる。
   (use-package which-key
-    :ensure t
+    ;; :ensure t
 	:diminish which-key-mode
 	:hook (after-init . which-key-mode))
 
@@ -914,6 +924,7 @@ properly disable mozc-mode."
 	(git-gutter:deleted-sign  "-")
 	:init
 	(add-hook 'c-mode-hook 'git-gutter-mode) ; add-hookしないとうまくうごかないので
+	(add-hook 'c-ts-mode-hook 'git-gutter-mode) ; add-hookしないとうまくうごかないので
 	:custom-face
 	(git-gutter:modified ((t (:background "#f1fa8c"))))
 	(git-gutter:added    ((t (:background "#50fa7b"))))
@@ -971,10 +982,10 @@ properly disable mozc-mode."
   ;; git-timemachine
   ;; ================================================================================
   ;; https://gitlab.com/pidu/git-timemachine/tree/8d675750e921a047707fcdc36d84f8439b19a907
-  (use-package git-timemachine
-	:ensure t
-	:config
-	(bind-key "C-c g" 'git-timemachine-toggle))
+  ;; (use-package git-timemachine
+  ;; 	:ensure t
+  ;; 	:config
+  ;; 	(bind-key "C-c g" 'git-timemachine-toggle))
 
   ;; なぜあるか不明
   ;; PATHを拾う
@@ -1076,27 +1087,42 @@ properly disable mozc-mode."
   ;; tree-sitter-mode
   ;; ================================================================================
   ;; (setq treesit-language-source-alist
-  ;;  '((bash "https://github.com/tree-sitter/tree-sitter-bash")
-  ;;    (cmake "https://github.com/uyha/tree-sitter-cmake")
-  ;;    (css "https://github.com/tree-sitter/tree-sitter-css")
-  ;;    (elisp "https://github.com/Wilfred/tree-sitter-elisp")
-  ;;    (go "https://github.com/tree-sitter/tree-sitter-go")
-  ;;    (html "https://github.com/tree-sitter/tree-sitter-html")
-  ;;    (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-  ;;    (json "https://github.com/tree-sitter/tree-sitter-json")
-  ;;    (make "https://github.com/alemuller/tree-sitter-make")
-  ;;    (markdown "https://github.com/ikatyang/tree-sitter-markdown")
-  ;;    (python "https://github.com/tree-sitter/tree-sitter-python")
-  ;;    (toml "https://github.com/tree-sitter/tree-sitter-toml")
-  ;;    (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-  ;;    (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-  ;;    (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+  ;; 	'(
+  ;; 	  (c "https://github.com/tree-sitter/tree-sitter-c" "v0.20.0")
+  ;; 	  (cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.22.0")
+  ;; 	  (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
+  ;; 	  (elisp "https://github.com/Wilfred/tree-sitter-elisp" "1.3.0")
+  ;; 	  ))
 
-  ;; (mapc #'treesit-install-language-grammar (mapcar #'car treesit-language-source-alist))
+  ;; (dolist (element treesit-language-source-alist)
+  ;;   (let* ((lang (car element)))
+  ;;     (if (treesit-language-available-p lang)
+  ;;         (message "treesit: %s is already installed" lang)
+  ;; 	(message "treesit: %s is not installed" lang)
+  ;; 	(treesit-install-language-grammar lang))))
 
   ;; (use-package treesit
   ;;   :config
-  ;;   (setq treesit-font-lock-level 4))
+  ;;   (setq treesit-font-lock-level 5))
+
+  ;; (use-package c-or-c++-ts-mode
+  ;;   :mode
+  ;;   ("\\.c$" . c-or-c++-ts-mode)
+  ;;   ("\\.h$" . c-or-c++-ts-mode)
+  ;;   ("\\.cpp$" . c-or-c++-ts-mode)
+  ;;   )
+
+  
+  ;; (use-package rust-ts-mode
+  ;;   :mode
+  ;;   ("\\.rs$" . rsut-ts-mode)
+  ;;   )
+
+    
+  ;; (use-package elisp-ts-mode
+  ;;   :mode
+  ;;   ("\\.el$" . elisp-ts-mode)
+  ;;   )
   
   (use-package tree-sitter
     :ensure t)
@@ -1104,10 +1130,10 @@ properly disable mozc-mode."
   (use-package tree-sitter-langs
     :ensure t)
 
-  (global-tree-sitter-mode)
-
-  
+  (global-tree-sitter-mode)  
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  
+  
   )
 (setq gc-cons-threshold 100000000)
 (setq file-name-handler-alist my/saved-file-name-handler-alist)
