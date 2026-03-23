@@ -670,12 +670,13 @@ properly disable mozc-mode."
   ;; cargoのPATHの設定
   (add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
   (use-package rustic
-	:ensure t
-	:config
-	(setq rustic-lsp-client 'eglot)
-	:custom
-	  (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
-	  )
+    :ensure t
+    :config
+    (setq rustic-lsp-client 'eglot)
+    (setq rustic-cargo-auto-add-missing-dependencies nil)
+    :custom
+    (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+    )
   ;; (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1)))
   ;; 本当にwithout switchしているわけではなく前のウィンドウにフォーカスを戻すだけ
   (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
