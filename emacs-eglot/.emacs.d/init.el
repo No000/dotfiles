@@ -735,23 +735,28 @@ properly disable mozc-mode."
     :config	(eglot-booster-mode))
 
   
-    (use-package flycheck
-    :ensure t
-    :config
-    (add-hook 'after-init-hook #'global-flycheck-mode))
+    ;; (use-package flycheck
+    ;; :ensure t
+    ;; :config
+    ;; (add-hook 'after-init-hook #'global-flycheck-mode))
 
   (use-package consult-eglot
     :ensure t)
 
-  (use-package flycheck-eglot
-  :ensure t
-  :after (flycheck eglot)
-  :config
-  (global-flycheck-eglot-mode 1))
-  
+  ;; (use-package flycheck-eglot
+  ;; :ensure t
+  ;; :after (flycheck eglot)
+  ;; :config
+  ;; (global-flycheck-eglot-mode 1))
 
 
+  ;; (use-package rust-owl
+  ;;   :vc (:url "https://github.com/cordx56/rustowl.git" :rev :newest)
+  ;;   :ensure t
+  ;;   :after eglot
+  ;;   )
   
+
   ;; ===========================================================================================
   ;; gdb
   ;; ===========================================================================================
@@ -1074,9 +1079,14 @@ properly disable mozc-mode."
     (define-key vterm-mode-map (kbd "C-x") nil)
     (setq vterm-max-scrollback 10000)
     (setq vterm-buffer-name-string "vt %s")
-    (setq-default vterm-keymap-exceptions '("C-c" "C-x"))
-    (setq vterm-keymap-exceptions '("C-c" "C-x"))
+    (setq vterm-keymap-exceptions '("C-c" "C-x" "M-<right>" "M-<left>" "M-<up>" "M-<down>"))    
+    (define-key vterm-mode-map (kbd "M-<left>")  #'windmove-left)
+    (define-key vterm-mode-map (kbd "M-<right>") #'windmove-right)
+    (define-key vterm-mode-map (kbd "M-<up>")    #'windmove-up)
+    (define-key vterm-mode-map (kbd "M-<down>")  #'windmove-down)
+    (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
     )
+
 
   (use-package multi-vterm
     :ensure t
