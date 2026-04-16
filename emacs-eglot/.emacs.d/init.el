@@ -109,6 +109,11 @@
   (global-set-key (kbd "M-<right>") 'windmove-right)
   (global-set-key (kbd "M-<up>")    'windmove-up)
   (global-set-key (kbd "M-<down>")  'windmove-down)
+  (global-set-key (kbd "C-<left>")  'windmove-left)
+  (global-set-key (kbd "C-<right>") 'windmove-right)
+  (global-set-key (kbd "C-<up>")    'windmove-up)
+  (global-set-key (kbd "C-<down>")  'windmove-down)
+  
 
   (xterm-mouse-mode t)
   ;; 現状スクロールバーとメニューバーを使っていないため削除する。
@@ -192,6 +197,8 @@
   (use-package clang-format
     :ensure t)
 
+  
+
   (add-hook 'c-mode-common-hook (lambda ()
                                   (c-set-style "bsd")
                                   (setq indent-tabs-mode t)
@@ -268,6 +275,9 @@
 
 
   (tab-bar-mode t)
+
+  ;; 任意の場所をハイライトできる機能
+  (global-hi-lock-mode t)
 
   ;; ================================================================================
   ;; async
@@ -1079,11 +1089,15 @@ properly disable mozc-mode."
     (define-key vterm-mode-map (kbd "C-x") nil)
     (setq vterm-max-scrollback 10000)
     (setq vterm-buffer-name-string "vt %s")
-    (setq vterm-keymap-exceptions '("C-c" "C-x" "M-<right>" "M-<left>" "M-<up>" "M-<down>"))    
+    (setq vterm-keymap-exceptions '("C-c" "C-x" "M-<right>" "M-<left>" "M-<up>" "M-<down>" "C-<right>" "C-<left>" "C-<up>" "C-<down>"))
     (define-key vterm-mode-map (kbd "M-<left>")  #'windmove-left)
     (define-key vterm-mode-map (kbd "M-<right>") #'windmove-right)
     (define-key vterm-mode-map (kbd "M-<up>")    #'windmove-up)
     (define-key vterm-mode-map (kbd "M-<down>")  #'windmove-down)
+    (define-key vterm-mode-map (kbd "C-<left>")  #'windmove-left)
+    (define-key vterm-mode-map (kbd "C-<right>") #'windmove-right)
+    (define-key vterm-mode-map (kbd "C-<up>")    #'windmove-up)
+    (define-key vterm-mode-map (kbd "C-<down>")  #'windmove-down)
     (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
     )
 
